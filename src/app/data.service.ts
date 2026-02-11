@@ -1,0 +1,285 @@
+import { Injectable, inject } from '@angular/core';
+import { Firestore, collection, doc, addDoc, getDocs, writeBatch, deleteDoc, setDoc, query, orderBy, limit } from '@angular/fire/firestore';
+import { read, utils } from 'xlsx';
+
+export interface IndexData {
+  history: any[];
+  rankings: any[];
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  private firestore = inject(Firestore);
+
+  constructor() { }
+
+  // --- PUBLIC DATA ACCESS ---
+
+  // Kept for backward compatibility / fallback
+  getMockData(): IndexData {
+    return {
+      history: [
+        { country: "Italy", date: "2023-01-01", value: 85.5 },
+      ],
+      rankings: [
+        { country: "Italy", value: 85.5, change: "+1.2" },
+      ]
+    };
+  }
+
+  // --- PUBLIC SUBMISSION ---
+
+  async submitLink(url: string): Promise<void> {
+    try {
+      const submissionsRef = collection(this.firestore, 'submissions');
+      await addDoc(submissionsRef, {
+        url,
+        timestamp: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error('Error submitting link', e);
+      throw e;
+    }
+  }
+
+  // --- ADMIN / UPLOAD LOGIC ---
+
+  async clearDatabase(): Promise<void> {
+    const batch = writeBatch(this.firestore);
+
+    // Clear old collections
+    const historySnap = await getDocs(collection(this.firestore, 'history'));
+    historySnap.forEach(d => batch.delete(d.ref));
+
+    const rankingsSnap = await getDocs(collection(this.firestore, 'rankings'));
+    rankingsSnap.forEach(d => batch.delete(d.ref));
+
+    // Clear new collections
+    const areasSnap = await getDocs(collection(this.firestore, 'areas'));
+    areasSnap.forEach(d => batch.delete(d.ref));
+
+    const countriesSnap = await getDocs(collection(this.firestore, 'countries'));
+    countriesSnap.forEach(d => batch.delete(d.ref));
+
+    const measurementsSnap = await getDocs(collection(this.firestore, 'measurements'));
+    measurementsSnap.forEach(d => batch.delete(d.ref));
+
+    await batch.commit();
+  }
+
+  async parseAndUploadExcel(file: File): Promise<string> {
+    const data = await file.arrayBuffer();
+    const workbook = read(data, { cellDates: true });
+
+    if (workbook.SheetNames.length === 0) throw new Error('Excel vuoto');
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = utils.sheet_to_json(sheet) as any[];
+
+    if (rows.length === 0) throw new Error('Nessun dato trovato nel foglio');
+
+    // Maps to avoid duplicates
+    const areasMap = new Map<string, string>(); // Name -> ID
+    const countriesMap = new Map<string, string>(); // Name -> ID
+
+    const batch = writeBatch(this.firestore);
+    let opCount = 0;
+
+    // Helper to generate ID
+    const cleanId = (str: string) => str.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+    for (const row of rows) {
+      // Expected Excel Columns (loose matching): 
+      // Area, Paese, Data, Prezzo Originale, Cambio, Prezzo Euro, Peso, PIL, Anno PIL
+
+      const areaName = (row['Area'] || row['area'] || 'Unknown').trim();
+      const countryName = (row['Paese'] || row['Country'] || row['paese']).trim();
+      const dateRaw = row['Data'] || row['Data Video Nic'] || row['Date'];
+
+      if (!countryName || !dateRaw) continue;
+
+      const dateVal = dateRaw instanceof Date ? dateRaw.toISOString().split('T')[0] : String(dateRaw).trim();
+
+      // Values
+      const priceOriginal = parseFloat(row['Prezzo Originale'] || 0);
+      const exchangeRate = parseFloat(row['Cambio'] || row['Tasso Cambio'] || 1);
+      const priceEuro = parseFloat(row['Prezzo Euro'] || row['Euro/100g'] || 0);
+
+      const weight = parseInt(row['Peso'] || row['Peso (g)'] || 750);
+      const gdpPerCapita = parseFloat(row['PIL'] || row['PIL pro capite'] || 0);
+      const gdpYear = parseInt(row['Anno PIL'] || new Date().getFullYear());
+
+      // 1. AREA
+      let areaId = areasMap.get(areaName);
+      if (!areaId) {
+        areaId = cleanId(areaName);
+        if (!areasMap.has(areaName)) {
+          batch.set(doc(this.firestore, 'areas', areaId), { nome: areaName });
+          areasMap.set(areaName, areaId);
+          opCount++;
+        }
+      }
+
+      // 2. COUNTRY
+      let countryId = countriesMap.get(countryName);
+      if (!countryId) {
+        countryId = cleanId(countryName);
+        if (!countriesMap.has(countryName)) {
+          batch.set(doc(this.firestore, 'countries', countryId), {
+            nome: countryName,
+            area_id: areaId
+          });
+          countriesMap.set(countryName, countryId);
+          opCount++;
+        }
+      }
+
+      // 3. MEASUREMENT (Rilevazione)
+      const measurementId = `${countryId}_${dateVal}`;
+      const measurementData = {
+        paese_id: countryId,
+        data_video: dateVal,
+        prezzo_originale: priceOriginal,
+        tasso_cambio: exchangeRate,
+        prezzo_euro: priceEuro,
+        peso_grammi: weight,
+        pil_pro_capite_eur: gdpPerCapita,
+        anno_pil: gdpYear
+      };
+
+      batch.set(doc(this.firestore, 'measurements', measurementId), measurementData);
+      opCount++;
+    }
+
+    await batch.commit();
+    return `Caricati ${opCount} record (Aree, Paesi, Rilevazioni).`;
+  }
+
+  // --- ANALYTICS VIEW ---
+  async getAnalyticsData(): Promise<any[]> {
+    console.log('Calculating Analytics...');
+
+    // Fetch all needed collections
+    const [areasSnap, countriesSnap, measurementsSnap] = await Promise.all([
+      getDocs(collection(this.firestore, 'areas')),
+      getDocs(collection(this.firestore, 'countries')),
+      getDocs(collection(this.firestore, 'measurements'))
+    ]);
+
+    const areas = new Map(areasSnap.docs.map(d => [d.id, d.data()['nome']]));
+    const countries = new Map(countriesSnap.docs.map(d => [d.id, { ...d.data(), id: d.id }]));
+
+    // Find Italy ID for comparison
+    const italyId = [...countries.values()].find((c: any) => c.nome.toLowerCase() === 'italy' || c.nome.toLowerCase() === 'italia')?.id;
+
+    // First pass: Prepare measurements
+    let rawData: any[] = measurementsSnap.docs.map(d => {
+      const m = d.data();
+      const c: any = countries.get(m['paese_id']);
+      return {
+        ...m,
+        paese: c?.nome || 'Unknown',
+        area: areas.get(c?.area_id) || 'Unknown',
+        euro_per_100g: (m['prezzo_euro'] / m['peso_grammi']) * 100,
+        nutella_index_percent: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 100,
+        minuti_lavoro_necessari: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 2000 * 60,
+        weight_penalty: (m['prezzo_euro'] / m['peso_grammi']) / ((m['prezzo_euro'] / 750) || 1),
+        price_per_kg: (m['prezzo_euro'] / m['peso_grammi']) * 1000
+      };
+    });
+
+    // Calc Italy stats for Reference (latest date)
+    const italyData = rawData.filter(d => d.paese_id === italyId).sort((a: any, b: any) => b['data_video'].localeCompare(a['data_video']))[0];
+    const italyPricePerKg = italyData ? italyData.price_per_kg : 1;
+    const italyWorkMins = italyData ? italyData.minuti_lavoro_necessari : 1;
+
+    // Second pass: Comparative metrics
+    return rawData.map((d: any) => {
+      return {
+        ...d,
+        nutella_ppp_rate: d['prezzo_originale'] / (italyData?.prezzo_originale || 1),
+        affordability_gap: ((d.minuti_lavoro_necessari - italyWorkMins) / italyWorkMins) * 100,
+        weight_penalty: d.peso_grammi === 750 ? 1 : (d.price_per_kg / (italyPricePerKg)),
+        nutella_shadow_gdp: (d['prezzo_euro'] / d.nutella_index_percent) * 100
+      };
+    });
+  }
+
+  // Compatibility wrapper
+  async getRealData(): Promise<IndexData> {
+    try {
+      const analytics = await this.getAnalyticsData();
+      // Map to old structure for Dashboard compatibility (initially)
+      const history = analytics.map((a: any) => ({
+        country: a.paese,
+        date: a.data_video,
+        value: a.euro_per_100g // Map to old 'value'
+      }));
+
+      // Latest for ranking
+      const latestMap = new Map();
+      analytics.forEach((a: any) => {
+        const existing = latestMap.get(a.paese);
+        if (!existing || a.data_video > existing.data_video) {
+          latestMap.set(a.paese, a);
+        }
+      });
+
+      const rankings = Array.from(latestMap.values()).map((a: any) => ({
+        country: a.paese,
+        value: a.euro_per_100g,
+        change: a.affordability_gap.toFixed(1) + '%' // Re-purpose change for gap?
+      })).sort((a: any, b: any) => b.value - a.value);
+
+      return { history, rankings };
+    } catch (e) {
+      console.error(e);
+      return this.getMockData(); // fallback
+    }
+  }
+
+  // --- SINGLE ENTRY ADMIN ---
+  async addRilevazione(item: any): Promise<void> {
+    const cleanId = (str: string) => str.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+    const areaName = (item.area || 'Unknown').trim();
+    const countryName = item.country.trim();
+
+    let areaId = cleanId(areaName);
+    let countryId = cleanId(countryName);
+
+    // Ensure Area exists
+    const areaRef = doc(this.firestore, 'areas', areaId);
+    await setDoc(areaRef, { nome: areaName }, { merge: true });
+
+    // Ensure Country exists
+    const countryRef = doc(this.firestore, 'countries', countryId);
+    await setDoc(countryRef, { nome: countryName, area_id: areaId }, { merge: true });
+
+    // Add Measurement
+    const measurementId = `${countryId}_${item.date}`;
+    const measurementDoc = doc(this.firestore, 'measurements', measurementId);
+    await setDoc(measurementDoc, {
+      paese_id: countryId,
+      data_video: item.date,
+      prezzo_originale: item.priceOriginal,
+      tasso_cambio: item.exchangeRate,
+      prezzo_euro: item.priceEuro,
+      peso_grammi: item.weight,
+      pil_pro_capite_eur: item.gdp,
+      anno_pil: item.gdpYear
+    });
+  }
+
+  async getAdminHistory(limitCount?: number): Promise<any[]> {
+    const data = await this.getAnalyticsData();
+    // Sort by date desc
+    const sorted = data.sort((a, b) => b.data_video.localeCompare(a.data_video));
+    return limitCount ? sorted.slice(0, limitCount) : sorted;
+  }
+
+  async deleteHistoryItem(id: string): Promise<void> {
+    await deleteDoc(doc(this.firestore, 'measurements', id));
+  }
+}
