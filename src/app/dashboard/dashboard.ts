@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DataService, IndexData } from '../data.service';
 import { Chart, registerables } from 'chart.js';
 
@@ -8,7 +9,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -20,6 +21,11 @@ export class Dashboard implements OnInit, AfterViewInit {
   loading = true;
   error = '';
 
+  // Filtering
+  selectedRegion = 'All Regions';
+  regions = ['All Regions', 'Europe', 'Asia', 'Americas', 'Oceania', 'Africa'];
+  filteredRankings: any[] = [];
+
   @ViewChild('rankingChart') rankingChart!: ElementRef<HTMLCanvasElement>;
   chart: Chart | null = null;
 
@@ -28,6 +34,8 @@ export class Dashboard implements OnInit, AfterViewInit {
     try {
       this.data = await this.dataService.getRealData();
       console.log('[Dashboard] Data received:', this.data);
+
+      this.applyFilter(); // Set initial filtered data
 
       this.loading = false;
       this.cdr.detectChanges(); // Force update
@@ -51,8 +59,28 @@ export class Dashboard implements OnInit, AfterViewInit {
     // Chart init is handled in ngOnInit after data load
   }
 
+  applyFilter() {
+    if (!this.data) return;
+
+    if (this.selectedRegion === 'All Regions') {
+      this.filteredRankings = this.data.rankings;
+    } else {
+      this.filteredRankings = this.data.rankings.filter(r => r.area === this.selectedRegion);
+    }
+
+    // Re-init chart whenever filter changes
+    // verify if view is ready (chart element exists)
+    if (this.rankingChart) {
+      this.initChart();
+    }
+  }
+
+  onFilterChange() {
+    this.applyFilter();
+  }
+
   initChart() {
-    if (!this.data || !this.rankingChart) return;
+    if (!this.filteredRankings || !this.rankingChart) return;
 
     if (this.chart) {
       this.chart.destroy();
@@ -62,10 +90,10 @@ export class Dashboard implements OnInit, AfterViewInit {
     if (!ctx) return;
 
     // Guard against empty data
-    if (!this.data.rankings || this.data.rankings.length === 0) return;
+    if (this.filteredRankings.length === 0) return;
 
-    const countries = this.data.rankings.map(d => d.country);
-    const values = this.data.rankings.map(d => d.value);
+    const countries = this.filteredRankings.map(d => d.country);
+    const values = this.filteredRankings.map(d => d.value);
 
     this.chart = new Chart(ctx, {
       type: 'bar',

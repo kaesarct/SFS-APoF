@@ -160,50 +160,84 @@ export class DataService {
   async getAnalyticsData(): Promise<any[]> {
     console.log('Calculating Analytics...');
 
-    // Fetch all needed collections
-    const [areasSnap, countriesSnap, measurementsSnap] = await Promise.all([
-      getDocs(collection(this.firestore, 'areas')),
-      getDocs(collection(this.firestore, 'countries')),
-      getDocs(collection(this.firestore, 'measurements'))
-    ]);
+    try {
+      // Fetch all needed collections
+      console.log('Fetching collections...');
+      const [areasSnap, countriesSnap, measurementsSnap] = await Promise.all([
+        getDocs(collection(this.firestore, 'areas')),
+        getDocs(collection(this.firestore, 'countries')),
+        getDocs(collection(this.firestore, 'measurements'))
+      ]);
+      console.log('Collections fetched:', {
+        areas: areasSnap.size,
+        countries: countriesSnap.size,
+        measurements: measurementsSnap.size
+      });
 
-    const areas = new Map(areasSnap.docs.map(d => [d.id, d.data()['nome']]));
-    const countries = new Map(countriesSnap.docs.map(d => [d.id, { ...d.data(), id: d.id }]));
+      console.log('Mapping areas and countries...');
+      const areas = new Map(areasSnap.docs.map(d => [d.id, d.data()['nome'] || 'Unknown Area']));
+      const countries = new Map(countriesSnap.docs.map(d => [d.id, { ...d.data(), id: d.id }]));
 
-    // Find Italy ID for comparison
-    const italyId = [...countries.values()].find((c: any) => c.nome.toLowerCase() === 'italy' || c.nome.toLowerCase() === 'italia')?.id;
+      // Debug: Log all country names to see what is available
+      const allCountryNames = [...countries.values()].map((c: any) => c.nome);
+      console.log('Available Countries:', allCountryNames);
 
-    // First pass: Prepare measurements
-    let rawData: any[] = measurementsSnap.docs.map(d => {
-      const m = d.data();
-      const c: any = countries.get(m['paese_id']);
-      return {
-        ...m,
-        paese: c?.nome || 'Unknown',
-        area: areas.get(c?.area_id) || 'Unknown',
-        euro_per_100g: (m['prezzo_euro'] / m['peso_grammi']) * 100,
-        nutella_index_percent: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 100,
-        minuti_lavoro_necessari: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 2000 * 60,
-        weight_penalty: (m['prezzo_euro'] / m['peso_grammi']) / ((m['prezzo_euro'] / 750) || 1),
-        price_per_kg: (m['prezzo_euro'] / m['peso_grammi']) * 1000
-      };
-    });
+      // Find Italy ID for comparison
+      let italyId = [...countries.values()].find((c: any) =>
+        (c.nome && (c.nome.trim().toLowerCase() === 'italy' || c.nome.trim().toLowerCase() === 'italia'))
+      )?.id;
 
-    // Calc Italy stats for Reference (latest date)
-    const italyData = rawData.filter(d => d.paese_id === italyId).sort((a: any, b: any) => b['data_video'].localeCompare(a['data_video']))[0];
-    const italyPricePerKg = italyData ? italyData.price_per_kg : 1;
-    const italyWorkMins = italyData ? italyData.minuti_lavoro_necessari : 1;
+      console.log('Italy ID found:', italyId);
 
-    // Second pass: Comparative metrics
-    return rawData.map((d: any) => {
-      return {
-        ...d,
-        nutella_ppp_rate: d['prezzo_originale'] / (italyData?.prezzo_originale || 1),
-        affordability_gap: ((d.minuti_lavoro_necessari - italyWorkMins) / italyWorkMins) * 100,
-        weight_penalty: d.peso_grammi === 750 ? 1 : (d.price_per_kg / (italyPricePerKg)),
-        nutella_shadow_gdp: (d['prezzo_euro'] / d.nutella_index_percent) * 100
-      };
-    });
+      if (!italyId) {
+        console.warn('Italy/Italia not found! Using first available country as fallback to prevent crash.');
+        italyId = [...countries.keys()][0];
+      }
+
+      // First pass: Prepare measurements
+      console.log('Processing measurements...');
+      let rawData: any[] = measurementsSnap.docs.map(d => {
+        const m = d.data();
+        const c: any = countries.get(m['paese_id']);
+        return {
+          ...m,
+          paese: c?.nome || 'Unknown',
+          area: areas.get(c?.area_id) || 'Unknown',
+          euro_per_100g: (m['prezzo_euro'] / (m['peso_grammi'] || 750)) * 100, // protect div by zero
+          nutella_index_percent: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 100,
+          minuti_lavoro_necessari: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 2000 * 60,
+          weight_penalty: (m['prezzo_euro'] / (m['peso_grammi'] || 750)) / ((m['prezzo_euro'] / 750) || 1),
+          price_per_kg: (m['prezzo_euro'] / (m['peso_grammi'] || 750)) * 1000
+        };
+      });
+
+      console.log('Processed raw measurements:', rawData.length);
+
+      // Calc Italy stats for Reference (latest date)
+      const italyData = rawData.filter(d => d.paese_id === italyId).sort((a: any, b: any) => {
+        const da = a['data_video'] || '';
+        const db = b['data_video'] || '';
+        return db.localeCompare(da);
+      })[0];
+
+      const italyPricePerKg = italyData ? italyData.price_per_kg : 1;
+      const italyWorkMins = italyData ? italyData.minuti_lavoro_necessari : 1;
+      console.log('Reference Italy Data:', italyData ? 'Found' : 'Not Found');
+
+      // Second pass: Comparative metrics
+      return rawData.map((d: any) => {
+        return {
+          ...d,
+          nutella_ppp_rate: d['prezzo_originale'] / (italyData?.prezzo_originale || 1),
+          affordability_gap: ((d.minuti_lavoro_necessari - italyWorkMins) / italyWorkMins) * 100,
+          weight_penalty: d.peso_grammi === 750 ? 1 : (d.price_per_kg / (italyPricePerKg)),
+          nutella_shadow_gdp: (d['prezzo_euro'] / d.nutella_index_percent) * 100
+        };
+      });
+    } catch (e) {
+      console.error('Error in getAnalyticsData:', e);
+      throw e;
+    }
   }
 
   // Compatibility wrapper
@@ -229,7 +263,8 @@ export class DataService {
       const rankings = Array.from(latestMap.values()).map((a: any) => ({
         country: a.paese,
         value: a.euro_per_100g,
-        change: a.affordability_gap.toFixed(1) + '%' // Re-purpose change for gap?
+        change: a.affordability_gap.toFixed(1) + '%', // Re-purpose change for gap?
+        area: a.area
       })).sort((a: any, b: any) => b.value - a.value);
 
       return { history, rankings };
@@ -274,8 +309,14 @@ export class DataService {
 
   async getAdminHistory(limitCount?: number): Promise<any[]> {
     const data = await this.getAnalyticsData();
-    // Sort by date desc
-    const sorted = data.sort((a, b) => b.data_video.localeCompare(a.data_video));
+
+    // Sort by date desc with safety check
+    const sorted = data.sort((a, b) => {
+      const dateA = a.data_video || '';
+      const dateB = b.data_video || '';
+      return dateB.localeCompare(dateA);
+    });
+
     return limitCount ? sorted.slice(0, limitCount) : sorted;
   }
 
