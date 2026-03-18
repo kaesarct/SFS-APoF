@@ -33,40 +33,40 @@
     <!-- Chart Section -->
     <div
       class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transition-transform hover:scale-[1.01] duration-300">
-      <h3 class="text-lg font-semibold text-gray-700 mb-4">Top Performing Nations</h3>
-      <div class="relative h-64 md:h-80 w-full">
+      <h3 class="text-lg font-semibold text-gray-700 mb-4">Indice PPP Globale</h3>
+      <div class="relative h-[500px] md:h-[800px] w-full">
         <canvas #rankingChart></canvas>
       </div>
     </div>
 
     <!-- Rankings Table Section -->
     <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-      <h3 class="text-lg font-semibold text-gray-700 mb-4">Detailed Rankings</h3>
+      <h3 class="text-lg font-semibold text-gray-700 mb-4">Nutella PPP Index Overview</h3>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm text-gray-600">
-          <thead class="bg-gray-50 text-gray-700 font-semibold uppercase tracking-wider">
+          <thead class="bg-gray-50 text-gray-700 font-semibold uppercase tracking-wider text-xs">
             <tr>
-              <th class="px-4 py-3 rounded-tl-lg">Rank</th>
-              <th class="px-4 py-3">Country</th>
-              <th class="px-4 py-3">Value</th>
-              <th class="px-4 py-3 rounded-tr-lg">Change</th>
+              <th class="px-3 py-3 rounded-tl-lg">#</th>
+              <th class="px-3 py-3">Paese</th>
+              <th class="px-3 py-3 text-right">Prezzo Locale (100g)</th>
+              <th class="px-3 py-3 text-right">PPP Implicito</th>
+              <th class="px-3 py-3 text-right">Cambio Reale</th>
+              <th class="px-3 py-3 text-right rounded-tr-lg">Valutazione</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100">
+          <tbody class="divide-y divide-gray-100 text-sm">
             <tr *ngFor="let item of filteredRankings; index as i"
               class="hover:bg-blue-50 transition-colors cursor-default">
-              <td class="px-4 py-3 font-medium text-gray-900">#{{ i + 1 }}</td>
-              <td class="px-4 py-3 flex items-center gap-2">
-                <!-- Placeholder Pattern for Flag -->
-                <div class="w-6 h-4 bg-gray-200 rounded overflow-hidden relative shadow-sm">
-                  <div class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-300"></div>
-                </div>
+              <td class="px-3 py-3 font-medium text-gray-900">{{ i + 1 }}</td>
+              <td class="px-3 py-3 font-medium text-gray-900">
                 {{ item.country }}
               </td>
-              <td class="px-4 py-3 font-semibold text-blue-600">{{ item.value }}</td>
-              <td class="px-4 py-3" [class.text-green-500]="item.change.startsWith('+')"
-                [class.text-red-500]="item.change.startsWith('-')">
-                {{ item.change }}
+              <td class="px-3 py-3 text-right font-semibold text-gray-600">{{ item.local_price | number:'1.2-2' }}</td>
+              <td class="px-3 py-3 text-right font-semibold text-gray-800">{{ item.ppp_rate | number:'1.4-4' }}</td>
+              <td class="px-3 py-3 text-right text-gray-500">{{ item.exchange_rate | number:'1.4-4' }}</td>
+              <td class="px-3 py-3 text-right font-bold" 
+                  [ngClass]="{'text-red-500': item.valuation_percentage > 5, 'text-green-500': item.valuation_percentage < -5, 'text-gray-500': item.valuation_percentage >= -5 && item.valuation_percentage <= 5}">
+                <span *ngIf="item.valuation_percentage > 5">+</span>{{ item.valuation_percentage | number:'1.1-1' }}%
               </td>
             </tr>
           </tbody>

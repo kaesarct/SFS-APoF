@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, doc, addDoc, getDocs, writeBatch, deleteDoc, setDoc, query, orderBy, limit } from '@angular/fire/firestore';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { read, utils } from 'xlsx';
 
 export interface IndexData {
@@ -12,6 +13,7 @@ export interface IndexData {
 })
 export class DataService {
   private firestore = inject(Firestore);
+  private storage = inject(Storage);
 
   constructor() { }
 
@@ -40,6 +42,35 @@ export class DataService {
       });
     } catch (e) {
       console.error('Error submitting link', e);
+      throw e;
+    }
+  }
+
+  async uploadPhoto(file: File): Promise<string> {
+    try {
+      const timestamp = new Date().getTime();
+      const uniqueName = `${timestamp}_${file.name}`;
+      const storageRef = ref(this.storage, `uploads/${uniqueName}`);
+
+      const result = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(result.ref);
+      return url;
+    } catch (e) {
+      console.error('Error uploading photo', e);
+      throw e;
+    }
+  }
+
+  async submitData(data: any): Promise<void> {
+    try {
+      const submissionsRef = collection(this.firestore, 'submissions');
+      await addDoc(submissionsRef, {
+        ...data,
+        timestamp: new Date().toISOString(),
+        status: 'pending' // For admin review
+      });
+    } catch (e) {
+      console.error('Error submitting data', e);
       throw e;
     }
   }
@@ -93,7 +124,7 @@ export class DataService {
       // Expected Excel Columns (loose matching): 
       // Area, Paese, Data, Prezzo Originale, Cambio, Prezzo Euro, Peso, PIL, Anno PIL
 
-      const areaName = (row['Area'] || row['area'] || 'Unknown').trim();
+      const areaName = (row['Area'] || row['area'] || row['Area Geografica'] || 'Unknown').trim();
       const countryName = (row['Paese'] || row['Country'] || row['paese']).trim();
       const dateRaw = row['Data'] || row['Data Video Nic'] || row['Date'];
 
@@ -102,13 +133,13 @@ export class DataService {
       const dateVal = dateRaw instanceof Date ? dateRaw.toISOString().split('T')[0] : String(dateRaw).trim();
 
       // Values
-      const priceOriginal = parseFloat(row['Prezzo Originale'] || 0);
-      const exchangeRate = parseFloat(row['Cambio'] || row['Tasso Cambio'] || 1);
-      const priceEuro = parseFloat(row['Prezzo Euro'] || row['Euro/100g'] || 0);
+      const priceOriginal = parseFloat(row['Prezzo Originale'] || row['Prezzo nutella in valuta'] || 0);
+      const exchangeRate = parseFloat(row['Cambio'] || row['Tasso Cambio'] || row['Tasso di cambio del video'] || 1);
+      const priceEuro = parseFloat(row['Prezzo Euro'] || row['NUTELLA IN EURO'] || row['Euro/100g'] || 0);
 
-      const weight = parseInt(row['Peso'] || row['Peso (g)'] || 750);
+      const weight = parseInt(row['Peso'] || row['Peso (g)'] || row['Quantità (g)'] || 750);
       const gdpPerCapita = parseFloat(row['PIL'] || row['PIL pro capite'] || 0);
-      const gdpYear = parseInt(row['Anno PIL'] || new Date().getFullYear());
+      const gdpYear = parseInt(row['Anno PIL'] || row['Anno del dato pil'] || new Date().getFullYear());
 
       // 1. AREA
       let areaId = areasMap.get(areaName);
@@ -199,15 +230,16 @@ export class DataService {
       let rawData: any[] = measurementsSnap.docs.map(d => {
         const m = d.data();
         const c: any = countries.get(m['paese_id']);
+        const weight = m['peso_grammi'] || 750;
         return {
           ...m,
           paese: c?.nome || 'Unknown',
           area: areas.get(c?.area_id) || 'Unknown',
-          euro_per_100g: (m['prezzo_euro'] / (m['peso_grammi'] || 750)) * 100, // protect div by zero
+          local_per_100g: (m['prezzo_originale'] / weight) * 100,
+          euro_per_100g: (m['prezzo_euro'] / weight) * 100, // protect div by zero
           nutella_index_percent: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 100,
           minuti_lavoro_necessari: (m['prezzo_euro'] / (m['pil_pro_capite_eur'] || 1)) * 2000 * 60,
-          weight_penalty: (m['prezzo_euro'] / (m['peso_grammi'] || 750)) / ((m['prezzo_euro'] / 750) || 1),
-          price_per_kg: (m['prezzo_euro'] / (m['peso_grammi'] || 750)) * 1000
+          price_per_kg: (m['prezzo_euro'] / weight) * 1000
         };
       });
 
@@ -222,15 +254,15 @@ export class DataService {
 
       const italyPricePerKg = italyData ? italyData.price_per_kg : 1;
       const italyWorkMins = italyData ? italyData.minuti_lavoro_necessari : 1;
+      const italyLocalPer100g = italyData ? italyData.local_per_100g : 1;
       console.log('Reference Italy Data:', italyData ? 'Found' : 'Not Found');
 
       // Second pass: Comparative metrics
       return rawData.map((d: any) => {
         return {
           ...d,
-          nutella_ppp_rate: d['prezzo_originale'] / (italyData?.prezzo_originale || 1),
+          nutella_ppp_rate: d['local_per_100g'] / (italyLocalPer100g || 1),
           affordability_gap: ((d.minuti_lavoro_necessari - italyWorkMins) / italyWorkMins) * 100,
-          weight_penalty: d.peso_grammi === 750 ? 1 : (d.price_per_kg / (italyPricePerKg)),
           nutella_shadow_gdp: (d['prezzo_euro'] / d.nutella_index_percent) * 100
         };
       });
@@ -262,10 +294,15 @@ export class DataService {
 
       const rankings = Array.from(latestMap.values()).map((a: any) => ({
         country: a.paese,
+        local_price: a.local_per_100g || 0,
+        ppp_rate: a.nutella_ppp_rate || 0,
+        exchange_rate: a.tasso_cambio || 1,
+        valuation_percentage: a.tasso_cambio && a.tasso_cambio > 0 ? ((a.nutella_ppp_rate - a.tasso_cambio) / a.tasso_cambio) * 100 : 0,
+        nutella_index_minutes: a.minuti_lavoro_necessari || 0,
         value: a.euro_per_100g,
         change: a.affordability_gap.toFixed(1) + '%', // Re-purpose change for gap?
         area: a.area
-      })).sort((a: any, b: any) => b.value - a.value);
+      })).sort((a: any, b: any) => b.valuation_percentage - a.valuation_percentage);
 
       return { history, rankings };
     } catch (e) {

@@ -1,0 +1,91 @@
+<div class="max-w-3xl mx-auto animate-fade-in-up">
+  <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+      </svg>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-900 mb-2 text-center">Calcolatore Parità di Potere d'Acquisto (PPP)</h2>
+    <p class="text-center text-gray-500 mb-8 text-sm">Scopri se una valuta estera è sopravvalutata o sottovalutata rispetto all'Euro, usando la Nutella come riferimento (in stile Big Mac Index).</p>
+
+    <form [formGroup]="form" class="space-y-6">
+
+      <!-- Baseline and Local Currency Name -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo Nutella in Italia (€)</label>
+          <input type="number" formControlName="italyPrice" step="0.01"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Valuta Estera (Es. GBP, USD)</label>
+          <input type="text" formControlName="localCurrency" placeholder="es. GBP"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors uppercase">
+        </div>
+      </div>
+
+      <!-- Local Price & Exchange Rate -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo Nutella (in {{ form.get('localCurrency')?.value || 'Valuta' }})</label>
+          <input type="number" formControlName="localPrice" placeholder="es. 6.00" step="0.01"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tasso di Cambio (1 € = X {{ form.get('localCurrency')?.value || 'Valuta' }})</label>
+          <input type="number" formControlName="exchangeRate" placeholder="es. 0.85" step="0.0001"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors">
+        </div>
+      </div>
+
+      <!-- Indicator Card -->
+      <div *ngIf="pppRate !== null && valuationPercentage !== null" class="mt-8 transition-all duration-500 ease-in-out">
+        <div class="p-6 rounded-xl border relative overflow-hidden" 
+             [ngClass]="{'bg-red-50 border-red-200': isOvervalued && valuationPercentage > 5, 
+                         'bg-green-50 border-green-200': !isOvervalued && valuationPercentage < -5,
+                         'bg-gray-50 border-gray-300': valuationPercentage >= -5 && valuationPercentage <= 5}">
+          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <div class="flex-1 text-center md:text-left">
+              <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Tasso PPP (Nutella)</p>
+              <div class="text-4xl font-black text-gray-800 tracking-tight">
+                {{ pppRate | number:'1.2-2' }} <span class="text-lg text-gray-500 font-semibold">{{ form.get('localCurrency')?.value }}/€</span>
+              </div>
+            </div>
+
+            <div class="hidden md:block w-px h-16 bg-gray-200"></div>
+
+            <div class="flex-1 text-center md:text-right">
+              <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Valutazione della Valuta</p>
+              <div class="text-2xl font-bold flex items-center justify-center md:justify-end gap-2"
+                   [ngClass]="{'text-red-600': isOvervalued && valuationPercentage > 5, 
+                               'text-green-600': !isOvervalued && valuationPercentage < -5,
+                               'text-gray-600': valuationPercentage >= -5 && valuationPercentage <= 5}">
+                <span *ngIf="isOvervalued && valuationPercentage > 5">Sopravvalutata del</span>
+                <span *ngIf="!isOvervalued && valuationPercentage < -5">Sottovalutata del</span>
+                <span *ngIf="valuationPercentage >= -5 && valuationPercentage <= 5">In Equilibrio</span>
+                <span *ngIf="valuationPercentage > 5 || valuationPercentage < -5">{{ absValuationPercentage | number:'1.1-1' }}%</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Explanation -->
+          <div class="mt-6 pt-5 border-t border-black/5 text-sm" [ngClass]="{'text-red-800': isOvervalued && valuationPercentage > 5, 'text-green-800': !isOvervalued && valuationPercentage < -5, 'text-gray-600': valuationPercentage >= -5 && valuationPercentage <= 5}">
+            <p *ngIf="isOvervalued && valuationPercentage > 5">
+              Il tasso di cambio implicito ({{ pppRate | number:'1.2-2' }}) è <strong>maggiore</strong> del tasso di cambio ufficiale ({{ form.get('exchangeRate')?.value }}). Secondo l'Indice Nutella, la valuta {{ form.get('localCurrency')?.value }} è più forte di quanto dovrebbe essere rispetto all'Euro.
+            </p>
+            <p *ngIf="!isOvervalued && valuationPercentage < -5">
+              Il tasso di cambio implicito ({{ pppRate | number:'1.2-2' }}) è <strong>minore</strong> del tasso di cambio ufficiale ({{ form.get('exchangeRate')?.value }}). Secondo l'Indice Nutella, la valuta {{ form.get('localCurrency')?.value }} è più debole di quanto dovrebbe essere rispetto all'Euro.
+            </p>
+            <p *ngIf="valuationPercentage >= -5 && valuationPercentage <= 5">
+              Il tasso di cambio implicito ({{ pppRate | number:'1.2-2' }}) è molto <strong>vicino</strong> al tasso di cambio ufficiale ({{ form.get('exchangeRate')?.value }}). La valuta è in sintonia con il suo reale potere d'acquisto.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

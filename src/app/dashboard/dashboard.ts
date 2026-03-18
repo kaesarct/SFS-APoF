@@ -93,35 +93,33 @@ export class Dashboard implements OnInit, AfterViewInit {
     if (this.filteredRankings.length === 0) return;
 
     const countries = this.filteredRankings.map(d => d.country);
-    const values = this.filteredRankings.map(d => d.value);
+    const values = this.filteredRankings.map(d => d.valuation_percentage);
+
+    const backgroundColors = values.map(val => val > 0 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(34, 197, 94, 0.8)'); // Red for OVR, Green for UDR
 
     this.chart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: countries,
         datasets: [{
-          label: 'Valore Indice',
+          label: 'Sopra/Sottovalutazione (%)',
           data: values,
-          backgroundColor: [
-            'rgba(59, 130, 246, 0.8)', // Blue-500
-            'rgba(249, 115, 22, 0.8)', // Orange-500
-            'rgba(16, 185, 129, 0.8)', // Emerald-500
-            'rgba(236, 72, 153, 0.8)', // Pink-500
-            'rgba(139, 92, 246, 0.8)', // Violet-500
-          ],
+          backgroundColor: backgroundColors,
           borderColor: 'rgba(0,0,0,0)',
           borderWidth: 1,
           borderRadius: 6,
         }]
       },
       options: {
+        indexAxis: 'y',
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          title: { display: true, text: 'Classifiche Nazionali Attuali' }
+          title: { display: true, text: 'Sopravvalutazione / Sottovalutazione delle Valute (%)' }
         },
         scales: {
-          y: { beginAtZero: false, min: 60 }
+          y: { beginAtZero: true } // Need to show negative and positive clearly
         }
       }
     });
