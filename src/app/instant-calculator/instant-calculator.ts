@@ -18,7 +18,9 @@ export class InstantCalculator implements OnInit {
   // Form Bindings
   selectedCountry: string = '';
   localPrice: number | null = null;
-  weightGrams: number = 350; // default come richiesto
+  private _weightGrams: number = 350;
+  get weightGrams(): number { return this._weightGrams; }
+  set weightGrams(val: number) { this._weightGrams = val; if (this.hasCalculated) this.calculate(); }
   exchangeRate: number | null = null; // temporaneo manuale
 
   // Calculated Results

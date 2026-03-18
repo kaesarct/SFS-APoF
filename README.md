@@ -67,6 +67,48 @@ To deploy the entire application to Firebase:
     firebase deploy
     ```
 
+## Modificare il Testo e Fare Deploy da Zero
+
+Passi completi per modificare un testo nell'interfaccia e pubblicare le modifiche su Firebase.
+
+### 1. Prerequisiti (solo la prima volta)
+
+```bash
+npm install -g firebase-tools
+npm install
+```
+
+### 2. Modifica il testo
+
+I file HTML dei componenti si trovano in `src/app/<nome-componente>/`. Aprili e modifica il testo direttamente nel template `.html`.
+
+Esempio: per cambiare il titolo dell'instant calculator, apri:
+```
+src/app/instant-calculator/instant-calculator.html
+```
+
+### 3. Build
+
+```bash
+npx ng build
+```
+
+I file compilati vengono generati in `dist/frontend/browser/`.
+
+### 4. Login Firebase (solo la prima volta o se scaduto)
+
+```bash
+firebase login
+```
+
+### 5. Deploy
+
+```bash
+firebase deploy --only hosting
+```
+
+---
+
 ## Backend API
 
 The backend is accessible at `/api/`. Example endpoint:
