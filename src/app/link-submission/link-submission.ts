@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { DataService } from '../data.service';
 import nutellaData from '../nutella-data.json';
+import paesiIta from '../paesi-ita.json';
+import itaToEng from '../ita-to-eng.json';
 
 @Component({
   selector: 'app-data-submission',
@@ -15,7 +17,7 @@ export class DataSubmission implements OnInit {
   private fb = inject(FormBuilder);
   private dataService = inject(DataService);
 
-  countries = nutellaData.countries;
+  countries = (paesiIta as string[]).sort();
   gdpData: any = nutellaData.gdp;
 
   nutellaIndexMinutes: number | null = null;
@@ -29,7 +31,8 @@ export class DataSubmission implements OnInit {
     weight: ['750', Validators.required],
     city: ['', Validators.required],
     country: ['', Validators.required],
-    file: [null as File | null]
+    file: [null as File | null],
+    gdprConsent: [false, Validators.requiredTrue]
   });
 
   currencies = ['EUR', 'USD', 'GBP', 'CHF', 'PLN'];
@@ -76,7 +79,8 @@ export class DataSubmission implements OnInit {
       }
 
       const weight = parseFloat(v.weight) || 750;
-      const gdpObj = this.gdpData[v.country];
+      const engCountry = (itaToEng as any)[v.country] || v.country;
+      const gdpObj = this.gdpData[engCountry];
       let gdp = 0;
       if (gdpObj) {
           let maxYear = 0;

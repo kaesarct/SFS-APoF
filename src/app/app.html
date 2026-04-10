@@ -6,7 +6,6 @@
         <a routerLink="/" class="hover:text-blue-200 transition-colors font-medium">Dashboard</a>
         <a routerLink="/methodology" class="hover:text-blue-200 transition-colors font-medium">Metodologia</a>
         <a routerLink="/ppp-index" class="hover:text-blue-200 transition-colors font-medium">Nutella PPP</a>
-        <a routerLink="/equivalency" class="hover:text-blue-200 transition-colors font-medium">Equivalenza</a>
         <a routerLink="/instant-calculator" class="hover:text-blue-200 transition-colors font-medium">Calcolo
           Istantaneo</a>
         <a routerLink="/submit-link"
@@ -20,9 +19,31 @@
     <router-outlet></router-outlet>
   </main>
 
-  <footer class="bg-gray-800 text-gray-300 py-6 text-center text-sm">
+  <!-- Cookie Banner -->
+  <div *ngIf="cookieBannerVisible"
+    class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-gray-200 px-4 py-4 shadow-2xl border-t border-gray-700 animate-fade-in-up">
+    <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-center sm:text-left">
+        🍪 Questo sito utilizza cookie tecnici per il funzionamento e cookie analitici anonimi.
+        Non raccogliamo dati personali senza consenso.
+        <a href="#" class="underline text-blue-400 hover:text-blue-300 ml-1">Privacy Policy</a>
+      </p>
+      <div class="flex gap-3 shrink-0">
+        <button (click)="declineCookies()"
+          class="px-4 py-2 text-sm rounded-lg border border-gray-500 hover:bg-gray-700 transition-colors">
+          Solo necessari
+        </button>
+        <button (click)="acceptCookies()"
+          class="px-4 py-2 text-sm rounded-lg bg-green-600 hover:bg-green-500 text-white font-semibold transition-colors">
+          Accetta tutti
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-gray-800 text-gray-300 py-6 text-center text-sm space-y-2">
     <p>Nutella® è un marchio registrato di Ferrero S.p.A. Questo sito è un progetto statistico indipendente e non è in
-      alcun
-      modo affiliato, sponsorizzato o approvato da Ferrero S.p.A.</p>
+      alcun modo affiliato, sponsorizzato o approvato da Ferrero S.p.A.</p>
+    <p>Sito realizzato da <strong>luiggio</strong> e <strong>faro__c</strong></p>
   </footer>
 </div>

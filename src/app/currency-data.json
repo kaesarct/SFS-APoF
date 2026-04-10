@@ -1,0 +1,790 @@
+{
+  "Afghanistan": {
+    "currency": "Afghani (AFN)",
+    "rate": 78.5
+  },
+  "Albania": {
+    "currency": "Lek Albanese (ALL)",
+    "rate": 103.2
+  },
+  "Algeria": {
+    "currency": "Dinar Algerino (DZD)",
+    "rate": 146.8
+  },
+  "Andorra": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Angola": {
+    "currency": "Kwanza Angolano (AOA)",
+    "rate": 910
+  },
+  "Antigua e Barbuda": {
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "rate": 2.94
+  },
+  "Argentina": {
+    "currency": "Peso Argentino (ARS)",
+    "rate": 920.5
+  },
+  "Armenia": {
+    "currency": "Dram Armeno (AMD)",
+    "rate": 435
+  },
+  "Aruba": {
+    "currency": "Fiorino Arubano (AWG)",
+    "rate": 1.96
+  },
+  "Australia": {
+    "currency": "Dollaro Australiano (AUD)",
+    "rate": 1.65
+  },
+  "Austria": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Azerbaijan": {
+    "currency": "Manat Azero (AZN)",
+    "rate": 1.85
+  },
+  "Bahamas": {
+    "currency": "Dollaro delle Bahamas (BSD)",
+    "rate": 1.09
+  },
+  "Bahrain": {
+    "currency": "Dinaro del Bahrain (BHD)",
+    "rate": 0.41
+  },
+  "Bangladesh": {
+    "currency": "Taka Bengalese (BDT)",
+    "rate": 119.5
+  },
+  "Barbados": {
+    "currency": "Dollaro di Barbados (BBD)",
+    "rate": 2.18
+  },
+  "Bielorussia": {
+    "currency": "Rublo Bielorusso (BYN)",
+    "rate": 3.55
+  },
+  "Belgio": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Belize": {
+    "currency": "Dollaro del Belize (BZD)",
+    "rate": 2.18
+  },
+  "Benin": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Bhutan": {
+    "currency": "Ngultrum Bhutanese (BTN)",
+    "rate": 90.2
+  },
+  "Bolivia": {
+    "currency": "Boliviano (BOB)",
+    "rate": 7.5
+  },
+  "Bosnia Herzegovina": {
+    "currency": "Marco Convertibile (BAM)",
+    "rate": 1.95
+  },
+  "Botswana": {
+    "currency": "Pula del Botswana (BWP)",
+    "rate": 14.8
+  },
+  "Brasile": {
+    "currency": "Real Brasiliano (BRL)",
+    "rate": 5.45
+  },
+  "Brunei": {
+    "currency": "Dollaro del Brunei (BND)",
+    "rate": 1.46
+  },
+  "Bulgaria": {
+    "currency": "Lev Bulgaro (BGN)",
+    "rate": 1.95
+  },
+  "Burkina Faso": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Burundi": {
+    "currency": "Franco del Burundi (BIF)",
+    "rate": 3100
+  },
+  "Cabo Verde": {
+    "currency": "Escudo Capoverdiano (CVE)",
+    "rate": 110.26
+  },
+  "Cambogia": {
+    "currency": "Riel Cambogiano (KHR)",
+    "rate": 4450
+  },
+  "Camerun": {
+    "currency": "Franco CFA (XAF)",
+    "rate": 655.96
+  },
+  "Canada": {
+    "currency": "Dollaro Canadese (CAD)",
+    "rate": 1.47
+  },
+  "Centrafricana, Repubblica": {
+    "currency": "Franco CFA (XAF)",
+    "rate": 655.96
+  },
+  "Chad": {
+    "currency": "Franco CFA (XAF)",
+    "rate": 655.96
+  },
+  "Cile": {
+    "currency": "Peso Cileno (CLP)",
+    "rate": 1050
+  },
+  "Cina": {
+    "currency": "Renminbi Cinese (CNY)",
+    "rate": 7.85
+  },
+  "Colombia": {
+    "currency": "Peso Colombiano (COP)",
+    "rate": 4250
+  },
+  "Isole Comore": {
+    "currency": "Franco Comoriano (KMF)",
+    "rate": 491.96
+  },
+  "Congo, Repubblica Democratica Del": {
+    "currency": "Franco Congolese (CDF)",
+    "rate": 3000
+  },
+  "Congo  ": {
+    "currency": "Franco CFA (XAF)",
+    "rate": 655.96
+  },
+  "Costa Rica": {
+    "currency": "Colón Costaricano (CRC)",
+    "rate": 560
+  },
+  "Croatia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Cipro": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Repubblica Ceca": {
+    "currency": "Corona Ceca (CZK)",
+    "rate": 25.3
+  },
+  "Costa d'Avorio": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Danimarca": {
+    "currency": "Corona Danese (DKK)",
+    "rate": 7.45
+  },
+  "Gibuti": {
+    "currency": "Franco Gibutiano (DJF)",
+    "rate": 193.5
+  },
+  "Dominica": {
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "rate": 2.94
+  },
+  "Repubblica Dominicana": {
+    "currency": "Peso Dominicano (DOP)",
+    "rate": 64.5
+  },
+  "Ecuador": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Egitto": {
+    "currency": "Sterlina Egiziana (EGP)",
+    "rate": 33.5
+  },
+  "El Salvador": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Guinea Equatoriale": {
+    "currency": "Franco CFA (XAF)",
+    "rate": 655.96
+  },
+  "Eritrea": {
+    "currency": "Nakfa Eritreo (ERN)",
+    "rate": 16.35
+  },
+  "Estonia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Eswatini": {
+    "currency": "Lilangeni dello Swaziland (SZL)",
+    "rate": 20.5
+  },
+  "Etiopia": {
+    "currency": "Birr Etiope (ETB)",
+    "rate": 61.5
+  },
+  "Fiji": {
+    "currency": "Dollaro delle Figi (FJD)",
+    "rate": 2.45
+  },
+  "Finlandia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Francia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Gabon": {
+    "currency": "Franco CFA (XAF)",
+    "rate": 655.96
+  },
+  "Gambia": {
+    "currency": "Dalasi Gambiano (GMD)",
+    "rate": 73.5
+  },
+  "Georgia": {
+    "currency": "Lari Georgiano (GEL)",
+    "rate": 2.9
+  },
+  "Germania": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Ghana": {
+    "currency": "Cedi Ghanese (GHS)",
+    "rate": 13.5
+  },
+  "Grecia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Grenada": {
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "rate": 2.94
+  },
+  "Guatemala": {
+    "currency": "Quetzal Guatemalteco (GTQ)",
+    "rate": 8.5
+  },
+  "Guinea": {
+    "currency": "Franco Guineano (GNF)",
+    "rate": 9350
+  },
+  "Guinea-Bissau": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Guyana": {
+    "currency": "Dollaro Guyanese (GYD)",
+    "rate": 228
+  },
+  "Haiti": {
+    "currency": "Gourde Haitiano (HTG)",
+    "rate": 144
+  },
+  "Honduras": {
+    "currency": "Lempira Honduregna (HNL)",
+    "rate": 26.8
+  },
+  "Hong Kong SAR": {
+    "currency": "Dollaro di Hong Kong (HKD)",
+    "rate": 8.52
+  },
+  "Ungheria": {
+    "currency": "Fiorino Ungherese (HUF)",
+    "rate": 390.5
+  },
+  "Islanda": {
+    "currency": "Corona Islandese (ISK)",
+    "rate": 149.5
+  },
+  "India": {
+    "currency": "Rupia Indiana (INR)",
+    "rate": 90.2
+  },
+  "Indonesia": {
+    "currency": "Rupia Indiana (IDR)",
+    "rate": 16950
+  },
+  "Iran": {
+    "currency": "Rial Iraniano (IRR)",
+    "rate": 45800
+  },
+  "Iraq": {
+    "currency": "Dinaro Iracheno (IQD)",
+    "rate": 1425
+  },
+  "Irlanda": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Israele": {
+    "currency": "Nuovo Siclo Israeliano (ILS)",
+    "rate": 3.95
+  },
+  "Italia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Jamaica": {
+    "currency": "Dollaro Giamaicano (JMD)",
+    "rate": 168.5
+  },
+  "Giappone": {
+    "currency": "Yen Giapponese (JPY)",
+    "rate": 161.5
+  },
+  "Giordania": {
+    "currency": "Dinaro Giordano (JOD)",
+    "rate": 0.77
+  },
+  "Kazakistan": {
+    "currency": "Tenge Kazako (KZT)",
+    "rate": 495
+  },
+  "Kenya": {
+    "currency": "Scellino Keniota (KES)",
+    "rate": 155
+  },
+  "Kiribati": {
+    "currency": "Dollaro Australiano (AUD)",
+    "rate": 1.65
+  },
+  "Corea del Sud": {
+    "currency": "Won Sudcoreano (KRW)",
+    "rate": 1450
+  },
+  "Kosovo": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Kuwait": {
+    "currency": "Dinaro Kuwaitiano (KWD)",
+    "rate": 0.33
+  },
+  "Kyrgyzistan": {
+    "currency": "Som Kirghizo (KGS)",
+    "rate": 97.5
+  },
+  "Laos": {
+    "currency": "Kip Laotiano (LAK)",
+    "rate": 22500
+  },
+  "Lettonia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Libano": {
+    "currency": "Lira Libanese (LBP)",
+    "rate": 97500
+  },
+  "Lesotho": {
+    "currency": "Loti del Lesotho (LSL)",
+    "rate": 20.5
+  },
+  "Liberia": {
+    "currency": "Dollaro Liberiano (LRD)",
+    "rate": 208
+  },
+  "Libia": {
+    "currency": "Dinaro Libico (LYD)",
+    "rate": 5.25
+  },
+  "Liechtenstein": {
+    "currency": "Franco Svizzero (CHF)",
+    "rate": 0.91
+  },
+  "Lituania": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Lussemburgo": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Macao": {
+    "currency": "Pataca di Macao (MOP)",
+    "rate": 8.78
+  },
+  "Madagascar": {
+    "currency": "Ariary Malgascio (MGA)",
+    "rate": 4950
+  },
+  "Malawi": {
+    "currency": "Kwacha Malawiano (MWK)",
+    "rate": 1850
+  },
+  "Malesia": {
+    "currency": "Ringgit Malese (MYR)",
+    "rate": 5.15
+  },
+  "Maldive": {
+    "currency": "Rufiyaa delle Maldive (MVR)",
+    "rate": 16.8
+  },
+  "Mali": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Malta": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Isole Marshall": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Mauritania": {
+    "currency": "Ouguiya Mauritana (MRU)",
+    "rate": 43.5
+  },
+  "Mauritius": {
+    "currency": "Rupia Mauriziana (MUR)",
+    "rate": 49.5
+  },
+  "Messico": {
+    "currency": "Peso Messicano (MXN)",
+    "rate": 18.2
+  },
+  "Micronesia, Stati federati di": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Moldavia": {
+    "currency": "Leu Moldavo (MDL)",
+    "rate": 19.3
+  },
+  "Mongolia": {
+    "currency": "Tugrik Mongolo (MNT)",
+    "rate": 3750
+  },
+  "Montenegro": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Marocco": {
+    "currency": "Dirham Marocchino (MAD)",
+    "rate": 10.85
+  },
+  "Mozambico": {
+    "currency": "Metical Mozambicano (MZN)",
+    "rate": 69.5
+  },
+  "Myanmar": {
+    "currency": "Kyat Birmano (MMK)",
+    "rate": 2290
+  },
+  "Namibia": {
+    "currency": "Dollaro Namibiano (NAD)",
+    "rate": 20.5
+  },
+  "Nauru": {
+    "currency": "Dollaro Australiano (AUD)",
+    "rate": 1.65
+  },
+  "Nepal": {
+    "currency": "Rupia Nepalese (NPR)",
+    "rate": 144.5
+  },
+  "Paesi Bassi": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Nuova Zelanda": {
+    "currency": "Dollaro Neozelandese (NZD)",
+    "rate": 1.78
+  },
+  "Nicaragua": {
+    "currency": "Córdoba Nicaraguense (NIO)",
+    "rate": 40
+  },
+  "Niger": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Nigeria": {
+    "currency": "Naira Nigeriana (NGN)",
+    "rate": 1650
+  },
+  "Macedonia del Nord": {
+    "currency": "Denaro Macedone (MKD)",
+    "rate": 61.5
+  },
+  "Norvegia": {
+    "currency": "Corona Norvegese (NOK)",
+    "rate": 11.5
+  },
+  "Oman": {
+    "currency": "Rial dell'Oman (OMR)",
+    "rate": 0.42
+  },
+  "Pakistan": {
+    "currency": "Rupia Pakistana (PKR)",
+    "rate": 305
+  },
+  "Palau": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Panama": {
+    "currency": "Balboa Panamense (PAB)",
+    "rate": 1.09
+  },
+  "Papua Nuova Guinea": {
+    "currency": "Kina Papuana (PGK)",
+    "rate": 4.1
+  },
+  "Paraguay": {
+    "currency": "Guaraní Paraguaiano (PYG)",
+    "rate": 7950
+  },
+  "Peru": {
+    "currency": "Sol Peruviano (PEN)",
+    "rate": 4.15
+  },
+  "Filippine": {
+    "currency": "Peso Filippino (PHP)",
+    "rate": 61
+  },
+  "Polonia": {
+    "currency": "Złoty Polacco (PLN)",
+    "rate": 4.3
+  },
+  "Portogallo": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Puerto Rico": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Qatar": {
+    "currency": "Riyal Qatariota (QAR)",
+    "rate": 3.97
+  },
+  "Romania": {
+    "currency": "Leu Rumeno (RON)",
+    "rate": 4.97
+  },
+  "Russia": {
+    "currency": "Rublo Russo (RUB)",
+    "rate": 100.5
+  },
+  "Rwanda": {
+    "currency": "Franco Ruandese (RWF)",
+    "rate": 1390
+  },
+  "Saint Kitts e Nevis": {
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "rate": 2.94
+  },
+  "Saint Lucia": {
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "rate": 2.94
+  },
+  "Saint Vincent and the Grenadines": {
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "rate": 2.94
+  },
+  "Samoa": {
+    "currency": "Tala Samoano (WST)",
+    "rate": 3
+  },
+  "San Marino": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Arabia Saudita": {
+    "currency": "Riyal Saudita (SAR)",
+    "rate": 4.09
+  },
+  "Senegal": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Serbia": {
+    "currency": "Dinaro Serbo (RSD)",
+    "rate": 117.2
+  },
+  "Seychelles": {
+    "currency": "Rupia delle Seychelles (SCR)",
+    "rate": 14.8
+  },
+  "Sierra Leone": {
+    "currency": "Leone Sierraleonese (SLE)",
+    "rate": 24.5
+  },
+  "Singapore": {
+    "currency": "Dollaro di Singapore (SGD)",
+    "rate": 1.46
+  },
+  "Slovacchia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Slovenia": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Isole Solomon": {
+    "currency": "Dollaro delle Isole Salomone (SBD)",
+    "rate": 9.2
+  },
+  "Somalia": {
+    "currency": "Scellino Somalo (SOS)",
+    "rate": 625
+  },
+  "Sudafrica": {
+    "currency": "Rand Sudafricano (ZAR)",
+    "rate": 20.5
+  },
+  "South Sudan": {
+    "currency": "Lira Sudsudanese (SSP)",
+    "rate": 1150
+  },
+  "Spagna": {
+    "currency": "Euro (EUR)",
+    "rate": 1
+  },
+  "Sri Lanka": {
+    "currency": "Rupia Srilankese (LKR)",
+    "rate": 345
+  },
+  "Sudan": {
+    "currency": "Sterlina Sudanese (SDG)",
+    "rate": 655
+  },
+  "Suriname": {
+    "currency": "Dollaro del Suriname (SRD)",
+    "rate": 39.5
+  },
+  "Svezia": {
+    "currency": "Corona Svedese (SEK)",
+    "rate": 11.25
+  },
+  "Svizzera": {
+    "currency": "Franco Svizzero (CHF)",
+    "rate": 0.91
+  },
+  "Siria": {
+    "currency": "Lira Siriana (SYP)",
+    "rate": 14150
+  },
+  "São Tomé and Príncipe": {
+    "currency": "Dobra (STN)",
+    "rate": 24.5
+  },
+  "Taiwan": {
+    "currency": "Nuovo Dollaro Taiwanese (TWD)",
+    "rate": 34.5
+  },
+  "Tajikistan": {
+    "currency": "Somoni Tagiko (TJS)",
+    "rate": 11.9
+  },
+  "Tanzania": {
+    "currency": "Scellino Tanzaniano (TZS)",
+    "rate": 2750
+  },
+  "Thailandia": {
+    "currency": "Baht Thailandese (THB)",
+    "rate": 38.5
+  },
+  "Timor Est": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Togo": {
+    "currency": "Franco CFA (XOF)",
+    "rate": 655.96
+  },
+  "Tonga": {
+    "currency": "Paʻanga Tongano (TOP)",
+    "rate": 2.55
+  },
+  "Trinidad and Tobago": {
+    "currency": "Dollaro di Trinidad e Tobago (TTD)",
+    "rate": 7.35
+  },
+  "Tunisia": {
+    "currency": "Dinaro Tunisino (TND)",
+    "rate": 3.4
+  },
+  "Turkmenistan": {
+    "currency": "Manat Turkmeno (TMT)",
+    "rate": 3.82
+  },
+  "Tuvalu": {
+    "currency": "Dollaro Australiano (AUD)",
+    "rate": 1.65
+  },
+  "Turchia": {
+    "currency": "Lira Turca (TRY)",
+    "rate": 34.5
+  },
+  "Uganda": {
+    "currency": "Scellino Ugandese (UGX)",
+    "rate": 4250
+  },
+  "Ucraina": {
+    "currency": "Grivnia Ucraina (UAH)",
+    "rate": 41.5
+  },
+  "Emirati Arabi Uniti": {
+    "currency": "Dirham degli Emirati Arabi Uniti (AED)",
+    "rate": 4
+  },
+  "Regno Unito": {
+    "currency": "Sterlina Britannica (GBP)",
+    "rate": 0.85
+  },
+  "Stati Uniti d'America": {
+    "currency": "Dollaro Statunitense (USD)",
+    "rate": 1.09
+  },
+  "Uruguay": {
+    "currency": "Peso Uruguaiano (UYU)",
+    "rate": 42.5
+  },
+  "Uzbekistan": {
+    "currency": "Sum Uzbeco (UZS)",
+    "rate": 13650
+  },
+  "Vanuatu": {
+    "currency": "Vatu di Vanuatu (VUV)",
+    "rate": 130.5
+  },
+  "Venezuela": {
+    "currency": "Bolívar Venezuelano (VES)",
+    "rate": 39.5
+  },
+  "Vietnam": {
+    "currency": "Dong Vietnamita (VND)",
+    "rate": 26800
+  },
+  "West Bank and Gaza": {
+    "currency": "Nuovo Siclo Israeliano (ILS)",
+    "rate": 3.95
+  },
+  "Yemen": {
+    "currency": "Rial Yemenita (YER)",
+    "rate": 273
+  },
+  "Zambia": {
+    "currency": "Kwacha Zambiano (ZMW)",
+    "rate": 24.5
+  },
+  "Zimbabwe": {
+    "currency": "Dollaro Statunitense (USD) / ZiG",
+    "rate": 1.09
+  }
+}

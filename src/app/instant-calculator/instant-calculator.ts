@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import nutellaData from '../nutella-data.json';
-import { ITALY_WAGE_PER_MINUTE, findMatchingTier, PriceTier } from '../shared/tiers';
+import paesiIta from '../paesi-ita.json';
+import itaToEng from '../ita-to-eng.json';
+import currencyData from '../currency-data.json';
+import { ITALY_WAGE_PER_MINUTE, ITALY_MINUTES_PER_100G, findMatchingTier, PriceTier } from '../shared/tiers';
 
 @Component({
   selector: 'app-instant-calculator',
@@ -21,25 +24,46 @@ export class InstantCalculator implements OnInit {
   private _weightGrams: number = 350;
   get weightGrams(): number { return this._weightGrams; }
   set weightGrams(val: number) { this._weightGrams = val; if (this.hasCalculated) this.calculate(); }
-  exchangeRate: number | null = null; // temporaneo manuale
+  
+  currencyLabel: string = '';
+  exchangeRate: number | null = null;
 
   // Calculated Results
   calculatedEuroPrice: number = 0;
   calculatedMinutes100g: number = 0;
   calculatedMinutesVasetto: number = 0;
   calculatedEquivalentEuro: number = 0;
-  matchedItem: string = '';
+  calculatedNutellaGrams: number = 0;
+  calculatedEuroValue: number = 0;
+  matchedTier: PriceTier | null = null;
   
   hasCalculated: boolean = false;
+  
+  // Custom tabs support
+  activeTab: 'calcolo' | 'equivalenza' = 'calcolo';
+  inputMinutes: number | null = null;
 
   constructor(private decimalPipe: DecimalPipe) {}
 
   ngOnInit() {
-    this.countries = nutellaData.countries.sort();
+    this.countries = (paesiIta as string[]).sort();
   }
 
-  getRecentGdp(countryName: string): number {
-    const rawGdpData = (nutellaData.gdp as any)[countryName];
+  onCountryChange() {
+    const data = (currencyData as any)[this.selectedCountry];
+    if (data) {
+      this.currencyLabel = data.currency;
+      this.exchangeRate = data.rate;
+    } else {
+      this.currencyLabel = '';
+      this.exchangeRate = null;
+    }
+    this.hasCalculated = false;
+  }
+
+  getRecentGdp(itaName: string): number {
+    const engName = (itaToEng as any)[itaName] || itaName;
+    const rawGdpData = (nutellaData.gdp as any)[engName];
     if (!rawGdpData) return 0; // Default if not found
 
     // Cerchiamo in ordine di priorità gli anni dal più recente al più vecchio
@@ -85,9 +109,29 @@ export class InstantCalculator implements OnInit {
 
     // "Prende i minuti per il vasetto, li moltiplica per 0.31 (ITALY_WAGE_PER_MINUTE) e trova la fascia di prezzo"
     this.calculatedEquivalentEuro = this.calculatedMinutesVasetto * ITALY_WAGE_PER_MINUTE;
-    const tier = findMatchingTier(this.calculatedEquivalentEuro);
-    this.matchedItem = tier ? tier.item : "Non calcolabile";
+    this.matchedTier = findMatchingTier(this.calculatedEquivalentEuro);
+    this.calculatedNutellaGrams = (this.calculatedMinutesVasetto / ITALY_MINUTES_PER_100G) * 100;
+    
+    // Auto-populate the equivalency tab if they switch to it
+    this.inputMinutes = this.calculatedMinutesVasetto;
+    this.calculatedEuroValue = this.calculatedEquivalentEuro;
     
     this.hasCalculated = true;
+  }
+
+  switchTab(tab: 'calcolo' | 'equivalenza') {
+    this.activeTab = tab;
+    // If switching to equivalenza and we have a calculated result, run calculations.
+    if (tab === 'equivalenza' && this.inputMinutes == null && this.calculatedMinutesVasetto > 0) {
+      this.inputMinutes = this.calculatedMinutesVasetto;
+      this.calculateEquivalency();
+    }
+  }
+
+  calculateEquivalency() {
+    if (!this.inputMinutes) return;
+    this.calculatedEuroValue = this.inputMinutes * ITALY_WAGE_PER_MINUTE;
+    this.matchedTier = findMatchingTier(this.calculatedEuroValue);
+    this.calculatedNutellaGrams = (this.inputMinutes / ITALY_MINUTES_PER_100G) * 100;
   }
 }

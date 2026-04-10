@@ -1,0 +1,23 @@
+[
+  { "country": "Italy",        "area": "Europe",   "euro_per_100g": 1.00,  "exchange_rate": 1.00,   "minutes_per_100g": 2.41  },
+  { "country": "Switzerland",  "area": "Europe",   "euro_per_100g": 2.20,  "exchange_rate": 0.91,   "minutes_per_100g": 1.85  },
+  { "country": "Norway",       "area": "Europe",   "euro_per_100g": 2.10,  "exchange_rate": 11.50,  "minutes_per_100g": 1.40  },
+  { "country": "Germany",      "area": "Europe",   "euro_per_100g": 1.05,  "exchange_rate": 1.00,   "minutes_per_100g": 2.10  },
+  { "country": "France",       "area": "Europe",   "euro_per_100g": 1.08,  "exchange_rate": 1.00,   "minutes_per_100g": 2.20  },
+  { "country": "Spain",        "area": "Europe",   "euro_per_100g": 0.95,  "exchange_rate": 1.00,   "minutes_per_100g": 3.10  },
+  { "country": "Poland",       "area": "Europe",   "euro_per_100g": 0.85,  "exchange_rate": 4.30,   "minutes_per_100g": 3.80  },
+  { "country": "United Kingdom","area": "Europe",  "euro_per_100g": 1.50,  "exchange_rate": 0.85,   "minutes_per_100g": 2.50  },
+  { "country": "United States","area": "Americas", "euro_per_100g": 1.80,  "exchange_rate": 1.09,   "minutes_per_100g": 2.00  },
+  { "country": "Brazil",       "area": "Americas", "euro_per_100g": 1.20,  "exchange_rate": 5.45,   "minutes_per_100g": 8.50  },
+  { "country": "Argentina",    "area": "Americas", "euro_per_100g": 0.60,  "exchange_rate": 920.50, "minutes_per_100g": 5.20  },
+  { "country": "Mexico",       "area": "Americas", "euro_per_100g": 1.10,  "exchange_rate": 18.20,  "minutes_per_100g": 6.30  },
+  { "country": "Grenada",      "area": "Americas", "euro_per_100g": 1.35,  "exchange_rate": 2.94,   "minutes_per_100g": 12.29 },
+  { "country": "Japan",        "area": "Asia",     "euro_per_100g": 2.50,  "exchange_rate": 161.50, "minutes_per_100g": 4.80  },
+  { "country": "China",        "area": "Asia",     "euro_per_100g": 1.40,  "exchange_rate": 7.85,   "minutes_per_100g": 5.50  },
+  { "country": "India",        "area": "Asia",     "euro_per_100g": 1.60,  "exchange_rate": 90.20,  "minutes_per_100g": 35.00 },
+  { "country": "Turkey",       "area": "Asia",     "euro_per_100g": 0.80,  "exchange_rate": 34.50,  "minutes_per_100g": 4.20  },
+  { "country": "Australia",    "area": "Oceania",  "euro_per_100g": 1.90,  "exchange_rate": 1.65,   "minutes_per_100g": 2.20  },
+  { "country": "Nigeria",      "area": "Africa",   "euro_per_100g": 1.50,  "exchange_rate": 1650.00,"minutes_per_100g": 95.00 },
+  { "country": "South Africa", "area": "Africa",   "euro_per_100g": 1.20,  "exchange_rate": 20.50,  "minutes_per_100g": 18.00 },
+  { "country": "Burundi",      "area": "Africa",   "euro_per_100g": 1.10,  "exchange_rate": 3100.00,"minutes_per_100g": 362.46}
+]
