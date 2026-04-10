@@ -106,6 +106,14 @@ npx ng serve
 
 ## Deploy su Firebase
 
+### Comando completo (build + deploy in un colpo)
+
+```bash
+npx ng build && firebase deploy --only hosting
+```
+
+### Passo per passo
+
 ```bash
 # 1. Build
 npx ng build
@@ -118,7 +126,6 @@ Se il login Firebase è scaduto:
 ```bash
 firebase login --reauth
 ```
-
 ---
 
 ## Aggiornare i dati della Dashboard
