@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import nutellaData from '../nutella-data.json';
-import paesiIta from '../paesi-ita.json';
-import itaToEng from '../ita-to-eng.json';
-import currencyData from '../currency-data.json';
 import { ITALY_WAGE_PER_MINUTE, ITALY_MINUTES_PER_100G, findMatchingTier, PriceTier } from '../shared/tiers';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-instant-calculator',
@@ -16,7 +14,11 @@ import { ITALY_WAGE_PER_MINUTE, ITALY_MINUTES_PER_100G, findMatchingTier, PriceT
   styleUrl: './instant-calculator.css'
 })
 export class InstantCalculator implements OnInit {
+  private dataService = inject(DataService);
+
   countries: string[] = [];
+  private currencyMap = new Map<string, { currency: string; rate: number }>();
+  private itaToEngMap = new Map<string, string>();
   
   // Form Bindings
   selectedCountry: string = '';
@@ -39,18 +41,43 @@ export class InstantCalculator implements OnInit {
   
   hasCalculated: boolean = false;
   
-  // Custom tabs support
   activeTab: 'calcolo' | 'equivalenza' = 'calcolo';
   inputMinutes: number | null = null;
 
   constructor(private decimalPipe: DecimalPipe) {}
 
-  ngOnInit() {
-    this.countries = (paesiIta as string[]).sort();
+  private cd = inject(ChangeDetectorRef);
+
+  async ngOnInit() {
+    try {
+      const remote = await this.dataService.getPaesiConfig();
+      if (remote.length > 0) {
+        this.countries = remote.map((c: any) => c.paese_it).sort((a: string, b: string) => a.localeCompare(b, 'it'));
+        remote.forEach((c: any) => {
+          this.currencyMap.set(c.paese_it, { currency: c.currency, rate: c.exchange_rate });
+          this.itaToEngMap.set(c.paese_it, c.paese_en);
+        });
+        console.log('instant-calculator: loaded', remote.length, 'countries from Firestore');
+        this.cd.detectChanges();
+        return;
+      }
+      console.warn('instant-calculator: Firestore paesi_config empty, using fallback');
+    } catch (e) {
+      console.error('instant-calculator: Firestore error, using fallback', e);
+    }
+    const [paesiIta, itaToEng, currencyData] = await Promise.all([
+      import('../paesi-ita.json'),
+      import('../ita-to-eng.json'),
+      import('../currency-data.json')
+    ]);
+    this.countries = (paesiIta.default as string[]).sort();
+    Object.entries(itaToEng.default as any).forEach(([k, v]: any) => this.itaToEngMap.set(k, v as string));
+    Object.entries(currencyData.default as any).forEach(([k, v]: any) => this.currencyMap.set(k, { currency: v.currency, rate: v.rate }));
+    this.cd.detectChanges();
   }
 
   onCountryChange() {
-    const data = (currencyData as any)[this.selectedCountry];
+    const data = this.currencyMap.get(this.selectedCountry);
     if (data) {
       this.currencyLabel = data.currency;
       this.exchangeRate = data.rate;
@@ -62,26 +89,19 @@ export class InstantCalculator implements OnInit {
   }
 
   getRecentGdp(itaName: string): number {
-    const engName = (itaToEng as any)[itaName] || itaName;
+    const engName = this.itaToEngMap.get(itaName) || itaName;
     const rawGdpData = (nutellaData.gdp as any)[engName];
-    if (!rawGdpData) return 0; // Default if not found
-
-    // Cerchiamo in ordine di priorità gli anni dal più recente al più vecchio
+    if (!rawGdpData) return 0;
     const yearsToTry = ["2026", "2025", "2024", "2023", "2022", "2021", "2020"];
-    
-    // Le chiavi in nutellaData.gdp sono tipo "2025 EUR (0.85)"
     const keys = Object.keys(rawGdpData);
-    
     for (const year of yearsToTry) {
        const matchingKey = keys.find(k => k.startsWith(year));
        if (matchingKey) {
           const val = rawGdpData[matchingKey];
-          if (val !== "no data" && !isNaN(parseFloat(val))) {
-             return parseFloat(val);
-          }
+          if (val !== "no data" && !isNaN(parseFloat(val))) return parseFloat(val);
        }
     }
-    return 0; // Se non c'è nessun fallback numerico valido
+    return 0;
   }
 
   calculate() {

@@ -1,9 +1,8 @@
 import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../data.service';
+import { DataService, Rilevazione, PaeseConfig } from '../data.service';
 import { Auth, signOut, user, updatePassword } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -20,264 +19,226 @@ export class Admin {
   private cd = inject(ChangeDetectorRef);
 
   user$ = user(this.auth);
-
   uploading = false;
   message = '';
   error = '';
 
-  // Password Change
+  // Password
   showPasswordModal = false;
   newPassword = '';
 
-  // New Management State
-  loadingHistory = false;
-  fullHistory: any[] = [];
-  historyData: any[] = []; // Displayed Page
+  // Rilevazioni
+  loadingRilevazioni = false;
+  rilevazioni: Rilevazione[] = [];
+  rilevazioniFiltered: Rilevazione[] = [];
+  rilevazioniSearch = '';
+  editingRilevazione: Rilevazione | null = null;
+  newRilevazione: Rilevazione = this.emptyRilevazione();
 
-  // Pagination
-  currentPage = 1;
-  itemsPerPage = 50;
-
-  newItem = {
-    area: '',
-    country: '',
-    date: '',
-    priceOriginal: 0,
-    exchangeRate: 1,
-    priceEuro: 0,
-    weight: 750,
-    gdp: 0,
-    gdpYear: 2024
-  };
-
-  // Editing State
-  editingItem: any | null = null;
-  editingId: string | null = null;
-
-
+  // Paesi Config
+  loadingPaesi = false;
+  paesiConfig: PaeseConfig[] = [];
+  paesiConfigFiltered: PaeseConfig[] = [];
+  paesiSearch = '';
+  editingPaese: PaeseConfig | null = null;
+  newPaese: PaeseConfig = this.emptyPaese();
 
   ngOnInit() {
-    this.loadHistory();
+    this.loadRilevazioni();
+    this.loadPaesiConfig();
   }
 
-  async loadHistory() {
-    console.log('Admin: loadHistory started');
-    this.loadingHistory = true;
-    this.error = '';
+  emptyRilevazione(): Rilevazione {
+    return { paese_en: '', paese_it: '', area: '', data_video: '', prezzo_originale: 0, tasso_cambio: 1, prezzo_euro: 0, peso_grammi: 750, euro_per_100g: 0, pil_pro_capite_eur: 0, anno_pil: 2024, minutes_per_100g: 0 };
+  }
 
-    // Timeout promise (10 seconds)
-    const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Timeout caricamento dati (10s)')), 10000)
-    );
+  emptyPaese(): PaeseConfig {
+    return { paese_en: '', paese_it: '', currency: '', currency_code: '', exchange_rate: 1 };
+  }
 
+  // --- RILEVAZIONI ---
+
+  async loadRilevazioni() {
+    this.loadingRilevazioni = true;
     try {
-      // Race between fetch and timeout
-      console.log('Admin: Calling getAdminHistory...');
-      this.fullHistory = await Promise.race([
-        this.dataService.getAdminHistory(),
-        timeout
-      ]) as any[];
-      console.log('Admin: getAdminHistory returned', this.fullHistory?.length);
-
-      this.updateTable();
-      console.log('Admin: Table updated');
+      this.rilevazioni = await this.dataService.getRilevazioni();
+      this.rilevazioni.sort((a, b) => (b.data_video || '').localeCompare(a.data_video || ''));
+      this.filterRilevazioni();
     } catch (e: any) {
-      console.error('Error loading history', e);
-      this.error = 'Errore caricamento: ' + (e.message || 'Errore sconosciuto');
+      this.error = 'Errore caricamento rilevazioni: ' + e.message;
     } finally {
-      console.log('Admin: Finally block - setting loadingHistory to false');
-      this.loadingHistory = false;
-      this.cd.detectChanges(); // Force UI update
+      this.loadingRilevazioni = false;
+      this.cd.detectChanges();
     }
   }
 
-  updateTable() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    this.historyData = this.fullHistory.slice(startIndex, endIndex);
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updateTable();
-    }
-  }
-
-  prevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.updateTable();
-    }
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.fullHistory.length / this.itemsPerPage);
-  }
-
-  async logout() {
-    await signOut(this.auth);
-    this.router.navigate(['/login']);
-  }
-
-  togglePasswordModal() {
-    this.showPasswordModal = !this.showPasswordModal;
-    this.newPassword = '';
-    this.error = '';
-    this.message = '';
-  }
-
-  async onChangePassword() {
-    if (!this.newPassword || this.newPassword.length < 6) {
-      this.error = 'La password deve avere almeno 6 caratteri.';
-      return;
-    }
-
-    const currentUser = this.auth.currentUser;
-    if (!currentUser) return;
-
-    this.uploading = true;
-    this.error = '';
-    this.message = '';
-
-    try {
-      await updatePassword(currentUser, this.newPassword);
-      this.message = 'Password aggiornata con successo!';
-      setTimeout(() => this.togglePasswordModal(), 1500);
-    } catch (e: any) {
-      console.error(e);
-      if (e.code === 'auth/requires-recent-login') {
-        this.error = 'Per sicurezza, devi rifare il login prima di cambiare la password.';
-      } else {
-        this.error = 'Errore aggiornamento password: ' + e.message;
-      }
-    } finally {
-      this.uploading = false;
-    }
-  }
-
-  // --- ACTIONS ---
-
-  async onClearDatabase() {
-    if (!confirm('SEI SICURO? Questo cancellerà TUTTA la cronologia e le classifiche. Questa azione è irreversibile.')) return;
-
-    this.uploading = true;
-    try {
-      await this.dataService.clearDatabase();
-      this.message = 'Database pulito con successo.';
-      this.loadHistory();
-    } catch (e: any) {
-      this.error = 'Errore durante la pulizia: ' + e.message;
-    } finally {
-      this.uploading = false;
-    }
-  }
-
-  async onAddItem() {
-    if (!this.newItem.country || !this.newItem.date) return;
-
-    this.uploading = true;
-    try {
-      await this.dataService.addRilevazione(this.newItem);
-      this.message = 'Elemento aggiunto con successo.';
-
-      // Reset form (keep some defaults)
-      this.newItem = {
-        area: '',
-        country: '',
-        date: '',
-        priceOriginal: 0,
-        exchangeRate: 1,
-        priceEuro: 0,
-        weight: 750,
-        gdp: 0,
-        gdpYear: 2024
-      };
-      this.loadHistory();
-    } catch (e: any) {
-      this.error = 'Errore aggiunta elemento: ' + e.message;
-    } finally {
-      this.uploading = false;
-    }
-  }
-
-  async onDeleteItem(id: string) {
-    if (!confirm('Eliminare questo elemento?')) return;
-
-    try {
-      await this.dataService.deleteHistoryItem(id);
-      this.loadHistory(); // Reload list without showing big loading spinner usually
-    } catch (e: any) {
-      this.error = 'Errore eliminazione: ' + e.message;
-    }
-  }
-
-  onEdit(item: any) {
-    this.editingId = item.paese_id + '_' + item.data_video;
-    this.editingItem = {
-      area: item.area,
-      country: item.paese,
-      date: item.data_video,
-      priceOriginal: item.prezzo_originale,
-      exchangeRate: item.tasso_cambio,
-      priceEuro: item.prezzo_euro,
-      weight: item.peso_grammi,
-      gdp: item.pil_pro_capite_eur,
-      gdpYear: item.anno_pil
-    };
-  }
-
-  cancelEdit() {
-    this.editingItem = null;
-    this.editingId = null;
-  }
-
-  async saveEdit() {
-    if (!this.editingItem) return;
-
-    this.uploading = true;
-    try {
-      const cleanId = (str: string) => str.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
-      const newId = `${cleanId(this.editingItem.country)}_${this.editingItem.date}`;
-
-      // If Primary Key changed, delete old record
-      if (this.editingId && newId !== this.editingId) {
-        await this.dataService.deleteHistoryItem(this.editingId);
-      }
-
-      await this.dataService.addRilevazione(this.editingItem);
-
-      this.message = 'Modifica salvata con successo.';
-      this.editingItem = null;
-      this.editingId = null;
-      this.loadHistory();
-    } catch (e: any) {
-      console.error(e);
-      this.error = 'Errore salvataggio: ' + e.message;
-    } finally {
-      this.uploading = false;
-    }
+  filterRilevazioni() {
+    const q = this.rilevazioniSearch.toLowerCase();
+    this.rilevazioniFiltered = q
+      ? this.rilevazioni.filter(r => r.paese_it?.toLowerCase().includes(q) || r.paese_en?.toLowerCase().includes(q))
+      : [...this.rilevazioni];
   }
 
   async onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
-
     this.uploading = true;
     this.message = '';
     this.error = '';
-
     try {
-      const resultMessage = await this.dataService.parseAndUploadExcel(file);
-      this.message = 'Successo! ' + resultMessage;
-      this.loadHistory(); // Refresh table
+      const msg = await this.dataService.importRilevazioniFromExcel(file);
+      this.message = msg;
+      this.loadRilevazioni();
     } catch (e: any) {
-      console.error(e);
-      this.error = 'Caricamento fallito: ' + (e.message || 'Errore sconosciuto');
+      this.error = 'Errore: ' + (e.message || 'Errore sconosciuto');
     } finally {
       this.uploading = false;
-      // Reset input
       event.target.value = '';
     }
+  }
+
+  async onAddRilevazione() {
+    if (!this.newRilevazione.paese_en || !this.newRilevazione.data_video) return;
+    this.uploading = true;
+    try {
+      await this.dataService.saveRilevazione(this.newRilevazione);
+      this.message = 'Rilevazione aggiunta.';
+      this.newRilevazione = this.emptyRilevazione();
+      this.loadRilevazioni();
+    } catch (e: any) { this.error = e.message; } finally { this.uploading = false; }
+  }
+
+  onEditRilevazione(r: Rilevazione) { this.editingRilevazione = { ...r }; }
+  cancelEditRilevazione() { this.editingRilevazione = null; }
+
+  async saveRilevazioneEdit() {
+    if (!this.editingRilevazione) return;
+    this.uploading = true;
+    try {
+      await this.dataService.saveRilevazione(this.editingRilevazione);
+      this.message = 'Rilevazione aggiornata.';
+      this.editingRilevazione = null;
+      this.loadRilevazioni();
+    } catch (e: any) { this.error = e.message; } finally { this.uploading = false; }
+  }
+
+  async onDeleteRilevazione(id: string) {
+    if (!confirm('Eliminare questa rilevazione?')) return;
+    try {
+      await this.dataService.deleteRilevazione(id);
+      this.loadRilevazioni();
+    } catch (e: any) { this.error = e.message; }
+  }
+
+  async onRecalculateAll() {
+    if (!confirm('Salvare i calcoli di Euro/100g e Min/100g sul database per queste rilevazioni?')) return;
+    this.uploading = true;
+    try {
+      const updates = this.rilevazioni.filter(r => !!r.id).map(r => ({
+        id: r.id!, 
+        euro: r.euro_per_100g, 
+        min: r.minutes_per_100g
+      }));
+      await this.dataService.updateRilevazioniCalculations(updates);
+      this.message = `Calcoli aggiornati su DB per ${updates.length} rilevazioni.`;
+      this.loadRilevazioni();
+    } catch (e: any) {
+      this.error = 'Errore salvataggio calcoli: ' + e.message;
+    } finally {
+      this.uploading = false;
+    }
+  }
+
+  // --- PAESI CONFIG ---
+
+  async loadPaesiConfig() {
+    this.loadingPaesi = true;
+    try {
+      this.paesiConfig = await this.dataService.getPaesiConfig();
+      this.filterPaesi();
+    } catch (e: any) {
+      this.error = 'Errore caricamento paesi: ' + e.message;
+    } finally {
+      this.loadingPaesi = false;
+      this.cd.detectChanges();
+    }
+  }
+
+  filterPaesi() {
+    const q = this.paesiSearch.toLowerCase();
+    this.paesiConfigFiltered = q
+      ? this.paesiConfig.filter(p => p.paese_en?.toLowerCase().includes(q) || p.paese_it?.toLowerCase().includes(q) || p.currency_code?.toLowerCase().includes(q))
+      : [...this.paesiConfig];
+  }
+
+  async onSeedPaesi() {
+    if (!confirm('Importare i 197 paesi da countries-data.json su Firestore?')) return;
+    this.uploading = true;
+    try {
+      const data = await import('../countries-data.json');
+      const entries: PaeseConfig[] = (data.default as any[]).map(e => ({
+        paese_en: e.country_en, paese_it: e.country_it,
+        currency: e.currency, currency_code: e.currency_code,
+        exchange_rate: e.exchange_rate
+      }));
+      await this.dataService.seedPaesiConfig(entries);
+      this.message = `${entries.length} paesi importati.`;
+      this.loadPaesiConfig();
+    } catch (e: any) { this.error = e.message; } finally { this.uploading = false; }
+  }
+
+  onEditPaese(p: PaeseConfig) { this.editingPaese = { ...p }; }
+  cancelEditPaese() { this.editingPaese = null; }
+
+  async savePaeseEdit() {
+    if (!this.editingPaese) return;
+    this.uploading = true;
+    try {
+      await this.dataService.savePaeseConfig(this.editingPaese);
+      this.message = 'Paese aggiornato.';
+      this.editingPaese = null;
+      this.loadPaesiConfig();
+    } catch (e: any) { this.error = e.message; } finally { this.uploading = false; }
+  }
+
+  async onAddPaese() {
+    if (!this.newPaese.paese_en) return;
+    this.uploading = true;
+    try {
+      await this.dataService.savePaeseConfig(this.newPaese);
+      this.message = 'Paese aggiunto.';
+      this.newPaese = this.emptyPaese();
+      this.loadPaesiConfig();
+    } catch (e: any) { this.error = e.message; } finally { this.uploading = false; }
+  }
+
+  async onDeletePaese(id: string) {
+    if (!confirm('Eliminare questo paese?')) return;
+    try {
+      await this.dataService.deletePaeseConfig(id);
+      this.loadPaesiConfig();
+    } catch (e: any) { this.error = e.message; }
+  }
+
+  // --- AUTH ---
+
+  async logout() { await signOut(this.auth); this.router.navigate(['/login']); }
+
+  togglePasswordModal() { this.showPasswordModal = !this.showPasswordModal; this.newPassword = ''; this.error = ''; this.message = ''; }
+
+  async onChangePassword() {
+    if (!this.newPassword || this.newPassword.length < 6) { this.error = 'Minimo 6 caratteri.'; return; }
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) return;
+    this.uploading = true;
+    try {
+      await updatePassword(currentUser, this.newPassword);
+      this.message = 'Password aggiornata!';
+      setTimeout(() => this.togglePasswordModal(), 1500);
+    } catch (e: any) {
+      this.error = e.code === 'auth/requires-recent-login'
+        ? 'Rifai il login prima di cambiare la password.'
+        : e.message;
+    } finally { this.uploading = false; }
   }
 }

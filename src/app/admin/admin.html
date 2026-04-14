@@ -1,327 +1,277 @@
 <div class="min-h-screen bg-gray-50 flex flex-col items-center py-12 animate-fade-in-up">
-  <div class="w-full max-w-4xl px-4">
+  <div class="w-full max-w-5xl px-4">
 
+    <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-3xl font-bold text-gray-900">Dashboard Amministratore</h1>
       <div class="flex items-center gap-4">
-        <span class="text-sm text-gray-600" *ngIf="user$ | async as user">{{ user.email }}</span>
-        <button (click)="togglePasswordModal()" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Cambia
-          Password</button>
+        <span class="text-sm text-gray-600" *ngIf="user$ | async as u">{{ u.email }}</span>
+        <button (click)="togglePasswordModal()" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Cambia Password</button>
         <div class="h-4 w-px bg-gray-300"></div>
         <button (click)="logout()" class="text-sm text-red-600 hover:text-red-800 font-medium">Disconnetti</button>
       </div>
     </div>
 
-    <!-- Upload Section -->
-    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
-      <h2 class="text-xl font-semibold text-gray-800 mb-4">Caricamento Dati in Blocco</h2>
-      <p class="text-gray-500 mb-6">
-        Carica un file Excel (.xlsx) contenente il foglio con i dati base (es. Sheet1).
-      </p>
+    <!-- Global messages -->
+    <div *ngIf="message" class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      {{ message }}
+    </div>
+    <div *ngIf="error" class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">{{ error }}</div>
 
-      <div
-        class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:bg-gray-50 transition-colors relative">
-        <input type="file" (change)="onFileSelected($event)" accept=".xlsx, .xls"
+    <!-- ===== SEZIONE RILEVAZIONI ===== -->
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Rilevazioni</h2>
+        <button (click)="onRecalculateAll()" [disabled]="uploading || loadingRilevazioni"
+          class="text-sm bg-orange-100 hover:bg-orange-200 text-orange-800 font-medium py-2 px-4 rounded-md disabled:opacity-50 border border-orange-200 shadow-sm transition-colors">
+          Ricalcola in Firebase
+        </button>
+      </div>
+
+      <!-- Upload Excel -->
+      <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors relative mb-6">
+        <input type="file" (change)="onFileSelected($event)" accept=".xlsx,.xls"
           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" [disabled]="uploading">
         <div class="flex flex-col items-center pointer-events-none">
-          <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+          <svg class="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
           </svg>
-          <p class="text-lg font-medium text-gray-700">Clicca per caricare o trascina il file qui</p>
-          <p class="text-sm text-gray-400 mt-1">Solo file .xlsx</p>
+          <p class="font-medium text-gray-700">Carica Nutella_Index.xlsx</p>
+          <p class="text-sm text-gray-400 mt-1">Importa tutte le rilevazioni dal file Excel</p>
         </div>
       </div>
 
-      <!-- Manual Management Sections -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <!-- Add New Entry -->
-        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4">Aggiungi Singola Voce</h3>
-          <div class="grid grid-cols-2 gap-4">
-            <!-- Row 1 -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Area</label>
-              <input type="text" [(ngModel)]="newItem.area" placeholder="Es. Europa"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Paese</label>
-              <input type="text" [(ngModel)]="newItem.country" placeholder="Es. Italy"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-
-            <!-- Row 2 -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Data Video</label>
-              <input type="date" [(ngModel)]="newItem.date"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Peso (g)</label>
-              <input type="number" [(ngModel)]="newItem.weight"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-
-            <!-- Row 3 -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo Originale</label>
-              <input type="number" [(ngModel)]="newItem.priceOriginal" step="0.01"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Cambio</label>
-              <input type="number" [(ngModel)]="newItem.exchangeRate" step="0.0001"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-
-            <!-- Row 4 -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo Euro</label>
-              <input type="number" [(ngModel)]="newItem.priceEuro" step="0.01"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">PPC Nominale</label>
-              <input type="number" [(ngModel)]="newItem.gdp" step="100"
-                class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-            </div>
-          </div>
-
-          <button (click)="onAddItem()" [disabled]="uploading"
-            class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50">
-            Aggiungi Voce
-          </button>
+      <!-- Add single rilevazione -->
+      <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+        <h3 class="text-sm font-semibold text-gray-700 mb-3">Aggiungi rilevazione manuale</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Paese EN</label>
+            <input type="text" [(ngModel)]="newRilevazione.paese_en" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Paese IT</label>
+            <input type="text" [(ngModel)]="newRilevazione.paese_it" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Area</label>
+            <input type="text" [(ngModel)]="newRilevazione.area" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Data</label>
+            <input type="date" [(ngModel)]="newRilevazione.data_video" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Prezzo originale</label>
+            <input type="number" [(ngModel)]="newRilevazione.prezzo_originale" step="0.01" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Tasso cambio</label>
+            <input type="number" [(ngModel)]="newRilevazione.tasso_cambio" step="0.0001" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Prezzo Euro</label>
+            <input type="number" [(ngModel)]="newRilevazione.prezzo_euro" step="0.01" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Peso (g)</label>
+            <input type="number" [(ngModel)]="newRilevazione.peso_grammi" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">PIL pro capite (€)</label>
+            <input type="number" [(ngModel)]="newRilevazione.pil_pro_capite_eur" step="100" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Anno PIL</label>
+            <input type="number" [(ngModel)]="newRilevazione.anno_pil" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
         </div>
-
-        <!-- Danger Zone -->
-        <div class="bg-red-50 p-6 rounded-xl border border-red-200">
-          <h3 class="text-lg font-semibold text-red-800 mb-4">Danger Zone</h3>
-          <p class="text-sm text-red-600 mb-6">
-            Attenzione: Queste azioni sono irreversibili. Prestare la massima attenzione.
-          </p>
-          <button (click)="onClearDatabase()" [disabled]="uploading"
-            class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-md transition-colors flex items-center justify-center disabled:opacity-50">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-              </path>
-            </svg>
-            Svuota Intero Database
-          </button>
-        </div>
+        <button (click)="onAddRilevazione()" [disabled]="uploading || !newRilevazione.paese_en || !newRilevazione.data_video"
+          class="mt-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md disabled:opacity-50">
+          Aggiungi
+        </button>
       </div>
 
-      <!-- Data Table -->
-      <div class="border-t border-gray-200 pt-8">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Dati Storici</h3>
+      <!-- Search + Table -->
+      <input type="text" [(ngModel)]="rilevazioniSearch" (ngModelChange)="filterRilevazioni()"
+        placeholder="Cerca per paese..." class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm mb-3">
 
-        <div *ngIf="error && !uploading && loadingHistory === false"
-          class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg flex items-center shadow-sm border border-red-100">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-            </path>
-          </svg>
-          <span class="flex-grow">{{ error }}</span>
-          <button (click)="loadHistory()"
-            class="ml-4 font-semibold hover:underline bg-white px-2 py-1 rounded border border-red-200 text-sm">Riprova</button>
-        </div>
-        <!-- Loader -->
-        <div *ngIf="loadingHistory" class="py-12 flex flex-col items-center justify-center text-blue-600">
-          <svg class="animate-spin h-10 w-10 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
-          </svg>
-          <span class="text-gray-500 font-medium">Caricamento dati in corso...</span>
-        </div>
-
-        <div class="overflow-x-auto" *ngIf="!loadingHistory">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paese</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valore</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr *ngFor="let item of historyData" class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.data_video }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.paese }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">€ {{ item.euro_per_100g?.toFixed(2) }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button (click)="onEdit(item)" class="text-blue-600 hover:text-blue-900 mr-3">Modifica</button>
-                  <button (click)="onDeleteItem(item.paese_id + '_' + item.data_video)"
-                    class="text-red-600 hover:text-red-900">Elimina</button>
-                </td>
-              </tr>
-              <tr *ngIf="historyData.length === 0">
-                <td colspan="4" class="px-6 py-12 text-center text-gray-500">
-                  <p class="text-lg font-medium mb-1">Nessun dato trovato</p>
-                  <p class="text-sm">Carica un file Excel o aggiungi una voce manualmente.</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Pagination Controls -->
-        <div class="mt-4 flex items-center justify-between border-t border-gray-200 pt-4"
-          *ngIf="fullHistory.length > 0">
-          <div class="text-sm text-gray-700">
-            Pagina <span class="font-medium">{{ currentPage }}</span> di <span class="font-medium">{{ totalPages
-              }}</span>
-            <span class="ml-2 text-gray-500">({{ fullHistory.length }} record totali)</span>
-          </div>
-          <div class="flex gap-2">
-            <button (click)="prevPage()" [disabled]="currentPage === 1"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-              Precedente
-            </button>
-            <button (click)="nextPage()" [disabled]="currentPage === totalPages"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-              Successivo
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Status Messages -->
-      <div *ngIf="uploading" class="mt-6 flex items-center justify-center text-blue-600">
-        <span class="animate-spin rounded-full h-5 w-5 border-b-2 border-current mr-2"></span>
-        Elaborazione...
-      </div>
-
-      <div *ngIf="message" class="mt-6 p-4 bg-green-50 text-green-700 rounded-lg flex items-center animate-fade-in">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      <div *ngIf="loadingRilevazioni" class="py-8 flex justify-center text-blue-600">
+        <svg class="animate-spin h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        {{ message }}
       </div>
 
-      <div *ngIf="error" class="mt-6 p-4 bg-red-50 text-red-700 rounded-lg flex items-center animate-fade-in">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        {{ error }}
+      <div class="overflow-x-auto" *ngIf="!loadingRilevazioni">
+        <p class="text-xs text-gray-400 mb-2">{{ rilevazioniFiltered.length }} / {{ rilevazioni.length }} rilevazioni</p>
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+              <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paese</th>
+              <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Area</th>
+              <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">€/100g</th>
+              <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">Min/100g</th>
+              <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">Azioni</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let r of rilevazioniFiltered | slice:0:100" class="hover:bg-gray-50">
+              <td class="px-3 py-2 text-gray-600">{{ r.data_video }}</td>
+              <td class="px-3 py-2 font-medium text-gray-900">{{ r.paese_it || r.paese_en }}</td>
+              <td class="px-3 py-2 text-gray-500">{{ r.area }}</td>
+              <td class="px-3 py-2 text-right text-gray-700">{{ r.euro_per_100g | number:'1.2-2' }}</td>
+              <td class="px-3 py-2 text-right text-gray-700">{{ r.minutes_per_100g | number:'1.2-2' }}</td>
+              <td class="px-3 py-2 text-right">
+                <button (click)="onEditRilevazione(r)" class="text-blue-600 hover:text-blue-900 mr-3">Modifica</button>
+                <button (click)="onDeleteRilevazione(r.id!)" class="text-red-600 hover:text-red-900">Elimina</button>
+              </td>
+            </tr>
+            <tr *ngIf="rilevazioniFiltered.length === 0">
+              <td colspan="6" class="px-3 py-8 text-center text-gray-400">Nessuna rilevazione. Carica il file Excel.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- ===== SEZIONE PAESI CONFIG ===== -->
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Paesi, Valute e Tassi di Cambio</h2>
+        <button (click)="onSeedPaesi()" [disabled]="uploading"
+          class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-md disabled:opacity-50">
+          Importa 197 paesi da JSON
+        </button>
+      </div>
+
+      <!-- Add paese -->
+      <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-4">
+        <h3 class="text-sm font-semibold text-gray-700 mb-3">Aggiungi paese</h3>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Nome EN</label>
+            <input type="text" [(ngModel)]="newPaese.paese_en" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Nome IT</label>
+            <input type="text" [(ngModel)]="newPaese.paese_it" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Valuta</label>
+            <input type="text" [(ngModel)]="newPaese.currency" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Codice</label>
+            <input type="text" [(ngModel)]="newPaese.currency_code" maxlength="3" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm uppercase"></div>
+          <div><label class="block text-xs font-medium text-gray-600 mb-1">Tasso (1 EUR=X)</label>
+            <input type="number" [(ngModel)]="newPaese.exchange_rate" step="0.0001" class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm"></div>
+        </div>
+        <button (click)="onAddPaese()" [disabled]="uploading || !newPaese.paese_en"
+          class="mt-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md disabled:opacity-50">
+          Aggiungi
+        </button>
+      </div>
+
+      <input type="text" [(ngModel)]="paesiSearch" (ngModelChange)="filterPaesi()"
+        placeholder="Cerca per nome o codice valuta..." class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm mb-3">
+
+      <div *ngIf="loadingPaesi" class="py-6 flex justify-center text-blue-600">
+        <svg class="animate-spin h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+
+      <div class="overflow-x-auto" *ngIf="!loadingPaesi">
+        <p class="text-xs text-gray-400 mb-2">{{ paesiConfigFiltered.length }} / {{ paesiConfig.length }} paesi</p>
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome EN</th>
+              <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome IT</th>
+              <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valuta</th>
+              <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">Tasso</th>
+              <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">Azioni</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let p of paesiConfigFiltered | slice:0:100" class="hover:bg-gray-50">
+              <td class="px-3 py-2 font-medium text-gray-900">{{ p.paese_en }}</td>
+              <td class="px-3 py-2 text-gray-700">{{ p.paese_it }}</td>
+              <td class="px-3 py-2 text-gray-500">{{ p.currency }}</td>
+              <td class="px-3 py-2 text-right text-gray-700">{{ p.exchange_rate }}</td>
+              <td class="px-3 py-2 text-right">
+                <button (click)="onEditPaese(p)" class="text-blue-600 hover:text-blue-900 mr-3">Modifica</button>
+                <button (click)="onDeletePaese(p.id!)" class="text-red-600 hover:text-red-900">Elimina</button>
+              </td>
+            </tr>
+            <tr *ngIf="paesiConfigFiltered.length === 0">
+              <td colspan="5" class="px-3 py-8 text-center text-gray-400">Nessun paese. Usa "Importa 197 paesi da JSON".</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Edit Modal -->
-  <div *ngIf="editingItem"
-    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fade-in">
+  <!-- Modal Modifica Rilevazione -->
+  <div *ngIf="editingRilevazione" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-      <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+      <div class="p-6 border-b flex justify-between items-center">
         <h3 class="text-xl font-bold text-gray-800">Modifica Rilevazione</h3>
-        <button (click)="cancelEdit()" class="text-gray-400 hover:text-gray-600">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
+        <button (click)="cancelEditRilevazione()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
-
-      <div class="p-6 space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Area & Country -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Area</label>
-            <input type="text" [(ngModel)]="editingItem.area"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Paese</label>
-            <input type="text" [(ngModel)]="editingItem.country"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-
-          <!-- Date -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Data Video</label>
-            <input type="date" [(ngModel)]="editingItem.date"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Peso (g)</label>
-            <input type="number" [(ngModel)]="editingItem.weight"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-
-          <!-- Financials -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo Originale</label>
-            <input type="number" [(ngModel)]="editingItem.priceOriginal" step="0.01"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Cambio</label>
-            <input type="number" [(ngModel)]="editingItem.exchangeRate" step="0.0001"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo Euro</label>
-            <input type="number" [(ngModel)]="editingItem.priceEuro" step="0.01"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">PPC Nominale</label>
-            <input type="number" [(ngModel)]="editingItem.gdp" step="100"
-              class="w-full rounded-md border-gray-300 shadow-sm p-2 border">
-          </div>
-        </div>
-
-        <div class="mt-4 p-4 bg-yellow-50 text-yellow-800 text-sm rounded-lg flex items-start">
-          <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-            </path>
-          </svg>
-          <p>Nota: Modificare Paese o Data creerà un nuovo record e rimuoverà quello vecchio.</p>
-        </div>
+      <div class="p-6 grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Paese EN</label>
+          <input type="text" [(ngModel)]="editingRilevazione.paese_en" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Paese IT</label>
+          <input type="text" [(ngModel)]="editingRilevazione.paese_it" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Area</label>
+          <input type="text" [(ngModel)]="editingRilevazione.area" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
+          <input type="date" [(ngModel)]="editingRilevazione.data_video" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Prezzo originale</label>
+          <input type="number" [(ngModel)]="editingRilevazione.prezzo_originale" step="0.01" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Tasso cambio</label>
+          <input type="number" [(ngModel)]="editingRilevazione.tasso_cambio" step="0.0001" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Prezzo Euro</label>
+          <input type="number" [(ngModel)]="editingRilevazione.prezzo_euro" step="0.01" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Peso (g)</label>
+          <input type="number" [(ngModel)]="editingRilevazione.peso_grammi" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">PIL pro capite (€)</label>
+          <input type="number" [(ngModel)]="editingRilevazione.pil_pro_capite_eur" step="100" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Anno PIL</label>
+          <input type="number" [(ngModel)]="editingRilevazione.anno_pil" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
       </div>
-
-      <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
-        <button (click)="cancelEdit()"
-          class="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg font-medium transition-colors">Annulla</button>
-        <button (click)="saveEdit()" [disabled]="uploading"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center">
-          <span *ngIf="uploading" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-          Salva Modifiche
-        </button>
+      <div class="p-6 border-t bg-gray-50 flex justify-end gap-3 rounded-b-xl">
+        <button (click)="cancelEditRilevazione()" class="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg font-medium">Annulla</button>
+        <button (click)="saveRilevazioneEdit()" [disabled]="uploading" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-50">Salva</button>
       </div>
     </div>
   </div>
 
-  <!-- Password Modal -->
-  <div *ngIf="showPasswordModal"
-    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fade-in">
+  <!-- Modal Modifica Paese -->
+  <div *ngIf="editingPaese" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full">
+      <div class="p-6 border-b flex justify-between items-center">
+        <h3 class="text-xl font-bold text-gray-800">Modifica Paese</h3>
+        <button (click)="cancelEditPaese()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="p-6 grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Nome EN</label>
+          <input type="text" [(ngModel)]="editingPaese.paese_en" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Nome IT</label>
+          <input type="text" [(ngModel)]="editingPaese.paese_it" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Valuta</label>
+          <input type="text" [(ngModel)]="editingPaese.currency" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+        <div><label class="block text-sm font-medium text-gray-700 mb-1">Codice (3 lettere)</label>
+          <input type="text" [(ngModel)]="editingPaese.currency_code" maxlength="3" class="w-full rounded-md border-gray-300 shadow-sm p-2 border uppercase"></div>
+        <div class="col-span-2"><label class="block text-sm font-medium text-gray-700 mb-1">Tasso (1 EUR = X)</label>
+          <input type="number" [(ngModel)]="editingPaese.exchange_rate" step="0.0001" class="w-full rounded-md border-gray-300 shadow-sm p-2 border"></div>
+      </div>
+      <div class="p-6 border-t bg-gray-50 flex justify-end gap-3 rounded-b-xl">
+        <button (click)="cancelEditPaese()" class="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg font-medium">Annulla</button>
+        <button (click)="savePaeseEdit()" [disabled]="uploading" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-50">Salva</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Password -->
+  <div *ngIf="showPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6">
       <h3 class="text-lg font-bold text-gray-800 mb-4">Cambia Password</h3>
-
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Nuova Password</label>
-        <input type="password" [(ngModel)]="newPassword" placeholder="Minimo 6 caratteri"
-          class="w-full rounded-md border-gray-300 shadow-sm p-3 border focus:ring-2 focus:ring-blue-500 outline-none">
-      </div>
-
-      <div *ngIf="message" class="mb-4 text-green-600 text-sm">{{ message }}</div>
-      <div *ngIf="error" class="mb-4 text-red-600 text-sm">{{ error }}</div>
-
-      <div class="flex justify-end gap-2 mt-6">
-        <button (click)="togglePasswordModal()"
-          class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium">Annulla</button>
-        <button (click)="onChangePassword()" [disabled]="uploading"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-50">
+      <input type="password" [(ngModel)]="newPassword" placeholder="Minimo 6 caratteri"
+        class="w-full rounded-md border-gray-300 shadow-sm p-3 border focus:ring-2 focus:ring-blue-500 outline-none mb-4">
+      <div *ngIf="message" class="mb-3 text-green-600 text-sm">{{ message }}</div>
+      <div *ngIf="error" class="mb-3 text-red-600 text-sm">{{ error }}</div>
+      <div class="flex justify-end gap-2">
+        <button (click)="togglePasswordModal()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium">Annulla</button>
+        <button (click)="onChangePassword()" [disabled]="uploading" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-50">
           {{ uploading ? 'Salvataggio...' : 'Salva' }}
         </button>
       </div>
     </div>
   </div>
+
 </div>

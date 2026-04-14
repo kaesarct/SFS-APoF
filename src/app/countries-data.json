@@ -1,0 +1,1381 @@
+[
+  {
+    "country_en": "Afghanistan",
+    "country_it": "Afghanistan",
+    "currency": "Afghani (AFN)",
+    "currency_code": "AFN",
+    "exchange_rate": 78.5
+  },
+  {
+    "country_en": "Albania",
+    "country_it": "Albania",
+    "currency": "Lek Albanese (ALL)",
+    "currency_code": "ALL",
+    "exchange_rate": 103.2
+  },
+  {
+    "country_en": "Algeria",
+    "country_it": "Algeria",
+    "currency": "Dinar Algerino (DZD)",
+    "currency_code": "DZD",
+    "exchange_rate": 146.8
+  },
+  {
+    "country_en": "Andorra",
+    "country_it": "Andorra",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Angola",
+    "country_it": "Angola",
+    "currency": "Kwanza Angolano (AOA)",
+    "currency_code": "AOA",
+    "exchange_rate": 910
+  },
+  {
+    "country_en": "Antigua and Barbuda",
+    "country_it": "Antigua e Barbuda",
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "currency_code": "XCD",
+    "exchange_rate": 2.94
+  },
+  {
+    "country_en": "Argentina",
+    "country_it": "Argentina",
+    "currency": "Peso Argentino (ARS)",
+    "currency_code": "ARS",
+    "exchange_rate": 920.5
+  },
+  {
+    "country_en": "Armenia",
+    "country_it": "Armenia",
+    "currency": "Dram Armeno (AMD)",
+    "currency_code": "AMD",
+    "exchange_rate": 435
+  },
+  {
+    "country_en": "Aruba",
+    "country_it": "Aruba",
+    "currency": "Fiorino Arubano (AWG)",
+    "currency_code": "AWG",
+    "exchange_rate": 1.96
+  },
+  {
+    "country_en": "Australia",
+    "country_it": "Australia",
+    "currency": "Dollaro Australiano (AUD)",
+    "currency_code": "AUD",
+    "exchange_rate": 1.65
+  },
+  {
+    "country_en": "Austria",
+    "country_it": "Austria",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Azerbaijan",
+    "country_it": "Azerbaijan",
+    "currency": "Manat Azero (AZN)",
+    "currency_code": "AZN",
+    "exchange_rate": 1.85
+  },
+  {
+    "country_en": "Bahamas, The",
+    "country_it": "Bahamas",
+    "currency": "Dollaro delle Bahamas (BSD)",
+    "currency_code": "BSD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Bahrain",
+    "country_it": "Bahrain",
+    "currency": "Dinaro del Bahrain (BHD)",
+    "currency_code": "BHD",
+    "exchange_rate": 0.41
+  },
+  {
+    "country_en": "Bangladesh",
+    "country_it": "Bangladesh",
+    "currency": "Taka Bengalese (BDT)",
+    "currency_code": "BDT",
+    "exchange_rate": 119.5
+  },
+  {
+    "country_en": "Barbados",
+    "country_it": "Barbados",
+    "currency": "Dollaro di Barbados (BBD)",
+    "currency_code": "BBD",
+    "exchange_rate": 2.18
+  },
+  {
+    "country_en": "Belarus",
+    "country_it": "Bielorussia",
+    "currency": "Rublo Bielorusso (BYN)",
+    "currency_code": "BYN",
+    "exchange_rate": 3.55
+  },
+  {
+    "country_en": "Belgium",
+    "country_it": "Belgio",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Belize",
+    "country_it": "Belize",
+    "currency": "Dollaro del Belize (BZD)",
+    "currency_code": "BZD",
+    "exchange_rate": 2.18
+  },
+  {
+    "country_en": "Benin",
+    "country_it": "Benin",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Bhutan",
+    "country_it": "Bhutan",
+    "currency": "Ngultrum Bhutanese (BTN)",
+    "currency_code": "BTN",
+    "exchange_rate": 90.2
+  },
+  {
+    "country_en": "Bolivia",
+    "country_it": "Bolivia",
+    "currency": "Boliviano (BOB)",
+    "currency_code": "BOB",
+    "exchange_rate": 7.5
+  },
+  {
+    "country_en": "Bosnia and Herzegovina",
+    "country_it": "Bosnia Herzegovina",
+    "currency": "Marco Convertibile (BAM)",
+    "currency_code": "BAM",
+    "exchange_rate": 1.95
+  },
+  {
+    "country_en": "Botswana",
+    "country_it": "Botswana",
+    "currency": "Pula del Botswana (BWP)",
+    "currency_code": "BWP",
+    "exchange_rate": 14.8
+  },
+  {
+    "country_en": "Brazil",
+    "country_it": "Brasile",
+    "currency": "Real Brasiliano (BRL)",
+    "currency_code": "BRL",
+    "exchange_rate": 5.45
+  },
+  {
+    "country_en": "Brunei Darussalam",
+    "country_it": "Brunei",
+    "currency": "Dollaro del Brunei (BND)",
+    "currency_code": "BND",
+    "exchange_rate": 1.46
+  },
+  {
+    "country_en": "Bulgaria",
+    "country_it": "Bulgaria",
+    "currency": "Lev Bulgaro (BGN)",
+    "currency_code": "BGN",
+    "exchange_rate": 1.95
+  },
+  {
+    "country_en": "Burkina Faso",
+    "country_it": "Burkina Faso",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Burundi",
+    "country_it": "Burundi",
+    "currency": "Franco del Burundi (BIF)",
+    "currency_code": "BIF",
+    "exchange_rate": 3100
+  },
+  {
+    "country_en": "Cabo Verde",
+    "country_it": "Cabo Verde",
+    "currency": "Escudo Capoverdiano (CVE)",
+    "currency_code": "CVE",
+    "exchange_rate": 110.26
+  },
+  {
+    "country_en": "Cambodia",
+    "country_it": "Cambogia",
+    "currency": "Riel Cambogiano (KHR)",
+    "currency_code": "KHR",
+    "exchange_rate": 4450
+  },
+  {
+    "country_en": "Cameroon",
+    "country_it": "Camerun",
+    "currency": "Franco CFA (XAF)",
+    "currency_code": "XAF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Canada",
+    "country_it": "Canada",
+    "currency": "Dollaro Canadese (CAD)",
+    "currency_code": "CAD",
+    "exchange_rate": 1.47
+  },
+  {
+    "country_en": "Central African Republic",
+    "country_it": "Centrafricana, Repubblica",
+    "currency": "Franco CFA (XAF)",
+    "currency_code": "XAF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Chad",
+    "country_it": "Chad",
+    "currency": "Franco CFA (XAF)",
+    "currency_code": "XAF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Chile",
+    "country_it": "Cile",
+    "currency": "Peso Cileno (CLP)",
+    "currency_code": "CLP",
+    "exchange_rate": 1050
+  },
+  {
+    "country_en": "China, People's Republic of",
+    "country_it": "Cina",
+    "currency": "Renminbi Cinese (CNY)",
+    "currency_code": "CNY",
+    "exchange_rate": 7.85
+  },
+  {
+    "country_en": "Colombia",
+    "country_it": "Colombia",
+    "currency": "Peso Colombiano (COP)",
+    "currency_code": "COP",
+    "exchange_rate": 4250
+  },
+  {
+    "country_en": "Comoros",
+    "country_it": "Isole Comore",
+    "currency": "Franco Comoriano (KMF)",
+    "currency_code": "KMF",
+    "exchange_rate": 491.96
+  },
+  {
+    "country_en": "Congo, Dem. Rep. of the",
+    "country_it": "Congo, Repubblica Democratica Del",
+    "currency": "Franco Congolese (CDF)",
+    "currency_code": "CDF",
+    "exchange_rate": 3000
+  },
+  {
+    "country_en": "Congo, Republic of",
+    "country_it": "Congo",
+    "currency": "Franco CFA (XAF)",
+    "currency_code": "XAF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Costa Rica",
+    "country_it": "Costa Rica",
+    "currency": "Colón Costaricano (CRC)",
+    "currency_code": "CRC",
+    "exchange_rate": 560
+  },
+  {
+    "country_en": "Croatia",
+    "country_it": "Croatia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Cyprus",
+    "country_it": "Cipro",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Czech Republic",
+    "country_it": "Repubblica Ceca",
+    "currency": "Corona Ceca (CZK)",
+    "currency_code": "CZK",
+    "exchange_rate": 25.3
+  },
+  {
+    "country_en": "Côte d'Ivoire",
+    "country_it": "Costa d'Avorio",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Denmark",
+    "country_it": "Danimarca",
+    "currency": "Corona Danese (DKK)",
+    "currency_code": "DKK",
+    "exchange_rate": 7.45
+  },
+  {
+    "country_en": "Djibouti",
+    "country_it": "Gibuti",
+    "currency": "Franco Gibutiano (DJF)",
+    "currency_code": "DJF",
+    "exchange_rate": 193.5
+  },
+  {
+    "country_en": "Dominica",
+    "country_it": "Dominica",
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "currency_code": "XCD",
+    "exchange_rate": 2.94
+  },
+  {
+    "country_en": "Dominican Republic",
+    "country_it": "Repubblica Dominicana",
+    "currency": "Peso Dominicano (DOP)",
+    "currency_code": "DOP",
+    "exchange_rate": 64.5
+  },
+  {
+    "country_en": "Ecuador",
+    "country_it": "Ecuador",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Egypt",
+    "country_it": "Egitto",
+    "currency": "Sterlina Egiziana (EGP)",
+    "currency_code": "EGP",
+    "exchange_rate": 33.5
+  },
+  {
+    "country_en": "El Salvador",
+    "country_it": "El Salvador",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Equatorial Guinea",
+    "country_it": "Guinea Equatoriale",
+    "currency": "Franco CFA (XAF)",
+    "currency_code": "XAF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Eritrea",
+    "country_it": "Eritrea",
+    "currency": "Nakfa Eritreo (ERN)",
+    "currency_code": "ERN",
+    "exchange_rate": 16.35
+  },
+  {
+    "country_en": "Estonia",
+    "country_it": "Estonia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Eswatini",
+    "country_it": "Eswatini",
+    "currency": "Lilangeni dello Swaziland (SZL)",
+    "currency_code": "SZL",
+    "exchange_rate": 20.5
+  },
+  {
+    "country_en": "Ethiopia",
+    "country_it": "Etiopia",
+    "currency": "Birr Etiope (ETB)",
+    "currency_code": "ETB",
+    "exchange_rate": 61.5
+  },
+  {
+    "country_en": "Fiji",
+    "country_it": "Fiji",
+    "currency": "Dollaro delle Figi (FJD)",
+    "currency_code": "FJD",
+    "exchange_rate": 2.45
+  },
+  {
+    "country_en": "Finland",
+    "country_it": "Finlandia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "France",
+    "country_it": "Francia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Gabon",
+    "country_it": "Gabon",
+    "currency": "Franco CFA (XAF)",
+    "currency_code": "XAF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Gambia, The",
+    "country_it": "Gambia",
+    "currency": "Dalasi Gambiano (GMD)",
+    "currency_code": "GMD",
+    "exchange_rate": 73.5
+  },
+  {
+    "country_en": "Georgia",
+    "country_it": "Georgia",
+    "currency": "Lari Georgiano (GEL)",
+    "currency_code": "GEL",
+    "exchange_rate": 2.9
+  },
+  {
+    "country_en": "Germany",
+    "country_it": "Germania",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Ghana",
+    "country_it": "Ghana",
+    "currency": "Cedi Ghanese (GHS)",
+    "currency_code": "GHS",
+    "exchange_rate": 13.5
+  },
+  {
+    "country_en": "Greece",
+    "country_it": "Grecia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Grenada",
+    "country_it": "Grenada",
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "currency_code": "XCD",
+    "exchange_rate": 2.94
+  },
+  {
+    "country_en": "Guatemala",
+    "country_it": "Guatemala",
+    "currency": "Quetzal Guatemalteco (GTQ)",
+    "currency_code": "GTQ",
+    "exchange_rate": 8.5
+  },
+  {
+    "country_en": "Guinea",
+    "country_it": "Guinea",
+    "currency": "Franco Guineano (GNF)",
+    "currency_code": "GNF",
+    "exchange_rate": 9350
+  },
+  {
+    "country_en": "Guinea-Bissau",
+    "country_it": "Guinea-Bissau",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Guyana",
+    "country_it": "Guyana",
+    "currency": "Dollaro Guyanese (GYD)",
+    "currency_code": "GYD",
+    "exchange_rate": 228
+  },
+  {
+    "country_en": "Haiti",
+    "country_it": "Haiti",
+    "currency": "Gourde Haitiano (HTG)",
+    "currency_code": "HTG",
+    "exchange_rate": 144
+  },
+  {
+    "country_en": "Honduras",
+    "country_it": "Honduras",
+    "currency": "Lempira Honduregna (HNL)",
+    "currency_code": "HNL",
+    "exchange_rate": 26.8
+  },
+  {
+    "country_en": "Hong Kong SAR",
+    "country_it": "Hong Kong SAR",
+    "currency": "Dollaro di Hong Kong (HKD)",
+    "currency_code": "HKD",
+    "exchange_rate": 8.52
+  },
+  {
+    "country_en": "Hungary",
+    "country_it": "Ungheria",
+    "currency": "Fiorino Ungherese (HUF)",
+    "currency_code": "HUF",
+    "exchange_rate": 390.5
+  },
+  {
+    "country_en": "Iceland",
+    "country_it": "Islanda",
+    "currency": "Corona Islandese (ISK)",
+    "currency_code": "ISK",
+    "exchange_rate": 149.5
+  },
+  {
+    "country_en": "India",
+    "country_it": "India",
+    "currency": "Rupia Indiana (INR)",
+    "currency_code": "INR",
+    "exchange_rate": 90.2
+  },
+  {
+    "country_en": "Indonesia",
+    "country_it": "Indonesia",
+    "currency": "Rupia Indiana (IDR)",
+    "currency_code": "IDR",
+    "exchange_rate": 16950
+  },
+  {
+    "country_en": "Iran",
+    "country_it": "Iran",
+    "currency": "Rial Iraniano (IRR)",
+    "currency_code": "IRR",
+    "exchange_rate": 45800
+  },
+  {
+    "country_en": "Iraq",
+    "country_it": "Iraq",
+    "currency": "Dinaro Iracheno (IQD)",
+    "currency_code": "IQD",
+    "exchange_rate": 1425
+  },
+  {
+    "country_en": "Ireland",
+    "country_it": "Irlanda",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Israel",
+    "country_it": "Israele",
+    "currency": "Nuovo Siclo Israeliano (ILS)",
+    "currency_code": "ILS",
+    "exchange_rate": 3.95
+  },
+  {
+    "country_en": "Italy",
+    "country_it": "Italia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Jamaica",
+    "country_it": "Jamaica",
+    "currency": "Dollaro Giamaicano (JMD)",
+    "currency_code": "JMD",
+    "exchange_rate": 168.5
+  },
+  {
+    "country_en": "Japan",
+    "country_it": "Giappone",
+    "currency": "Yen Giapponese (JPY)",
+    "currency_code": "JPY",
+    "exchange_rate": 161.5
+  },
+  {
+    "country_en": "Jordan",
+    "country_it": "Giordania",
+    "currency": "Dinaro Giordano (JOD)",
+    "currency_code": "JOD",
+    "exchange_rate": 0.77
+  },
+  {
+    "country_en": "Kazakhstan",
+    "country_it": "Kazakistan",
+    "currency": "Tenge Kazako (KZT)",
+    "currency_code": "KZT",
+    "exchange_rate": 495
+  },
+  {
+    "country_en": "Kenya",
+    "country_it": "Kenya",
+    "currency": "Scellino Keniota (KES)",
+    "currency_code": "KES",
+    "exchange_rate": 155
+  },
+  {
+    "country_en": "Kiribati",
+    "country_it": "Kiribati",
+    "currency": "Dollaro Australiano (AUD)",
+    "currency_code": "AUD",
+    "exchange_rate": 1.65
+  },
+  {
+    "country_en": "Korea, Republic of",
+    "country_it": "Corea del Sud",
+    "currency": "Won Sudcoreano (KRW)",
+    "currency_code": "KRW",
+    "exchange_rate": 1450
+  },
+  {
+    "country_en": "Kosovo",
+    "country_it": "Kosovo",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Kuwait",
+    "country_it": "Kuwait",
+    "currency": "Dinaro Kuwaitiano (KWD)",
+    "currency_code": "KWD",
+    "exchange_rate": 0.33
+  },
+  {
+    "country_en": "Kyrgyz Republic",
+    "country_it": "Kyrgyzistan",
+    "currency": "Som Kirghizo (KGS)",
+    "currency_code": "KGS",
+    "exchange_rate": 97.5
+  },
+  {
+    "country_en": "Lao P.D.R.",
+    "country_it": "Laos",
+    "currency": "Kip Laotiano (LAK)",
+    "currency_code": "LAK",
+    "exchange_rate": 22500
+  },
+  {
+    "country_en": "Latvia",
+    "country_it": "Lettonia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Lebanon",
+    "country_it": "Libano",
+    "currency": "Lira Libanese (LBP)",
+    "currency_code": "LBP",
+    "exchange_rate": 97500
+  },
+  {
+    "country_en": "Lesotho",
+    "country_it": "Lesotho",
+    "currency": "Loti del Lesotho (LSL)",
+    "currency_code": "LSL",
+    "exchange_rate": 20.5
+  },
+  {
+    "country_en": "Liberia",
+    "country_it": "Liberia",
+    "currency": "Dollaro Liberiano (LRD)",
+    "currency_code": "LRD",
+    "exchange_rate": 208
+  },
+  {
+    "country_en": "Libya",
+    "country_it": "Libia",
+    "currency": "Dinaro Libico (LYD)",
+    "currency_code": "LYD",
+    "exchange_rate": 5.25
+  },
+  {
+    "country_en": "Liechtenstein",
+    "country_it": "Liechtenstein",
+    "currency": "Franco Svizzero (CHF)",
+    "currency_code": "CHF",
+    "exchange_rate": 0.91
+  },
+  {
+    "country_en": "Lithuania",
+    "country_it": "Lituania",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Luxembourg",
+    "country_it": "Lussemburgo",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Macao SAR",
+    "country_it": "Macao",
+    "currency": "Pataca di Macao (MOP)",
+    "currency_code": "MOP",
+    "exchange_rate": 8.78
+  },
+  {
+    "country_en": "Madagascar",
+    "country_it": "Madagascar",
+    "currency": "Ariary Malgascio (MGA)",
+    "currency_code": "MGA",
+    "exchange_rate": 4950
+  },
+  {
+    "country_en": "Malawi",
+    "country_it": "Malawi",
+    "currency": "Kwacha Malawiano (MWK)",
+    "currency_code": "MWK",
+    "exchange_rate": 1850
+  },
+  {
+    "country_en": "Malaysia",
+    "country_it": "Malesia",
+    "currency": "Ringgit Malese (MYR)",
+    "currency_code": "MYR",
+    "exchange_rate": 5.15
+  },
+  {
+    "country_en": "Maldives",
+    "country_it": "Maldive",
+    "currency": "Rufiyaa delle Maldive (MVR)",
+    "currency_code": "MVR",
+    "exchange_rate": 16.8
+  },
+  {
+    "country_en": "Mali",
+    "country_it": "Mali",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Malta",
+    "country_it": "Malta",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Marshall Islands",
+    "country_it": "Isole Marshall",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Mauritania",
+    "country_it": "Mauritania",
+    "currency": "Ouguiya Mauritana (MRU)",
+    "currency_code": "MRU",
+    "exchange_rate": 43.5
+  },
+  {
+    "country_en": "Mauritius",
+    "country_it": "Mauritius",
+    "currency": "Rupia Mauriziana (MUR)",
+    "currency_code": "MUR",
+    "exchange_rate": 49.5
+  },
+  {
+    "country_en": "Mexico",
+    "country_it": "Messico",
+    "currency": "Peso Messicano (MXN)",
+    "currency_code": "MXN",
+    "exchange_rate": 18.2
+  },
+  {
+    "country_en": "Micronesia, Fed. States of",
+    "country_it": "Micronesia, Stati federati di",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Moldova",
+    "country_it": "Moldavia",
+    "currency": "Leu Moldavo (MDL)",
+    "currency_code": "MDL",
+    "exchange_rate": 19.3
+  },
+  {
+    "country_en": "Mongolia",
+    "country_it": "Mongolia",
+    "currency": "Tugrik Mongolo (MNT)",
+    "currency_code": "MNT",
+    "exchange_rate": 3750
+  },
+  {
+    "country_en": "Montenegro",
+    "country_it": "Montenegro",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Morocco",
+    "country_it": "Marocco",
+    "currency": "Dirham Marocchino (MAD)",
+    "currency_code": "MAD",
+    "exchange_rate": 10.85
+  },
+  {
+    "country_en": "Mozambique",
+    "country_it": "Mozambico",
+    "currency": "Metical Mozambicano (MZN)",
+    "currency_code": "MZN",
+    "exchange_rate": 69.5
+  },
+  {
+    "country_en": "Myanmar",
+    "country_it": "Myanmar",
+    "currency": "Kyat Birmano (MMK)",
+    "currency_code": "MMK",
+    "exchange_rate": 2290
+  },
+  {
+    "country_en": "Namibia",
+    "country_it": "Namibia",
+    "currency": "Dollaro Namibiano (NAD)",
+    "currency_code": "NAD",
+    "exchange_rate": 20.5
+  },
+  {
+    "country_en": "Nauru",
+    "country_it": "Nauru",
+    "currency": "Dollaro Australiano (AUD)",
+    "currency_code": "AUD",
+    "exchange_rate": 1.65
+  },
+  {
+    "country_en": "Nepal",
+    "country_it": "Nepal",
+    "currency": "Rupia Nepalese (NPR)",
+    "currency_code": "NPR",
+    "exchange_rate": 144.5
+  },
+  {
+    "country_en": "Netherlands",
+    "country_it": "Paesi Bassi",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "New Zealand",
+    "country_it": "Nuova Zelanda",
+    "currency": "Dollaro Neozelandese (NZD)",
+    "currency_code": "NZD",
+    "exchange_rate": 1.78
+  },
+  {
+    "country_en": "Nicaragua",
+    "country_it": "Nicaragua",
+    "currency": "Córdoba Nicaraguense (NIO)",
+    "currency_code": "NIO",
+    "exchange_rate": 40
+  },
+  {
+    "country_en": "Niger",
+    "country_it": "Niger",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Nigeria",
+    "country_it": "Nigeria",
+    "currency": "Naira Nigeriana (NGN)",
+    "currency_code": "NGN",
+    "exchange_rate": 1650
+  },
+  {
+    "country_en": "North Macedonia",
+    "country_it": "Macedonia del Nord",
+    "currency": "Denaro Macedone (MKD)",
+    "currency_code": "MKD",
+    "exchange_rate": 61.5
+  },
+  {
+    "country_en": "Norway",
+    "country_it": "Norvegia",
+    "currency": "Corona Norvegese (NOK)",
+    "currency_code": "NOK",
+    "exchange_rate": 11.5
+  },
+  {
+    "country_en": "Oman",
+    "country_it": "Oman",
+    "currency": "Rial dell'Oman (OMR)",
+    "currency_code": "OMR",
+    "exchange_rate": 0.42
+  },
+  {
+    "country_en": "Pakistan",
+    "country_it": "Pakistan",
+    "currency": "Rupia Pakistana (PKR)",
+    "currency_code": "PKR",
+    "exchange_rate": 305
+  },
+  {
+    "country_en": "Palau",
+    "country_it": "Palau",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Panama",
+    "country_it": "Panama",
+    "currency": "Balboa Panamense (PAB)",
+    "currency_code": "PAB",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Papua New Guinea",
+    "country_it": "Papua Nuova Guinea",
+    "currency": "Kina Papuana (PGK)",
+    "currency_code": "PGK",
+    "exchange_rate": 4.1
+  },
+  {
+    "country_en": "Paraguay",
+    "country_it": "Paraguay",
+    "currency": "Guaraní Paraguaiano (PYG)",
+    "currency_code": "PYG",
+    "exchange_rate": 7950
+  },
+  {
+    "country_en": "Peru",
+    "country_it": "Peru",
+    "currency": "Sol Peruviano (PEN)",
+    "currency_code": "PEN",
+    "exchange_rate": 4.15
+  },
+  {
+    "country_en": "Philippines",
+    "country_it": "Filippine",
+    "currency": "Peso Filippino (PHP)",
+    "currency_code": "PHP",
+    "exchange_rate": 61
+  },
+  {
+    "country_en": "Poland",
+    "country_it": "Polonia",
+    "currency": "Złoty Polacco (PLN)",
+    "currency_code": "PLN",
+    "exchange_rate": 4.3
+  },
+  {
+    "country_en": "Portugal",
+    "country_it": "Portogallo",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Puerto Rico",
+    "country_it": "Puerto Rico",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Qatar",
+    "country_it": "Qatar",
+    "currency": "Riyal Qatariota (QAR)",
+    "currency_code": "QAR",
+    "exchange_rate": 3.97
+  },
+  {
+    "country_en": "Romania",
+    "country_it": "Romania",
+    "currency": "Leu Rumeno (RON)",
+    "currency_code": "RON",
+    "exchange_rate": 4.97
+  },
+  {
+    "country_en": "Russian Federation",
+    "country_it": "Russia",
+    "currency": "Rublo Russo (RUB)",
+    "currency_code": "RUB",
+    "exchange_rate": 100.5
+  },
+  {
+    "country_en": "Rwanda",
+    "country_it": "Rwanda",
+    "currency": "Franco Ruandese (RWF)",
+    "currency_code": "RWF",
+    "exchange_rate": 1390
+  },
+  {
+    "country_en": "Saint Kitts and Nevis",
+    "country_it": "Saint Kitts e Nevis",
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "currency_code": "XCD",
+    "exchange_rate": 2.94
+  },
+  {
+    "country_en": "Saint Lucia",
+    "country_it": "Saint Lucia",
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "currency_code": "XCD",
+    "exchange_rate": 2.94
+  },
+  {
+    "country_en": "Saint Vincent and the Grenadines",
+    "country_it": "Saint Vincent and the Grenadines",
+    "currency": "Dollaro dei Caraibi Orientali (XCD)",
+    "currency_code": "XCD",
+    "exchange_rate": 2.94
+  },
+  {
+    "country_en": "Samoa",
+    "country_it": "Samoa",
+    "currency": "Tala Samoano (WST)",
+    "currency_code": "WST",
+    "exchange_rate": 3
+  },
+  {
+    "country_en": "San Marino",
+    "country_it": "San Marino",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Saudi Arabia",
+    "country_it": "Arabia Saudita",
+    "currency": "Riyal Saudita (SAR)",
+    "currency_code": "SAR",
+    "exchange_rate": 4.09
+  },
+  {
+    "country_en": "Senegal",
+    "country_it": "Senegal",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Serbia",
+    "country_it": "Serbia",
+    "currency": "Dinaro Serbo (RSD)",
+    "currency_code": "RSD",
+    "exchange_rate": 117.2
+  },
+  {
+    "country_en": "Seychelles",
+    "country_it": "Seychelles",
+    "currency": "Rupia delle Seychelles (SCR)",
+    "currency_code": "SCR",
+    "exchange_rate": 14.8
+  },
+  {
+    "country_en": "Sierra Leone",
+    "country_it": "Sierra Leone",
+    "currency": "Leone Sierraleonese (SLE)",
+    "currency_code": "SLE",
+    "exchange_rate": 24.5
+  },
+  {
+    "country_en": "Singapore",
+    "country_it": "Singapore",
+    "currency": "Dollaro di Singapore (SGD)",
+    "currency_code": "SGD",
+    "exchange_rate": 1.46
+  },
+  {
+    "country_en": "Slovak Republic",
+    "country_it": "Slovacchia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Slovenia",
+    "country_it": "Slovenia",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Solomon Islands",
+    "country_it": "Isole Solomon",
+    "currency": "Dollaro delle Isole Salomone (SBD)",
+    "currency_code": "SBD",
+    "exchange_rate": 9.2
+  },
+  {
+    "country_en": "Somalia",
+    "country_it": "Somalia",
+    "currency": "Scellino Somalo (SOS)",
+    "currency_code": "SOS",
+    "exchange_rate": 625
+  },
+  {
+    "country_en": "South Africa",
+    "country_it": "Sudafrica",
+    "currency": "Rand Sudafricano (ZAR)",
+    "currency_code": "ZAR",
+    "exchange_rate": 20.5
+  },
+  {
+    "country_en": "South Sudan, Republic of",
+    "country_it": "South Sudan",
+    "currency": "Lira Sudsudanese (SSP)",
+    "currency_code": "SSP",
+    "exchange_rate": 1150
+  },
+  {
+    "country_en": "Spain",
+    "country_it": "Spagna",
+    "currency": "Euro (EUR)",
+    "currency_code": "EUR",
+    "exchange_rate": 1
+  },
+  {
+    "country_en": "Sri Lanka",
+    "country_it": "Sri Lanka",
+    "currency": "Rupia Srilankese (LKR)",
+    "currency_code": "LKR",
+    "exchange_rate": 345
+  },
+  {
+    "country_en": "Sudan",
+    "country_it": "Sudan",
+    "currency": "Sterlina Sudanese (SDG)",
+    "currency_code": "SDG",
+    "exchange_rate": 655
+  },
+  {
+    "country_en": "Suriname",
+    "country_it": "Suriname",
+    "currency": "Dollaro del Suriname (SRD)",
+    "currency_code": "SRD",
+    "exchange_rate": 39.5
+  },
+  {
+    "country_en": "Sweden",
+    "country_it": "Svezia",
+    "currency": "Corona Svedese (SEK)",
+    "currency_code": "SEK",
+    "exchange_rate": 11.25
+  },
+  {
+    "country_en": "Switzerland",
+    "country_it": "Svizzera",
+    "currency": "Franco Svizzero (CHF)",
+    "currency_code": "CHF",
+    "exchange_rate": 0.91
+  },
+  {
+    "country_en": "Syria",
+    "country_it": "Siria",
+    "currency": "Lira Siriana (SYP)",
+    "currency_code": "SYP",
+    "exchange_rate": 14150
+  },
+  {
+    "country_en": "São Tomé and Príncipe",
+    "country_it": "São Tomé and Príncipe",
+    "currency": "Dobra (STN)",
+    "currency_code": "STN",
+    "exchange_rate": 24.5
+  },
+  {
+    "country_en": "Taiwan Province of China",
+    "country_it": "Taiwan",
+    "currency": "Nuovo Dollaro Taiwanese (TWD)",
+    "currency_code": "TWD",
+    "exchange_rate": 34.5
+  },
+  {
+    "country_en": "Tajikistan",
+    "country_it": "Tajikistan",
+    "currency": "Somoni Tagiko (TJS)",
+    "currency_code": "TJS",
+    "exchange_rate": 11.9
+  },
+  {
+    "country_en": "Tanzania",
+    "country_it": "Tanzania",
+    "currency": "Scellino Tanzaniano (TZS)",
+    "currency_code": "TZS",
+    "exchange_rate": 2750
+  },
+  {
+    "country_en": "Thailand",
+    "country_it": "Thailandia",
+    "currency": "Baht Thailandese (THB)",
+    "currency_code": "THB",
+    "exchange_rate": 38.5
+  },
+  {
+    "country_en": "Timor-Leste",
+    "country_it": "Timor Est",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Togo",
+    "country_it": "Togo",
+    "currency": "Franco CFA (XOF)",
+    "currency_code": "XOF",
+    "exchange_rate": 655.96
+  },
+  {
+    "country_en": "Tonga",
+    "country_it": "Tonga",
+    "currency": "Paʻanga Tongano (TOP)",
+    "currency_code": "TOP",
+    "exchange_rate": 2.55
+  },
+  {
+    "country_en": "Trinidad and Tobago",
+    "country_it": "Trinidad and Tobago",
+    "currency": "Dollaro di Trinidad e Tobago (TTD)",
+    "currency_code": "TTD",
+    "exchange_rate": 7.35
+  },
+  {
+    "country_en": "Tunisia",
+    "country_it": "Tunisia",
+    "currency": "Dinaro Tunisino (TND)",
+    "currency_code": "TND",
+    "exchange_rate": 3.4
+  },
+  {
+    "country_en": "Turkmenistan",
+    "country_it": "Turkmenistan",
+    "currency": "Manat Turkmeno (TMT)",
+    "currency_code": "TMT",
+    "exchange_rate": 3.82
+  },
+  {
+    "country_en": "Tuvalu",
+    "country_it": "Tuvalu",
+    "currency": "Dollaro Australiano (AUD)",
+    "currency_code": "AUD",
+    "exchange_rate": 1.65
+  },
+  {
+    "country_en": "Türkiye, Republic of",
+    "country_it": "Turchia",
+    "currency": "Lira Turca (TRY)",
+    "currency_code": "TRY",
+    "exchange_rate": 34.5
+  },
+  {
+    "country_en": "Uganda",
+    "country_it": "Uganda",
+    "currency": "Scellino Ugandese (UGX)",
+    "currency_code": "UGX",
+    "exchange_rate": 4250
+  },
+  {
+    "country_en": "Ukraine",
+    "country_it": "Ucraina",
+    "currency": "Grivnia Ucraina (UAH)",
+    "currency_code": "UAH",
+    "exchange_rate": 41.5
+  },
+  {
+    "country_en": "United Arab Emirates",
+    "country_it": "Emirati Arabi Uniti",
+    "currency": "Dirham degli Emirati Arabi Uniti (AED)",
+    "currency_code": "AED",
+    "exchange_rate": 4
+  },
+  {
+    "country_en": "United Kingdom",
+    "country_it": "Regno Unito",
+    "currency": "Sterlina Britannica (GBP)",
+    "currency_code": "GBP",
+    "exchange_rate": 0.85
+  },
+  {
+    "country_en": "United States",
+    "country_it": "Stati Uniti d'America",
+    "currency": "Dollaro Statunitense (USD)",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  },
+  {
+    "country_en": "Uruguay",
+    "country_it": "Uruguay",
+    "currency": "Peso Uruguaiano (UYU)",
+    "currency_code": "UYU",
+    "exchange_rate": 42.5
+  },
+  {
+    "country_en": "Uzbekistan",
+    "country_it": "Uzbekistan",
+    "currency": "Sum Uzbeco (UZS)",
+    "currency_code": "UZS",
+    "exchange_rate": 13650
+  },
+  {
+    "country_en": "Vanuatu",
+    "country_it": "Vanuatu",
+    "currency": "Vatu di Vanuatu (VUV)",
+    "currency_code": "VUV",
+    "exchange_rate": 130.5
+  },
+  {
+    "country_en": "Venezuela",
+    "country_it": "Venezuela",
+    "currency": "Bolívar Venezuelano (VES)",
+    "currency_code": "VES",
+    "exchange_rate": 39.5
+  },
+  {
+    "country_en": "Vietnam",
+    "country_it": "Vietnam",
+    "currency": "Dong Vietnamita (VND)",
+    "currency_code": "VND",
+    "exchange_rate": 26800
+  },
+  {
+    "country_en": "West Bank and Gaza",
+    "country_it": "West Bank and Gaza",
+    "currency": "Nuovo Siclo Israeliano (ILS)",
+    "currency_code": "ILS",
+    "exchange_rate": 3.95
+  },
+  {
+    "country_en": "Yemen",
+    "country_it": "Yemen",
+    "currency": "Rial Yemenita (YER)",
+    "currency_code": "YER",
+    "exchange_rate": 273
+  },
+  {
+    "country_en": "Zambia",
+    "country_it": "Zambia",
+    "currency": "Kwacha Zambiano (ZMW)",
+    "currency_code": "ZMW",
+    "exchange_rate": 24.5
+  },
+  {
+    "country_en": "Zimbabwe",
+    "country_it": "Zimbabwe",
+    "currency": "Dollaro Statunitense (USD) / ZiG",
+    "currency_code": "USD",
+    "exchange_rate": 1.09
+  }
+]
