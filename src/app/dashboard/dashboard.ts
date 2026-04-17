@@ -51,8 +51,8 @@ export class Dashboard implements OnInit, AfterViewInit {
         .map(r => ({
           ...r,
           country: r.paese_it || r.paese_en,
-          valuation_pct: r.tasso_cambio > 0
-            ? ((r.euro_per_100g - r.tasso_cambio) / r.tasso_cambio) * 100
+          valuation_pct: r.euro_per_100g > 0
+            ? ((r.euro_per_100g / 1.00) - 1) * 100
             : 0
         }));
 
@@ -112,7 +112,7 @@ export class Dashboard implements OnInit, AfterViewInit {
     if (!this.faticaChartRef) return;
     if (this.faticaChart) this.faticaChart.destroy();
 
-    const italyEntry = { country: 'Italia 🇮🇹', minutes_per_100g: 2.41 };
+    const italyEntry = { country: 'Italia 🇮🇹', minutes_per_100g: 1.56 };
     const validData = this.filteredData.filter(d => typeof d.minutes_per_100g === 'number' && !isNaN(d.minutes_per_100g));
     const sorted = [...validData].sort((a, b) => a.minutes_per_100g - b.minutes_per_100g);
     const all = [italyEntry, ...sorted].sort((a, b) => a.minutes_per_100g - b.minutes_per_100g);
@@ -121,7 +121,7 @@ export class Dashboard implements OnInit, AfterViewInit {
     const values = all.map(d => d.minutes_per_100g);
     const colors = all.map(d =>
       d.country.includes('Italia') ? 'rgba(59,130,246,0.9)' :
-      d.minutes_per_100g <= 2.41 ? 'rgba(34,197,94,0.8)' : 'rgba(249,115,22,0.8)'
+      d.minutes_per_100g <= 1.56 ? 'rgba(34,197,94,0.8)' : 'rgba(249,115,22,0.8)'
     );
 
     this.faticaChart = new Chart(this.faticaChartRef.nativeElement, {

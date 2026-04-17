@@ -30,6 +30,7 @@ export class PppIndex implements OnInit {
   pppRate: number | null = null;
   valuationPercentage: number | null = null;
   absValuationPercentage: number | null = null;
+  localPriceInEur100g: number | null = null;
   isOvervalued: boolean = false;
   hasCalculated: boolean = false;
 
@@ -104,6 +105,7 @@ export class PppIndex implements OnInit {
     // Valuation: (PPP - exchangeRate) / exchangeRate * 100
     this.valuationPercentage = ((this.pppRate - this.exchangeRate) / this.exchangeRate) * 100;
     this.absValuationPercentage = Math.abs(this.valuationPercentage);
+    this.localPriceInEur100g = localPrice100g / this.exchangeRate;
     this.isOvervalued = this.valuationPercentage > 0;
 
     this.hasCalculated = true;

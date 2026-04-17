@@ -2,19 +2,22 @@
   <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
     <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
       </svg>
     </div>
 
     <h2 class="text-2xl font-bold text-gray-900 mb-2 text-center">Calcolatore Parità di Potere d'Acquisto (PPP)</h2>
-    <p class="text-center text-gray-500 mb-8 text-sm">Scopri se una valuta estera è sopravvalutata o sottovalutata rispetto all'Euro, usando la Nutella come riferimento (in stile Big Mac Index).</p>
+    <p class="text-center text-gray-500 mb-8 text-sm">Scopri se una valuta estera è sopravvalutata o sottovalutata
+      rispetto all'Euro, usando la Nutella come riferimento (in stile Big Mac Index).</p>
 
     <div class="space-y-6">
 
       <!-- Row 1: Italy price (fixed) + Country -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo medio per 100g di Nutella in Italia (€)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo medio per 100g di Nutella in Italia
+            (€)</label>
           <input type="number" [value]="italyPrice" readonly
             class="w-full px-4 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed">
         </div>
@@ -72,8 +75,7 @@
       <!-- Result -->
       <div *ngIf="hasCalculated && pppRate !== null && valuationPercentage !== null"
         class="mt-4 transition-all duration-500 ease-in-out">
-        <div class="p-6 rounded-xl border relative overflow-hidden"
-          [ngClass]="{
+        <div class="p-6 rounded-xl border relative overflow-hidden" [ngClass]="{
             'bg-red-50 border-red-200': isOvervalued && valuationPercentage! > 5,
             'bg-green-50 border-green-200': !isOvervalued && valuationPercentage! < -5,
             'bg-gray-50 border-gray-300': valuationPercentage! >= -5 && valuationPercentage! <= 5
@@ -84,7 +86,8 @@
               <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Tasso PPP (Nutella)</p>
               <div class="text-4xl font-black text-gray-800 tracking-tight">
                 {{ pppRate | number:'1.2-2' }}
-                <span class="text-lg text-gray-500 font-semibold">{{ currencyLabel.split('(')[1]?.replace(')','') || currencyLabel }}/€</span>
+                <span class="text-lg text-gray-500 font-semibold">{{ currencyLabel.split('(')[1]?.replace(')','') ||
+                  currencyLabel }}/€</span>
               </div>
             </div>
 
@@ -92,8 +95,7 @@
 
             <div class="flex-1 text-center md:text-right">
               <p class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Valutazione della Valuta</p>
-              <div class="text-2xl font-bold flex items-center justify-center md:justify-end gap-2"
-                [ngClass]="{
+              <div class="text-2xl font-bold flex items-center justify-center md:justify-end gap-2" [ngClass]="{
                   'text-red-600': isOvervalued && valuationPercentage! > 5,
                   'text-green-600': !isOvervalued && valuationPercentage! < -5,
                   'text-gray-600': valuationPercentage! >= -5 && valuationPercentage! <= 5
@@ -101,33 +103,47 @@
                 <span *ngIf="isOvervalued && valuationPercentage! > 5">Sopravvalutata del</span>
                 <span *ngIf="!isOvervalued && valuationPercentage! < -5">Sottovalutata del</span>
                 <span *ngIf="valuationPercentage! >= -5 && valuationPercentage! <= 5">In Equilibrio</span>
-                <span *ngIf="valuationPercentage! > 5 || valuationPercentage! < -5">{{ absValuationPercentage | number:'1.1-1' }}%</span>
+                <span *ngIf="valuationPercentage! > 5 || valuationPercentage! < -5">{{ absValuationPercentage |
+                  number:'1.1-1' }}%</span>
               </div>
             </div>
           </div>
 
           <!-- Explanation -->
-          <div class="mt-6 pt-5 border-t border-black/5 text-sm space-y-2"
-            [ngClass]="{
+          <div class="mt-6 pt-5 border-t border-black/5 text-sm space-y-2" [ngClass]="{
               'text-red-800': isOvervalued && valuationPercentage! > 5,
               'text-green-800': !isOvervalued && valuationPercentage! < -5,
               'text-gray-600': valuationPercentage! >= -5 && valuationPercentage! <= 5
             }">
             <p *ngIf="isOvervalued && valuationPercentage! > 5">
-              Il tasso di cambio implicito ({{ pppRate | number:'1.2-2' }}) è <strong>maggiore</strong> del tasso di cambio ufficiale ({{ exchangeRate }}). Secondo l'Indice Nutella, la valuta di <strong>{{ selectedCountry }}</strong> è più forte di quanto dovrebbe essere rispetto all'Euro.
+              Il tasso di cambio ufficiale mantiene la valuta di <strong>{{ selectedCountry }}</strong> artificialmente
+              <strong>più forte (sopravvalutata)</strong> rispetto al suo reale potere d'acquisto. A causa di questo
+              divario, i prezzi locali convertiti in Euro risultano più
+              alti: in termini pratici, acquistare 100g di Nutella in <strong>{{ selectedCountry }}</strong> richiede
+              l'equivalente di <strong>{{ localPriceInEur100g | number:'1.2-2' }}€ </strong> costando effettivamente il <strong>{{
+                absValuationPercentage | number:'1.1-1' }}%
+                <span>in più</span>
+              </strong>
+              rispetto all'<strong>ITALIA</strong>.
             </p>
             <p *ngIf="!isOvervalued && valuationPercentage! < -5">
-              Il tasso di cambio implicito ({{ pppRate | number:'1.2-2' }}) è <strong>minore</strong> del tasso di cambio ufficiale ({{ exchangeRate }}). Secondo l'Indice Nutella, la valuta di <strong>{{ selectedCountry }}</strong> è più debole di quanto dovrebbe essere rispetto all'Euro.
+              Il tasso di cambio ufficiale mantiene la valuta di <strong>{{ selectedCountry }}</strong> artificialmente
+              <strong>più debole (sottovalutata)</strong> rispetto al suo reale potere d'acquisto. A causa di questo
+              divario, i prezzi locali convertiti in Euro risultano più
+              bassi: in termini pratici, acquistare 100g di Nutella in <strong>{{ selectedCountry }}</strong> richiede
+              l'equivalente di <strong>{{ localPriceInEur100g | number:'1.2-2' }}€ </strong> costando effettivamente il <strong>{{
+                absValuationPercentage | number:'1.1-1' }}%
+                <span>in meno</span>
+              </strong>
+              rispetto all'<strong>ITALIA</strong>.
             </p>
             <p *ngIf="valuationPercentage! >= -5 && valuationPercentage! <= 5">
-              Il tasso di cambio implicito ({{ pppRate | number:'1.2-2' }}) è molto <strong>vicino</strong> al tasso di cambio ufficiale ({{ exchangeRate }}). La valuta è in sintonia con il suo reale potere d'acquisto.
-            </p>
-            <!-- Additional sentence -->
-            <p class="mt-2">
-              In termini pratici, acquistare 100g di Nutella in <strong>{{ selectedCountry | uppercase }}</strong> costa effettivamente il
-              <strong>{{ absValuationPercentage | number:'1.1-1' }}%
-                <span *ngIf="isOvervalued">in più</span>
-                <span *ngIf="!isOvervalued">in meno</span>
+              Il tasso di cambio ufficiale è <strong>in sintonia</strong> con il suo reale potere d'acquisto.
+              I prezzi locali convertiti in Euro risultano allineati: in termini pratici, acquistare 100g di Nutella in <strong>{{ selectedCountry }}</strong> richiede
+              l'equivalente di <strong>{{ localPriceInEur100g | number:'1.2-2' }}€ </strong>, costando pressochè lo stesso con una variazione del <strong>{{
+                absValuationPercentage | number:'1.1-1' }}%
+                <span *ngIf="valuationPercentage! < 0">in meno</span>
+                <span *ngIf="valuationPercentage! > 0">in più</span>
               </strong>
               rispetto all'<strong>ITALIA</strong>.
             </p>
