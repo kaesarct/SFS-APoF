@@ -14,14 +14,9 @@ Sito statistico indipendente che misura il potere d'acquisto nei diversi paesi d
 | **Nutella PPP** | `/ppp-index` | Calcolatore interattivo: scegli un paese, inserisci il prezzo del vasetto, il sito mostra valuta e tasso di cambio automaticamente e calcola se la valuta locale è sopra o sottovalutata rispetto all'Euro. |
 | **Calcolo Istantaneo** | `/instant-calculator` | Due tab integrate: **Calcolo dal prezzo** (inserisci paese, peso, prezzo → ottieni i minuti di lavoro necessari) e **Equivalenza in Italia** (quei minuti cosa comprerebbero in Italia). Le due tab si alimentano a vicenda ma sono usabili anche separatamente. |
 | **Metodologia** | `/methodology` | Spiegazione del metodo di calcolo dell'indice. |
-| **Invia segnalazione** | `/submit-link` | Form pubblico per inviare rilevazioni di prezzo (con foto). I dati vanno in Firestore con status `pending` in attesa di verifica admin. |
+| **Invia segnalazione** | `/submit-link` | Form pubblico per inviare rilevazioni di prezzo (con foto e reCAPTCHA v3 anti-spam invisibile). I dati vanno in Firestore con status `pending` in attesa di verifica admin. |
 
 ### Schede admin (protette da login)
-
-| Scheda | URL | Descrizione |
-|---|---|---|
-| **Login** | `/login` | Autenticazione Firebase. |
-| **Admin** | `/admin` | Pannello per caricare dati via Excel, gestire le rilevazioni, approvare le segnalazioni pubbliche. |
 
 ---
 

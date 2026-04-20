@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { DataService } from '../data.service';
 import nutellaData from '../nutella-data.json';
 
+
 @Component({
   selector: 'app-data-submission',
   standalone: true,
@@ -37,6 +38,8 @@ export class DataSubmission implements OnInit {
   isSubmitting = false;
   successMessage = '';
   errorMessage = '';
+
+  constructor() {}
 
   form = this.fb.group({
     country: ['', Validators.required],
@@ -148,6 +151,11 @@ export class DataSubmission implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
+    // App Check gestisce la protezione reCAPTCHA in modo automatico e trasparente
+    this.performSubmit();
+  }
+
+  private async performSubmit() {
     try {
       const v = this.form.value;
       const price = Number(v.price);

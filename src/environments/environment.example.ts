@@ -8,5 +8,8 @@ export const environment = {
     messagingSenderId: "YOUR_SENDER_ID",
     appId: "YOUR_APP_ID"
   },
+  recaptcha: {
+    siteKey: 'YOUR_RECAPTCHA_SITE_KEY'
+  },
   email: 'info@example.com'
 };
