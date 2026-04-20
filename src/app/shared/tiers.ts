@@ -6,7 +6,7 @@ export interface PriceTier {
 }
 
 export const ITALY_WAGE_PER_MINUTE = 0.20;
-export const ITALY_MINUTES_PER_100G = 1.56;
+export const ITALY_MINUTES_PER_100G = 4.02;
 
 export const PRICING_TIERS: PriceTier[] = [
   { range: "0 - 2 €", min: 0, max: 2, item: "Un caffè espresso al bancone + un cioccolatino, o un pacchetto di gomme da masticare." },

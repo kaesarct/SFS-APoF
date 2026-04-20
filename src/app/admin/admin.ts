@@ -49,7 +49,7 @@ export class Admin {
   }
 
   emptyRilevazione(): Rilevazione {
-    return { paese_en: '', paese_it: '', area: '', data_video: '', prezzo_originale: 0, tasso_cambio: 1, prezzo_euro: 0, peso_grammi: 750, euro_per_100g: 0, pil_pro_capite_eur: 0, anno_pil: 2024, minutes_per_100g: 0 };
+    return { paese_en: '', paese_it: '', area: '', data_video: '', prezzo_originale: 0, tasso_cambio: 1, prezzo_euro: 0, peso_grammi: 750, euro_per_100g: 0, pil_pro_capite_eur: 0, anno_pil: 2024, minutes_per_100g: 0, is_human_safari: false, nome_utente: '', photo_url: '' };
   }
 
   emptyPaese(): PaeseConfig {

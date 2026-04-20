@@ -17,6 +17,9 @@ export interface Rilevazione {
   pil_pro_capite_eur: number;
   anno_pil: number;
   minutes_per_100g: number;
+  is_human_safari?: boolean;
+  nome_utente?: string;
+  photo_url?: string;
 }
 
 export interface PaeseConfig {
@@ -73,11 +76,26 @@ export class DataService {
       
       const minutes_per_100g = pil > 0 ? ((euro_per_100g / pil) * 2000 * 60) : 0;
 
+      let fallbackName = data['paese_id'] ? data['paese_id'].toString().replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()) : 'Unknown';
+      let finalPaeseIt = data['paese_it'] || p?.nome || fallbackName;
+      let finalPaeseEn = data['paese_en'] || p?.nome || fallbackName;
+      let finalArea = data['area'] || p?.areaName || 'Unknown';
+      
+      if (finalPaeseIt.toLowerCase() === 'sudan del sud' || finalPaeseIt.toLowerCase() === 'sudan_del_sud') {
+          finalPaeseIt = 'Sudan del Sud'; finalPaeseEn = 'South Sudan'; finalArea = 'Africa';
+      }
+      if (finalPaeseIt.toLowerCase() === 'burundi') {
+          finalPaeseIt = 'Burundi'; finalPaeseEn = 'Burundi'; finalArea = 'Africa';
+      }
+      if (finalPaeseIt.toLowerCase() === 'thailandia' || finalPaeseEn.toLowerCase() === 'thailand') {
+          finalPaeseIt = 'Thailandia'; finalPaeseEn = 'Thailand'; finalArea = 'Asia';
+      }
+
       return {
         id: d.id,
-        paese_it: p?.nome || data['paese_id'],
-        paese_en: p?.nome || data['paese_id'],
-        area: p?.areaName || 'Unknown',
+        paese_it: finalPaeseIt,
+        paese_en: finalPaeseEn,
+        area: finalArea,
         data_video: data['data_video'] || '',
         prezzo_originale: data['prezzo_originale'] || 0,
         tasso_cambio: data['tasso_cambio'] || 1,
@@ -86,7 +104,10 @@ export class DataService {
         euro_per_100g: euro_per_100g,
         pil_pro_capite_eur: pil,
         anno_pil: data['anno_pil_video'] || 2024,
-        minutes_per_100g: minutes_per_100g
+        minutes_per_100g: minutes_per_100g,
+        is_human_safari: data['is_human_safari'] === true,
+        nome_utente: data['nome_utente'] || '',
+        photo_url: data['photo_url'] || ''
       } as Rilevazione;
     });
 
@@ -101,13 +122,19 @@ export class DataService {
     // Save minimal data in measurements
     const measureData = {
       paese_id: paeseId,
+      paese_en: r.paese_en || paeseId,
+      paese_it: r.paese_it || r.paese_en || paeseId,
+      area: r.area || 'Unknown',
       data_video: r.data_video,
       prezzo_originale: r.prezzo_originale,
       tasso_cambio: r.tasso_cambio,
       prezzo_euro: r.prezzo_euro,
       peso_grammi: r.peso_grammi,
       pil_video_eur: r.pil_pro_capite_eur,
-      anno_pil_video: r.anno_pil
+      anno_pil_video: r.anno_pil,
+      is_human_safari: r.is_human_safari === true,
+      nome_utente: r.nome_utente || '',
+      photo_url: r.photo_url || ''
     };
     
     await setDoc(doc(this.firestore, 'measurements', id), measureData);
@@ -176,9 +203,15 @@ export class DataService {
         id: `${this.cleanId(paeseEn)}_${dataVideo}`,
         data: {
           paese_id: this.cleanId(paeseEn),
+          paese_en: paeseEn,
+          paese_it: paeseIt,
+          area: currentArea,
           data_video: dataVideo, prezzo_originale: prezzoOriginale,
           tasso_cambio: tassoCambio, prezzo_euro: prezzoEuro, peso_grammi: peso,
-          pil_video_eur: pil, anno_pil_video: annoPil
+          pil_video_eur: pil, anno_pil_video: annoPil,
+          is_human_safari: row['is_human_safari'] === true || row['Human Safari'] === true || row['Fonte'] === 'Human Safari' ? true : false,
+          nome_utente: row['Nome Utente'] || row['Utente'] || row['Caricato da'] || row['Fonte'] || '',
+          photo_url: row['Foto URL'] || row['Link Foto'] || row['Photo'] || ''
         }
       });
     }

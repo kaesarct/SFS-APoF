@@ -31,6 +31,7 @@ export class DataSubmission implements OnInit {
     weight: ['750', Validators.required],
     city: ['', Validators.required],
     country: ['', Validators.required],
+    userName: [''],
     file: [null as File | null],
     gdprConsent: [false, Validators.requiredTrue]
   });
@@ -142,6 +143,7 @@ export class DataSubmission implements OnInit {
         weight: this.form.value.weight,
         city: this.form.value.city,
         country: this.form.value.country,
+        nome_utente: this.form.value.userName || '',
         photoUrl: photoUrl
       };
 

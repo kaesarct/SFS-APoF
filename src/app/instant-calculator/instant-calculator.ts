@@ -127,7 +127,7 @@ export class InstantCalculator implements OnInit {
     // 350/100 * min(100)
     this.calculatedMinutesVasetto = (this.weightGrams / 100) * this.calculatedMinutes100g;
 
-    // "Prende i minuti per il vasetto, li moltiplica per 0.31 (ITALY_WAGE_PER_MINUTE) e trova la fascia di prezzo"
+    // "Prende i minuti per il vasetto, li moltiplica per 0.20 (ITALY_WAGE_PER_MINUTE) e trova la fascia di prezzo"
     this.calculatedEquivalentEuro = this.calculatedMinutesVasetto * ITALY_WAGE_PER_MINUTE;
     this.matchedTier = findMatchingTier(this.calculatedEquivalentEuro);
     this.calculatedNutellaGrams = (this.calculatedMinutesVasetto / ITALY_MINUTES_PER_100G) * 100;

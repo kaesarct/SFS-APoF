@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Chart, registerables } from 'chart.js';
 import { DataService } from '../data.service';
+import countryIso from '../country-iso.json';
+import itaToEng from '../ita-to-eng.json';
 
 Chart.register(...registerables);
 
@@ -26,6 +28,7 @@ export class Dashboard implements OnInit, AfterViewInit {
 
   allData: any[] = [];
   filteredData: any[] = [];
+  recentUploads: any[] = [];
   loading = true;
 
   private dataService = inject(DataService);
@@ -48,13 +51,46 @@ export class Dashboard implements OnInit, AfterViewInit {
 
       this.allData = Array.from(latestMap.values())
         .filter(r => r.paese_en?.toLowerCase() !== 'italy' && r.paese_it?.toLowerCase() !== 'italia')
-        .map(r => ({
-          ...r,
-          country: r.paese_it || r.paese_en,
-          valuation_pct: r.euro_per_100g > 0
-            ? ((r.euro_per_100g / 1.00) - 1) * 100
-            : 0
-        }));
+        .map(r => {
+          const namesToTry = [
+            (r.paese_en || '').toLowerCase(),
+            (r.paese_it || '').toLowerCase(),
+            ((itaToEng as any)[r.paese_it] || '').toLowerCase(),
+            ((itaToEng as any)[r.paese_en] || '').toLowerCase()
+          ].filter(n => n.length > 2);
+
+          let flagIso = 'un'; // Default to UN flag for unknown
+          
+          // 1. Exact match
+          for (const name of namesToTry) {
+            if ((countryIso as any)[name]) { flagIso = (countryIso as any)[name]; break; }
+          }
+          
+          // 2. Fuzzy match if still UN
+          if (flagIso === 'un') {
+            for (const name of namesToTry) {
+              for (const [key, f] of Object.entries(countryIso)) {
+                if (name.includes(key) || key.includes(name)) { flagIso = f as string; break; }
+              }
+              if (flagIso !== 'un') break;
+            }
+          }
+          
+          return {
+            ...r,
+            country: r.paese_it || r.paese_en,
+            isoCode: flagIso,
+            valuation_pct: r.euro_per_100g > 0
+              ? ((r.euro_per_100g / 1.00) - 1) * 100
+              : 0
+          };
+        });
+
+      // Calcola le rilevazioni più recenti con foto (limitato a 6)
+      this.recentUploads = [...this.allData]
+        .filter(r => r.photo_url)
+        .sort((a, b) => b.data_video.localeCompare(a.data_video))
+        .slice(0, 6);
 
       // Build region list dynamically
       const areas = [...new Set(this.allData.map(d => d.area).filter(Boolean))].sort();
@@ -112,7 +148,7 @@ export class Dashboard implements OnInit, AfterViewInit {
     if (!this.faticaChartRef) return;
     if (this.faticaChart) this.faticaChart.destroy();
 
-    const italyEntry = { country: 'Italia 🇮🇹', minutes_per_100g: 1.56 };
+    const italyEntry = { country: 'Italia 🇮🇹', minutes_per_100g: 4.02 };
     const validData = this.filteredData.filter(d => typeof d.minutes_per_100g === 'number' && !isNaN(d.minutes_per_100g));
     const sorted = [...validData].sort((a, b) => a.minutes_per_100g - b.minutes_per_100g);
     const all = [italyEntry, ...sorted].sort((a, b) => a.minutes_per_100g - b.minutes_per_100g);
@@ -121,7 +157,7 @@ export class Dashboard implements OnInit, AfterViewInit {
     const values = all.map(d => d.minutes_per_100g);
     const colors = all.map(d =>
       d.country.includes('Italia') ? 'rgba(59,130,246,0.9)' :
-      d.minutes_per_100g <= 1.56 ? 'rgba(34,197,94,0.8)' : 'rgba(249,115,22,0.8)'
+      d.minutes_per_100g <= 4.02 ? 'rgba(34,197,94,0.8)' : 'rgba(249,115,22,0.8)'
     );
 
     this.faticaChart = new Chart(this.faticaChartRef.nativeElement, {
@@ -136,5 +172,39 @@ export class Dashboard implements OnInit, AfterViewInit {
         scales: { x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + ' min' } }, y: { grid: { display: false } } }
       }
     });
+  }
+
+  exportCSV() {
+    if (!this.filteredData || this.filteredData.length === 0) return;
+
+    const headers = ['Paese', 'Area', 'Prezzo Euro', 'Peso (g)', 'Euro/100g', 'Min/100g', 'Fonte', 'Valutazione (%)'];
+    const rows = this.filteredData.map(d => [
+      `"${d.country}"`,
+      `"${d.area}"`,
+      d.prezzo_euro,
+      d.peso_grammi,
+      d.euro_per_100g.toFixed(2),
+      d.minutes_per_100g.toFixed(2),
+      `"${d.nome_utente || (d.is_human_safari ? 'Human Safari' : 'Luiggio')}"`,
+      d.valuation_pct.toFixed(2)
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(r => r.join(','))
+    ].join('\n');
+
+    // Add BOM for Excel UTF-8 compatibility
+    const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    const blob = new Blob([bom, csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `Nutella_Index_${this.selectedRegion.replace(/\s+/g, '_')}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }
