@@ -31,6 +31,21 @@ export interface PaeseConfig {
   exchange_rate: number;
 }
 
+export interface Submission {
+  id?: string;
+  country: string;
+  city: string;
+  price: number;
+  currency: string;
+  euroPrice: number;
+  weight: number;
+  exchangeRate: number;
+  nome_utente?: string;
+  nutellaIndexMinutes?: number;
+  timestamp: string;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
 @Injectable({ providedIn: 'root' })
 export class DataService {
   private firestore = inject(Firestore);
@@ -56,39 +71,39 @@ export class DataService {
 
     const countriesMap = new Map();
     counSnap.forEach(d => {
-       const cd = d.data();
-       countriesMap.set(d.id, {
-           nome: cd['nome'],
-           areaName: areasMap.get(cd['area_id']) || 'Unknown',
-           pil_data: cd['pil_data'] || {}
-       });
+      const cd = d.data();
+      countriesMap.set(d.id, {
+        nome: cd['nome'],
+        areaName: areasMap.get(cd['area_id']) || 'Unknown',
+        pil_data: cd['pil_data'] || {}
+      });
     });
 
     this.rilevazioniCache = measSnap.docs.map(d => {
       const data = d.data();
       const p = countriesMap.get(data['paese_id']);
-      
+
       const euro_per_100g = data['peso_grammi'] > 0 ? (data['prezzo_euro'] / data['peso_grammi']) * 100 : 0;
-      
-      // Prioritize video PIL (can be named pil_video_eur or pil_pro_capite_eur in db), else get the 2024 GDP 
+
+      // Prioritize video PIL (can be named pil_video_eur or pil_pro_capite_eur in db), else get the 2024 GDP
       const dbPil = Number(data['pil_video_eur']) || Number(data['pil_pro_capite_eur']) || 0;
       const pil = dbPil > 0 ? dbPil : (p?.pil_data?.['2024'] || 0);
-      
+
       const minutes_per_100g = pil > 0 ? ((euro_per_100g / pil) * 2000 * 60) : 0;
 
       let fallbackName = data['paese_id'] ? data['paese_id'].toString().replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()) : 'Unknown';
       let finalPaeseIt = data['paese_it'] || p?.nome || fallbackName;
       let finalPaeseEn = data['paese_en'] || p?.nome || fallbackName;
       let finalArea = data['area'] || p?.areaName || 'Unknown';
-      
+
       if (finalPaeseIt.toLowerCase() === 'sudan del sud' || finalPaeseIt.toLowerCase() === 'sudan_del_sud') {
-          finalPaeseIt = 'Sudan del Sud'; finalPaeseEn = 'South Sudan'; finalArea = 'Africa';
+        finalPaeseIt = 'Sudan del Sud'; finalPaeseEn = 'South Sudan'; finalArea = 'Africa';
       }
       if (finalPaeseIt.toLowerCase() === 'burundi') {
-          finalPaeseIt = 'Burundi'; finalPaeseEn = 'Burundi'; finalArea = 'Africa';
+        finalPaeseIt = 'Burundi'; finalPaeseEn = 'Burundi'; finalArea = 'Africa';
       }
       if (finalPaeseIt.toLowerCase() === 'thailandia' || finalPaeseEn.toLowerCase() === 'thailand') {
-          finalPaeseIt = 'Thailandia'; finalPaeseEn = 'Thailand'; finalArea = 'Asia';
+        finalPaeseIt = 'Thailandia'; finalPaeseEn = 'Thailand'; finalArea = 'Asia';
       }
 
       return {
@@ -118,7 +133,7 @@ export class DataService {
     // Write back to the new schema
     const paeseId = this.cleanId(r.paese_en);
     const id = r.id || `${paeseId}_${r.data_video}`;
-    
+
     // Save minimal data in measurements
     const measureData = {
       paese_id: paeseId,
@@ -136,7 +151,7 @@ export class DataService {
       nome_utente: r.nome_utente || '',
       photo_url: r.photo_url || ''
     };
-    
+
     await setDoc(doc(this.firestore, 'measurements', id), measureData);
     this.rilevazioniCache = null;
   }
@@ -189,15 +204,15 @@ export class DataService {
         : String(dateRaw).trim();
 
       const prezzoOriginale = parseFloat(row['Prezzo nutella in valuta'] || row['Prezzo Originale'] || 0);
-      const tassoCambio     = parseFloat(row['Tasso di cambio del video'] || row['Cambio'] || 1);
-      const prezzoEuro      = parseFloat(row['NUTELLA IN EURO'] || row['Prezzo Euro'] || 0);
-      const peso            = parseFloat(row['Quantità (g)'] || row['Peso (g)'] || row['Peso'] || 750);
-      const pil             = parseFloat(row['PIL PRO CAPITE NOMINALE (€)'] || row['PIL pro capite'] || row['PIL'] || 0);
-      const annoPil         = parseInt(row['Anno del dato pil'] || row['Anno PIL'] || new Date().getFullYear());
+      const tassoCambio = parseFloat(row['Tasso di cambio del video'] || row['Cambio'] || 1);
+      const prezzoEuro = parseFloat(row['NUTELLA IN EURO'] || row['Prezzo Euro'] || 0);
+      const peso = parseFloat(row['Quantità (g)'] || row['Peso (g)'] || row['Peso'] || 750);
+      const pil = parseFloat(row['PIL PRO CAPITE NOMINALE (€)'] || row['PIL pro capite'] || row['PIL'] || 0);
+      const annoPil = parseInt(row['Anno del dato pil'] || row['Anno PIL'] || new Date().getFullYear());
 
       const paeseIt = enToIt.get(paeseEn.toLowerCase()) || paeseEn;
       const euro100g = peso > 0 ? (prezzoEuro / peso) * 100 : 0;
-      const min100g  = pil > 0 ? (euro100g / pil) * 2000 * 60 : 0;
+      const min100g = pil > 0 ? (euro100g / pil) * 2000 * 60 : 0;
 
       ops.push({
         id: `${this.cleanId(paeseEn)}_${dataVideo}`,
@@ -278,5 +293,51 @@ export class DataService {
     await addDoc(collection(this.firestore, 'submissions'), {
       ...data, timestamp: new Date().toISOString(), status: 'pending'
     });
+  }
+
+  async getSubmissions(): Promise<Submission[]> {
+    const snap = await getDocs(collection(this.firestore, 'submissions'));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() } as Submission));
+  }
+
+  async approveSubmission(submission: Submission): Promise<void> {
+    if (!submission.id) throw new Error('Submission ID mancante');
+
+    // Create a rilevazione from the submission
+    const paeseEn = submission.country || 'Unknown';
+    const paeseId = this.cleanId(paeseEn);
+    const today = new Date().toISOString().split('T')[0];
+
+    const measurementId = `${paeseId}_${today}`;
+    const measurement = {
+      paese_id: paeseId,
+      paese_en: paeseEn,
+      paese_it: paeseEn, // Could be enhanced to lookup from paesi_config
+      area: 'User Submitted', // Placeholder
+      data_video: today,
+      prezzo_originale: submission.price,
+      tasso_cambio: submission.exchangeRate,
+      prezzo_euro: submission.euroPrice,
+      peso_grammi: submission.weight,
+      pil_video_eur: 0, // Will need to be calculated or filled later
+      anno_pil_video: new Date().getFullYear(),
+      is_human_safari: false,
+      nome_utente: submission.nome_utente || 'User',
+      photo_url: '',
+      city: submission.city,
+      timestamp: submission.timestamp
+    };
+
+    // Save to measurements and update submission status
+    const batch = writeBatch(this.firestore);
+    batch.set(doc(this.firestore, 'measurements', measurementId), measurement);
+    batch.update(doc(this.firestore, 'submissions', submission.id), { status: 'approved' });
+    await batch.commit();
+
+    this.rilevazioniCache = null;
+  }
+
+  async rejectSubmission(submissionId: string): Promise<void> {
+    await deleteDoc(doc(this.firestore, 'submissions', submissionId));
   }
 }

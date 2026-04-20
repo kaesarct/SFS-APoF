@@ -53,7 +53,8 @@
               <input type="number" formControlName="price" placeholder="es. 1250" min="0" step="0.01"
                 (input)="onPriceOrWeightChange()"
                 class="w-full pl-4 pr-20 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm">
-              <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded">
+              <div
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded">
                 {{ currencyCode || currencyLabel || 'valuta' }}
               </div>
             </div>
@@ -93,7 +94,8 @@
 
           <div>
             <p class="text-xs text-gray-500 mb-1">Prezzo in Euro</p>
-            <p class="font-bold text-lg" [class.text-blue-700]="calculatedEuroPrice" [class.text-gray-300]="!calculatedEuroPrice">
+            <p class="font-bold text-lg" [class.text-blue-700]="calculatedEuroPrice"
+              [class.text-gray-300]="!calculatedEuroPrice">
               {{ calculatedEuroPrice !== null ? (calculatedEuroPrice | number:'1.2-2') + ' €' : '—' }}
             </p>
           </div>
@@ -102,7 +104,8 @@
       </div>
 
       <!-- No country selected hint -->
-      <div *ngIf="!exchangeRate && form.value.country === ''" class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center text-sm text-gray-400">
+      <div *ngIf="!exchangeRate && form.value.country === ''"
+        class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center text-sm text-gray-400">
         👆 Seleziona prima il paese per vedere la valuta e il tasso di cambio
       </div>
 
@@ -111,14 +114,15 @@
         <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">👤 Chi sei?</h3>
         <input type="text" formControlName="userName" placeholder="es. Mario Rossi, @tuonick — lascia vuoto per 'Community'"
           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm">
-        <p class="text-xs text-gray-400 mt-1">Se sei un follower di @nicolo_balini (Human Safari) scrivi 'Human Safari'.</p>
       </div>
 
       <!-- ===== NUTELLA INDEX PREVIEW ===== -->
       <div *ngIf="nutellaIndexMinutes !== null"
         class="bg-gradient-to-br from-orange-50 to-amber-50 p-5 rounded-xl border border-orange-200 shadow-sm relative overflow-hidden">
         <div class="absolute -right-4 -top-4 text-orange-100">
-          <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+          <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
         </div>
         <div class="relative z-10">
           <h3 class="text-orange-900 font-bold text-base mb-1 flex items-center gap-2">
@@ -129,7 +133,8 @@
             PIL pro capite: <strong>{{ valoreGdpEur | number:'1.0-0' }}€</strong>
           </p>
           <div class="flex items-baseline gap-2">
-            <span class="text-4xl font-black text-orange-600 tracking-tight">{{ nutellaIndexMinutes | number:'1.2-2' }}</span>
+            <span class="text-4xl font-black text-orange-600 tracking-tight">{{ nutellaIndexMinutes | number:'1.2-2'
+              }}</span>
             <span class="text-orange-800 font-semibold">minuti di lavoro per 100g</span>
           </div>
           <p class="text-xs text-orange-400 mt-2">Riferimento Italia: 2.41 minuti</p>
@@ -138,11 +143,19 @@
 
       <!-- Messages -->
       <div *ngIf="errorMessage" class="p-4 bg-red-50 text-red-700 rounded-lg text-sm flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd" />
+        </svg>
         {{ errorMessage }}
       </div>
       <div *ngIf="successMessage" class="p-4 bg-green-50 text-green-700 rounded-lg text-sm flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd" />
+        </svg>
         {{ successMessage }}
       </div>
 
@@ -153,7 +166,8 @@
             class="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer">
         </div>
         <div>
-          <label for="gdprConsent" class="font-semibold text-gray-700 text-sm cursor-pointer">Informativa sulla privacy (art. 13 GDPR)</label>
+          <label for="gdprConsent" class="font-semibold text-gray-700 text-sm cursor-pointer">Informativa sulla privacy
+            (art. 13 GDPR)</label>
           <p class="text-xs text-gray-500 mt-1 leading-relaxed">
             I dati che invii (prezzo, città, paese) vengono raccolti esclusivamente per scopi statistici e di ricerca
             nell'ambito del progetto Nutella Index. Non vengono ceduti a terzi né utilizzati per finalità commerciali.
@@ -161,11 +175,32 @@
           </p>
         </div>
       </div>
+      <div class="p-4 bg-amber-50 border border-amber-300 rounded-lg flex items-start gap-3">
+        <div class="flex-shrink-0">
+          <svg class="w-5 h-5 text-amber-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-amber-800 text-sm flex items-center gap-1">
+            <span>⚠️</span> Nota Bene
+          </h4>
+          <p class="text-xs text-amber-700 mt-2 leading-relaxed">
+            Se hai una foto per supportare il tuo dato, inviala a <strong>@_luiggio_</strong> su
+            <a href="https://www.instagram.com/luiggio" target="_blank" rel="noopener noreferrer"
+              class="text-amber-600 hover:text-amber-800 underline font-semibold">Instagram</a>
+            o
+            <a href="https://www.tiktok.com/@luiggio" target="_blank" rel="noopener noreferrer"
+              class="text-amber-600 hover:text-amber-800 underline font-semibold">TikTok</a>
+          </p>
+        </div>
+      </div>
 
       <!-- Submit -->
       <button type="submit" [disabled]="form.invalid || isSubmitting"
         class="w-full flex justify-center items-center gap-2 py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
-        <svg *ngIf="isSubmitting" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg *ngIf="isSubmitting" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+          viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
         </svg>

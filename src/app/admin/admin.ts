@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService, Rilevazione, PaeseConfig } from '../data.service';
+import { DataService, Rilevazione, PaeseConfig, Submission } from '../data.service';
 import { Auth, signOut, user, updatePassword } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -43,9 +43,16 @@ export class Admin {
   editingPaese: PaeseConfig | null = null;
   newPaese: PaeseConfig = this.emptyPaese();
 
+  // Submissions
+  loadingSubmissions = false;
+  submissions: Submission[] = [];
+  submissionsFiltered: Submission[] = [];
+  submissionsSearch = '';
+
   ngOnInit() {
     this.loadRilevazioni();
     this.loadPaesiConfig();
+    this.loadSubmissions();
   }
 
   emptyRilevazione(): Rilevazione {
@@ -135,8 +142,8 @@ export class Admin {
     this.uploading = true;
     try {
       const updates = this.rilevazioni.filter(r => !!r.id).map(r => ({
-        id: r.id!, 
-        euro: r.euro_per_100g, 
+        id: r.id!,
+        euro: r.euro_per_100g,
         min: r.minutes_per_100g
       }));
       await this.dataService.updateRilevazioniCalculations(updates);
@@ -218,6 +225,62 @@ export class Admin {
       await this.dataService.deletePaeseConfig(id);
       this.loadPaesiConfig();
     } catch (e: any) { this.error = e.message; }
+  }
+
+  // --- SUBMISSIONS ---
+
+  async loadSubmissions() {
+    this.loadingSubmissions = true;
+    try {
+      this.submissions = await this.dataService.getSubmissions();
+      this.submissions.sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+      this.filterSubmissions();
+    } catch (e: any) {
+      this.error = 'Errore caricamento submissions: ' + e.message;
+    } finally {
+      this.loadingSubmissions = false;
+      this.cd.detectChanges();
+    }
+  }
+
+  filterSubmissions() {
+    const q = this.submissionsSearch.toLowerCase();
+    this.submissionsFiltered = q
+      ? this.submissions.filter(s =>
+        s.country?.toLowerCase().includes(q) ||
+        s.city?.toLowerCase().includes(q) ||
+        s.nome_utente?.toLowerCase().includes(q)
+      )
+      : [...this.submissions];
+  }
+
+  async approveSubmission(submission: Submission) {
+    if (!confirm(`Approvare la submission di ${submission.nome_utente || submission.country}?`)) return;
+    this.uploading = true;
+    try {
+      await this.dataService.approveSubmission(submission);
+      this.message = 'Submission approvata e trasferita a Rilevazioni.';
+      this.loadSubmissions();
+      this.loadRilevazioni();
+    } catch (e: any) {
+      this.error = 'Errore approvazione: ' + e.message;
+    } finally {
+      this.uploading = false;
+    }
+  }
+
+  async rejectSubmission(submissionId: string, country: string) {
+    if (!confirm(`Rifiutare la submission per ${country}?`)) return;
+    this.uploading = true;
+    try {
+      await this.dataService.rejectSubmission(submissionId);
+      this.message = 'Submission rifiutata e eliminata.';
+      this.loadSubmissions();
+    } catch (e: any) {
+      this.error = 'Errore rifiuto: ' + e.message;
+    } finally {
+      this.uploading = false;
+    }
   }
 
   // --- AUTH ---

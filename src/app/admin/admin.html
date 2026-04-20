@@ -18,7 +18,95 @@
       {{ message }}
     </div>
     <div *ngIf="error" class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">{{ error }}</div>
+     <!-- ===== SEZIONE SUBMISSIONS ===== -->
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Submissions in Sospeso</h2>
+        <button (click)="loadSubmissions()" [disabled]="uploading || loadingSubmissions"
+          class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-md disabled:opacity-50 border border-gray-300 shadow-sm transition-colors">
+          Ricarica
+        </button>
+      </div>
 
+      <input type="text" [(ngModel)]="submissionsSearch" (ngModelChange)="filterSubmissions()"
+        placeholder="Cerca per paese, città o utente..." class="w-full rounded-md border-gray-300 shadow-sm p-2 border text-sm mb-3">
+
+      <div *ngIf="loadingSubmissions" class="py-8 flex justify-center text-blue-600">
+        <svg class="animate-spin h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+
+      <div *ngIf="!loadingSubmissions">
+        <p *ngIf="submissionsFiltered.length === 0" class="text-center text-gray-400 py-8">
+          <span *ngIf="submissions.length === 0">Nessuna submission</span>
+          <span *ngIf="submissions.length > 0">Nessun risultato per la ricerca</span>
+        </p>
+
+        <div class="overflow-x-auto" *ngIf="submissionsFiltered.length > 0">
+          <p class="text-xs text-gray-400 mb-2">{{ submissionsFiltered.length }} / {{ submissions.length }} submissions</p>
+          <div class="grid gap-4">
+            <div *ngFor="let s of submissionsFiltered" class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Paese</p>
+                  <p class="font-semibold text-gray-800">{{ s.country }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Città</p>
+                  <p class="text-gray-700">{{ s.city }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Utente</p>
+                  <p class="text-gray-700">{{ s.nome_utente || '—' }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Prezzo (originale)</p>
+                  <p class="text-gray-700">{{ s.price | number:'1.2-2' }} {{ s.currency }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Prezzo (€)</p>
+                  <p class="text-gray-700">€ {{ s.euroPrice | number:'1.2-2' }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Peso (g)</p>
+                  <p class="text-gray-700">{{ s.weight }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">€/100g</p>
+                  <p class="text-gray-700">{{ (s.euroPrice / s.weight * 100) | number:'1.2-2' }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Tasso cambio</p>
+                  <p class="text-gray-700">{{ s.exchangeRate | number:'1.4-4' }}</p>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 uppercase">Nutella Index (min/100g)</p>
+                  <p class="text-gray-700">{{ s.nutellaIndexMinutes || '—' }}</p>
+                </div>
+                <div class="md:col-span-3">
+                  <p class="text-xs font-medium text-gray-500 uppercase">Data invio</p>
+                  <p class="text-xs text-gray-600">{{ s.timestamp | date:'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+              </div>
+              <div class="flex justify-end gap-2 pt-3 border-t">
+                <button (click)="rejectSubmission(s.id!, s.country)" [disabled]="uploading"
+                  class="px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-50 border border-red-300 rounded-md disabled:opacity-50 transition-colors">
+                  Rifiuta
+                </button>
+                <button (click)="approveSubmission(s)" [disabled]="uploading"
+                  class="px-3 py-1 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md disabled:opacity-50 transition-colors">
+                  Approva
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
     <!-- ===== SEZIONE RILEVAZIONI ===== -->
     <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
       <div class="flex justify-between items-center mb-6">
@@ -199,7 +287,7 @@
       </div>
     </div>
 
-  </div>
+
 
   <!-- Modal Modifica Rilevazione -->
   <div *ngIf="editingRilevazione" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
