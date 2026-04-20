@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDocs, writeBatch, deleteDoc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDocs, writeBatch, deleteDoc, setDoc, addDoc } from '@angular/fire/firestore';
 import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { read, utils } from 'xlsx';
 
@@ -275,7 +275,7 @@ export class DataService {
   // --- PUBLIC SUBMISSION ---
 
   async submitData(data: any): Promise<void> {
-    await setDoc(doc(collection(this.firestore, 'submissions')), {
+    await addDoc(collection(this.firestore, 'submissions'), {
       ...data, timestamp: new Date().toISOString(), status: 'pending'
     });
   }
