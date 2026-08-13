@@ -1,17 +1,22 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgxEchartsDirective } from 'ngx-echarts';
 import { Chart, registerables } from 'chart.js';
 import { DataService } from '../data.service';
+import { toWorldMapName } from '../shared/world-map-names';
 import countryIso from '../country-iso.json';
 import itaToEng from '../ita-to-eng.json';
 
 Chart.register(...registerables);
 
+const HUMAN_SAFARI_COLOR = '#f59e0b';
+const SYSTEM_COLOR = '#3b82f6';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxEchartsDirective],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -22,6 +27,8 @@ export class Dashboard implements OnInit, AfterViewInit {
 
   pppChart: Chart | null = null;
   faticaChart: Chart | null = null;
+  mapChartOption: any = null;
+  private worldMapRegistered = false;
 
   selectedRegion = 'Tutte le Aree';
   regions = ['Tutte le Aree'];
@@ -97,12 +104,64 @@ export class Dashboard implements OnInit, AfterViewInit {
       this.regions = ['Tutte le Aree', ...areas];
 
       this.applyFilter();
+      this.buildWorldMap();
     } catch (e) {
       console.error('Dashboard loadData error', e);
     } finally {
       this.loading = false;
       this.cd.detectChanges();
       setTimeout(() => this.buildCharts(), 0);
+    }
+  }
+
+  async buildWorldMap() {
+    try {
+      if (!this.worldMapRegistered) {
+        const [{ default: echarts }, topojsonClient, worldTopo] = await Promise.all([
+          import('../echarts-setup'),
+          import('topojson-client'),
+          import('world-atlas/countries-110m.json')
+        ]);
+        const topology = worldTopo.default as any;
+        const geo = topojsonClient.feature(topology, topology.objects.countries);
+        echarts.registerMap('world', geo as any);
+        this.worldMapRegistered = true;
+      }
+
+      const mapData = this.allData.map(d => {
+        const isHumanSafari = d.is_human_safari === true || d.nome_utente?.toLowerCase() === 'human safari';
+        return {
+          name: toWorldMapName(d.paese_en),
+          value: d.minutes_per_100g,
+          country: d.country,
+          euro: d.euro_per_100g,
+          minutes: d.minutes_per_100g,
+          itemStyle: { areaColor: isHumanSafari ? HUMAN_SAFARI_COLOR : SYSTEM_COLOR }
+        };
+      });
+
+      this.mapChartOption = {
+        tooltip: {
+          trigger: 'item',
+          formatter: (params: any) => {
+            if (!params.data) return '';
+            return `<strong>${params.data.country}</strong><br/>${params.data.euro.toFixed(2)} €/100g<br/>${params.data.minutes.toFixed(2)} min/100g`;
+          }
+        },
+        series: [{
+          type: 'map',
+          map: 'world',
+          roam: false,
+          selectedMode: false,
+          label: { show: false },
+          itemStyle: { areaColor: '#ffffff', borderColor: '#d1d5db', borderWidth: 0.5 },
+          emphasis: { itemStyle: { areaColor: '#e5e7eb' } },
+          data: mapData
+        }]
+      };
+      this.cd.detectChanges();
+    } catch (e) {
+      console.error('Dashboard buildWorldMap error', e);
     }
   }
 
