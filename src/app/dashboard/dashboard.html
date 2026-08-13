@@ -120,7 +120,7 @@
       </div>
       <h3 class="text-xl font-bold text-gray-800">Catture Recenti</h3>
     </div>
-    
+
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <div *ngFor="let upload of recentUploads" class="group block relative rounded-xl overflow-hidden bg-gray-50 border border-gray-200 hover:shadow-xl transition-all duration-300">
         <div class="aspect-w-4 aspect-h-3 w-full bg-gray-200">
@@ -153,11 +153,20 @@
     <h3 class="text-lg font-bold text-gray-800 mb-1">Mappa del Mondo</h3>
     <p class="text-xs text-gray-500 mb-4">
       Passa il mouse su un paese colorato per vedere il Nutella Index.
-      <span class="inline-block w-3 h-3 rounded-sm bg-blue-500 ml-2"></span> Dati Sistema
+      <span class="inline-block w-3 h-3 rounded-sm bg-blue-500 ml-2"></span> Dati Utenti
       <span class="inline-block w-3 h-3 rounded-sm bg-amber-500 ml-1"></span> Human Safari
       <span class="inline-block w-3 h-3 rounded-sm bg-white border border-gray-300 ml-1"></span> Nessun dato
     </p>
-    <div echarts [options]="mapChartOption" class="w-full" style="height: 500px;" *ngIf="mapChartOption"></div>
+    <div class="relative" *ngIf="mapChartOption">
+      <div echarts [options]="mapChartOption" (chartInit)="onMapChartInit($event)" class="w-full" style="height: 650px;"></div>
+      <div class="absolute top-3 right-3 flex flex-col gap-1 z-10">
+        <button (click)="zoomMap(2)" title="Zoom avanti" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700 font-bold text-lg leading-none">+</button>
+        <button (click)="zoomMap(0.5)" title="Zoom indietro" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700 font-bold text-lg leading-none">−</button>
+        <button (click)="resetMapZoom()" title="Reimposta vista" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </button>
+      </div>
+    </div>
   </div>
 
 </div>
