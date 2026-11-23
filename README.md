@@ -10,7 +10,7 @@ Sito statistico indipendente che misura il potere d'acquisto nei diversi paesi d
 
 | Scheda | URL | Descrizione |
 |---|---|---|
-| **Dashboard** | `/` | Due grafici admin-only: **Nutella PPP Index** (sopra/sottovalutazione valute) e **Nutella Fatica** (minuti di lavoro per 100g). Dati verificati e inseriti manualmente. |
+| **Dashboard** | `/` | Pagina pubblica con mappa, tabella e due grafici: **Nutella PPP Index** (sopra/sottovalutazione valute) e **Nutella Fatica** (minuti di lavoro per 100g). Dati verificati e inseriti manualmente. |
 | **Nutella PPP** | `/ppp-index` | Calcolatore interattivo: scegli un paese, inserisci il prezzo del vasetto, il sito mostra valuta e tasso di cambio automaticamente e calcola se la valuta locale è sopra o sottovalutata rispetto all'Euro. |
 | **Calcolo Istantaneo** | `/instant-calculator` | Due tab integrate: **Calcolo dal prezzo** (inserisci paese, peso, prezzo → ottieni i minuti di lavoro necessari) e **Equivalenza in Italia** (quei minuti cosa comprerebbero in Italia). Le due tab si alimentano a vicenda ma sono usabili anche separatamente. |
 | **Metodologia** | `/methodology` | Spiegazione del metodo di calcolo dell'indice. |
@@ -22,9 +22,10 @@ Sito statistico indipendente che misura il potere d'acquisto nei diversi paesi d
 
 ## Architettura
 
-- **Frontend**: Angular v19, standalone components, Tailwind CSS
+- **Frontend**: Angular v21, standalone components, Tailwind CSS
+- **SEO**: pagine pubbliche pre-generate in HTML statico durante la build (prerender), versione italiana su `/` e inglese su `/en/`; login e admin restano generate nel browser
 - **Database**: Firebase Firestore (collezioni: `submissions`, `measurements`, `countries`, `areas`)
-- **Storage**: Firebase Storage (foto caricate dagli utenti)
+- **Piano Firebase**: Spark (gratuito). Cloud Storage non è usato perché richiede il piano a pagamento Blaze; le foto sono link salvati nel campo `photo_url`
 - **Auth**: Firebase Authentication (email/password, solo admin)
 - **Hosting**: Firebase Hosting
 - **Dati statici**: JSON locali in `src/app/` (PIL, paesi, valute, dati admin dashboard)
@@ -38,7 +39,8 @@ Sito statistico indipendente che misura il potere d'acquisto nei diversi paesi d
 | `src/app/currency-data.json` | Valuta e tasso di cambio per ogni paese (generato da `gen_data.py`) |
 | `src/app/paesi-ita.json` | Lista paesi in italiano, ordine alfabetico italiano |
 | `src/app/ita-to-eng.json` | Mappa nome italiano → nome inglese (per lookup PIL) |
-| `src/app/shared/tiers.ts` | Fasce di prezzo italiane per l'equivalenza + costanti (0.31 €/min, 2.41 min/100g) |
+| `src/app/shared/tiers.ts` | Fasce di prezzo italiane per l'equivalenza |
+| `src/app/shared/nutella-math.ts` | Formule dell'indice e riferimento Italia, calcolato dall'ultima rilevazione italiana su Firestore |
 
 ---
 
@@ -104,23 +106,43 @@ npx ng serve
 ### Comando completo (build + deploy in un colpo)
 
 ```bash
-npx ng build && firebase deploy --only hosting
+npm run build && firebase deploy --only hosting,firestore:rules
 ```
 
 ### Passo per passo
 
 ```bash
-# 1. Build
-npx ng build
+# 1. Build (prerender IT + EN e copia di 404.html)
+npm run build
 
-# 2. Deploy (solo hosting)
-firebase deploy --only hosting
+# 2. Verifica le regole senza pubblicarle
+firebase deploy --only firestore:rules --dry-run
+
+# 3. Deploy di hosting e regole Firestore
+firebase deploy --only hosting,firestore:rules
 ```
+
+Le regole di sicurezza vivono in `firestore.rules` e vanno sempre pubblicate insieme al sito:
+un deploy "solo hosting" lascia in produzione le regole precedenti.
 
 Se il login Firebase è scaduto:
 ```bash
 firebase login --reauth
 ```
+---
+
+## Traduzioni (italiano / inglese)
+
+I testi sono in italiano nei template, marcati con `i18n="@@id"` (HTML) o `$localize` (TypeScript).
+Dopo aver aggiunto o modificato un testo:
+
+```bash
+npx ng extract-i18n        # aggiorna src/locale/messages.xlf
+```
+
+Poi aggiungi o aggiorna la traduzione corrispondente in `src/locale/messages.en.xlf`.
+La build segnala le traduzioni mancanti. In sviluppo (`npm start`) viene servita solo la versione italiana.
+
 ---
 
 ## Aggiornare i dati della Dashboard
@@ -189,7 +211,15 @@ Questo sovrascrive `currency-data.json`, `paesi-ita.json` e `ita-to-eng.json`.
 
 ---
 
+## Controlli automatici (CI)
+
+`.github/workflows/ci.yml` esegue a ogni push e pull request: `npm ci`, build completa (IT + EN, con un `environment.ts` di esempio), test unitari e `npm audit` sulle dipendenze di produzione (blocca solo le vulnerabilità critiche). Non pubblica nulla: il deploy resta manuale.
+
+---
+
 ## Note GDPR
+
+> Punti aperti da valutare con il DPO: vedi [docs/nota-dpo-gdpr.md](docs/nota-dpo-gdpr.md).
 
 - **Cookie banner**: compare al primo accesso, la scelta viene salvata in `localStorage`
 - **Form segnalazioni**: include informativa art. 13 GDPR prima del tasto invio

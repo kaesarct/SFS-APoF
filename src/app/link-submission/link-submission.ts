@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, LOCALE_ID, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { DataService } from '../data.service';
 import nutellaData from '../nutella-data.json';
+import { FALLBACK_ITALY_REFERENCE, euroPer100g, latestGdp, minutesPer100g } from '../shared/nutella-math';
 
 
 @Component({
@@ -16,7 +17,11 @@ import nutellaData from '../nutella-data.json';
 export class DataSubmission implements OnInit {
   private fb = inject(FormBuilder);
   private dataService = inject(DataService);
+  protected italyRef = signal(FALLBACK_ITALY_REFERENCE);
   private cd = inject(ChangeDetectorRef);
+  private isEnglish = inject(LOCALE_ID).startsWith('en');
+
+  protected readonly currencyFallback = $localize`:@@submit.form.currencyFallback:valuta`;
 
   // Data loaded from Firestore
   countries: string[] = [];
@@ -51,6 +56,7 @@ export class DataSubmission implements OnInit {
   });
 
   async ngOnInit() {
+    this.dataService.getItalyReference().then(ref => this.italyRef.set(ref));
     try {
       const remote = await this.dataService.getPaesiConfig();
       if (remote.length > 0) {
@@ -59,6 +65,7 @@ export class DataSubmission implements OnInit {
           this.currencyMap.set(c.paese_it, { currency: c.currency, code: c.currency_code, rate: c.exchange_rate });
           this.itaToEngMap.set(c.paese_it, c.paese_en);
         });
+        this.sortCountriesForDisplay();
         this.cd.detectChanges();
         return;
       }
@@ -76,7 +83,16 @@ export class DataSubmission implements OnInit {
     Object.entries(currencyData.default as any).forEach(([k, v]: any) =>
       this.currencyMap.set(k, { currency: v.currency, code: v.currency_code || '', rate: v.rate })
     );
+    this.sortCountriesForDisplay();
     this.cd.detectChanges();
+  }
+
+  displayName(itaName: string): string {
+    return this.isEnglish ? this.itaToEngMap.get(itaName) || itaName : itaName;
+  }
+
+  private sortCountriesForDisplay() {
+    if (this.isEnglish) this.countries = [...this.countries].sort((a, b) => this.displayName(a).localeCompare(this.displayName(b), 'en'));
   }
 
   onCountryChange() {
@@ -126,24 +142,17 @@ export class DataSubmission implements OnInit {
 
     // Nutella Index preview
     const engCountry = this.itaToEngMap.get(v.country!) || v.country!;
-    const gdpObj = this.gdpData[engCountry];
-    let gdp = 0;
-    if (gdpObj) {
-      for (const key of ['2026', '2025', '2024', '2023', '2022', '2021', '2020']) {
-        const val = gdpObj[key];
-        if (val && val !== 'no data' && !isNaN(parseFloat(val))) { gdp = parseFloat(val); break; }
-      }
-    }
+    const gdp = latestGdp(this.gdpData[engCountry])?.value ?? 0;
     if (gdp <= 0) { this.nutellaIndexMinutes = null; this.valoreGdpEur = null; this.costo100g = null; return; }
 
     this.valoreGdpEur = gdp;
-    this.costo100g = (this.calculatedEuroPrice / weight) * 100;
-    this.nutellaIndexMinutes = Math.round(((this.costo100g / gdp) * 2000 * 60) * 100) / 100;
+    this.costo100g = euroPer100g(this.calculatedEuroPrice, weight);
+    this.nutellaIndexMinutes = Math.round(minutesPer100g(this.costo100g, gdp) * 100) / 100;
   }
 
   async onSubmit() {
     if (this.form.invalid || !this.exchangeRate) {
-      this.errorMessage = 'Compila tutti i campi richiesti e seleziona un paese valido.';
+      this.errorMessage = $localize`:@@submit.error.invalidForm:Compila tutti i campi richiesti e seleziona un paese valido.`;
       return;
     }
 
@@ -173,13 +182,13 @@ export class DataSubmission implements OnInit {
         nutellaIndexMinutes: this.nutellaIndexMinutes
       });
 
-      this.successMessage = 'Grazie! I tuoi dati sono stati inviati con successo.';
+      this.successMessage = $localize`:@@submit.success:Grazie! I tuoi dati sono stati inviati con successo.`;
       this.form.reset();
       this.resetCurrency();
 
     } catch (e) {
       console.error(e);
-      this.errorMessage = 'Errore durante l\'invio. Riprova più tardi.';
+      this.errorMessage = $localize`:@@submit.error.sendFailed:Errore durante l'invio. Riprova più tardi.`;
     } finally {
       this.isSubmitting = false;
     }

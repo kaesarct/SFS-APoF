@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /login
+Disallow: /en/admin
+Disallow: /en/login
+
+Sitemap: https://lgrdg-a4a32.web.app/sitemap.xml

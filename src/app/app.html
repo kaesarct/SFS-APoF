@@ -1,15 +1,15 @@
 <div class="min-h-screen bg-gray-50 flex flex-col font-sans">
   <header class="text-white shadow-lg" style="background-color: #e50101;">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold tracking-tight">Dashboard Indice Nutella</h1>
+      <p class="text-2xl font-bold tracking-tight" i18n="@@shell.brand">Dashboard Indice Nutella</p>
       <nav class="space-x-6">
-        <a routerLink="/" class="hover:text-blue-200 transition-colors font-medium">Dashboard</a>
-        <a routerLink="/methodology" class="hover:text-blue-200 transition-colors font-medium">Metodologia</a>
-        <a routerLink="/ppp-index" class="hover:text-blue-200 transition-colors font-medium">Nutella PPP</a>
-        <a routerLink="/instant-calculator" class="hover:text-blue-200 transition-colors font-medium">Calcolo
-          Istantaneo</a>
+        <a routerLink="/" class="hover:text-blue-200 transition-colors font-medium" i18n="@@nav.dashboard">Dashboard</a>
+        <a routerLink="/methodology" class="hover:text-blue-200 transition-colors font-medium" i18n="@@nav.methodology">Metodologia</a>
+        <a routerLink="/ppp-index" class="hover:text-blue-200 transition-colors font-medium" i18n="@@nav.ppp">Nutella PPP</a>
+        <a routerLink="/instant-calculator" class="hover:text-blue-200 transition-colors font-medium" i18n="@@nav.calculator">Calcolo Istantaneo</a>
         <a routerLink="/submit-link" class="px-4 py-2 rounded-lg transition-colors font-medium shadow-md"
-          style="background-color: #2e150a;">Invia Dati</a>
+          style="background-color: #2e150a;" i18n="@@nav.submit">Invia Dati</a>
+        <a [href]="altLanguageHref()" [attr.hreflang]="altLanguage" class="hover:text-blue-200 transition-colors font-medium" i18n-aria-label="@@nav.languageSwitchLabel" aria-label="Leggi questa pagina in inglese" i18n="@@nav.languageSwitch">EN</a>
       </nav>
     </div>
   </header>
@@ -19,21 +19,21 @@
   </main>
 
   <!-- Cookie Banner -->
-  <div *ngIf="cookieBannerVisible"
+  <div *ngIf="cookieBannerVisible()"
     class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-gray-200 px-4 py-4 shadow-2xl border-t border-gray-700 animate-fade-in-up">
     <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-sm text-center sm:text-left">
+      <p class="text-sm text-center sm:text-left" i18n="@@cookie.text">
         🍪 Questo sito utilizza cookie tecnici per il funzionamento e cookie analitici anonimi.
         Non raccogliamo dati personali senza consenso.
         <a href="#" class="underline text-blue-400 hover:text-blue-300 ml-1">Privacy Policy</a>
       </p>
       <div class="flex gap-3 shrink-0">
         <button (click)="declineCookies()"
-          class="px-4 py-2 text-sm rounded-lg border border-gray-500 hover:bg-gray-700 transition-colors">
+          class="px-4 py-2 text-sm rounded-lg border border-gray-500 hover:bg-gray-700 transition-colors" i18n="@@cookie.decline">
           Solo necessari
         </button>
         <button (click)="acceptCookies()"
-          class="px-4 py-2 text-sm rounded-lg bg-green-600 hover:bg-green-500 text-white font-semibold transition-colors">
+          class="px-4 py-2 text-sm rounded-lg bg-green-700 hover:bg-green-600 text-white font-semibold transition-colors" i18n="@@cookie.accept">
           Accetta tutti
         </button>
       </div>
@@ -41,15 +41,15 @@
   </div>
 
   <footer class="text-gray-300 py-6 text-center text-sm space-y-2" style="background-color: #2e150a;">
-    <p>Nutella® è un marchio registrato di Ferrero S.p.A. Questo sito è un progetto statistico indipendente e non è in
+    <p i18n="@@footer.disclaimer">Nutella® è un marchio registrato di Ferrero S.p.A. Questo sito è un progetto statistico indipendente e non è in
       alcun modo affiliato, sponsorizzato o approvato da Ferrero S.p.A.</p>
-    <p>Sito realizzato da <strong><a href="https://beacons.ai/luiggio_" target="_blank"
+    <p i18n="@@footer.credits">Sito realizzato da <strong><a href="https://beacons.ai/luiggio_" target="_blank"
           rel="noopener noreferrer">luiggio</a></strong> e
       <strong><a href="https://www.instagram.com/faro__c/" target="_blank"
           rel="noopener noreferrer">faro__c</a></strong>.
     </p>
     <div class="flex items-center justify-center gap-2">
-      <p>Idea originale di <strong>Nicolò Balini (Human Safari)</strong></p>
+      <p i18n="@@footer.idea">Idea originale di <strong>Nicolò Balini (Human Safari)</strong></p>
       <a href="https://www.instagram.com/humansafari/" target="_blank" rel="noopener noreferrer"
         class="text-gray-300 hover:text-white transition-colors" aria-label="Instagram">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

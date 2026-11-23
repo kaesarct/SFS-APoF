@@ -1,10 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, LOCALE_ID, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import nutellaData from '../nutella-data.json';
 import { DataService } from '../data.service';
-
-const ITALY_PRICE_100G = 1.00;
+import { FALLBACK_ITALY_REFERENCE } from '../shared/nutella-math';
 
 @Component({
   selector: 'app-ppp-index',
@@ -15,6 +14,8 @@ const ITALY_PRICE_100G = 1.00;
 })
 export class PppIndex implements OnInit {
   private dataService = inject(DataService);
+  private italyRef = signal(FALLBACK_ITALY_REFERENCE);
+  private isEnglish = inject(LOCALE_ID).startsWith('en');
 
   countries: string[] = [];
   private currencyMap = new Map<string, { currency: string; rate: number }>();
@@ -35,6 +36,7 @@ export class PppIndex implements OnInit {
   hasCalculated: boolean = false;
 
   async ngOnInit() {
+    this.dataService.getItalyReference().then(ref => this.italyRef.set(ref));
     try {
       const remote = await this.dataService.getPaesiConfig();
       if (remote.length > 0) {
@@ -43,6 +45,7 @@ export class PppIndex implements OnInit {
           this.currencyMap.set(c.paese_it, { currency: c.currency, rate: c.exchange_rate });
           this.itaToEngMap.set(c.paese_it, c.paese_en);
         });
+        this.sortCountriesForDisplay();
         console.log('ppp-index: loaded', remote.length, 'countries from Firestore');
         return;
       }
@@ -58,6 +61,15 @@ export class PppIndex implements OnInit {
     this.countries = paesiItaFallback.default as string[];
     Object.entries(currencyDataFallback.default as any).forEach(([k, v]: any) => this.currencyMap.set(k, { currency: v.currency, rate: v.rate }));
     Object.entries(itaToEngFallback.default as any).forEach(([k, v]: any) => this.itaToEngMap.set(k, v as string));
+    this.sortCountriesForDisplay();
+  }
+
+  displayName(itaName: string): string {
+    return this.isEnglish ? this.itaToEngMap.get(itaName) || itaName : itaName;
+  }
+
+  private sortCountriesForDisplay() {
+    if (this.isEnglish) this.countries = [...this.countries].sort((a, b) => this.displayName(a).localeCompare(this.displayName(b), 'en'));
   }
 
   onCountryChange() {
@@ -97,7 +109,7 @@ export class PppIndex implements OnInit {
 
     // Normalize to 100g
     const localPrice100g = (this.localPrice / this.weightGrams) * 100;
-    const italyPrice100g = ITALY_PRICE_100G;
+    const italyPrice100g = this.italyRef().euroPer100g;
 
     // PPP rate: local currency per EUR implied by Nutella prices
     this.pppRate = localPrice100g / italyPrice100g;
@@ -111,5 +123,5 @@ export class PppIndex implements OnInit {
     this.hasCalculated = true;
   }
 
-  get italyPrice(): number { return ITALY_PRICE_100G; }
+  get italyPrice(): number { return Math.round(this.italyRef().euroPer100g * 100) / 100; }
 }

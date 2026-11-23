@@ -96,7 +96,7 @@
                   Rifiuta
                 </button>
                 <button (click)="approveSubmission(s)" [disabled]="uploading"
-                  class="px-3 py-1 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md disabled:opacity-50 transition-colors">
+                  class="px-3 py-1 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-md disabled:opacity-50 transition-colors">
                   Approva
                 </button>
               </div>
@@ -367,7 +367,7 @@
   <div *ngIf="showPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6">
       <h3 class="text-lg font-bold text-gray-800 mb-4">Cambia Password</h3>
-      <input type="password" [(ngModel)]="newPassword" placeholder="Minimo 6 caratteri"
+      <input type="password" [(ngModel)]="newPassword" placeholder="Minimo 12 caratteri" minlength="12"
         class="w-full rounded-md border-gray-300 shadow-sm p-3 border focus:ring-2 focus:ring-blue-500 outline-none mb-4">
       <div *ngIf="message" class="mb-3 text-green-600 text-sm">{{ message }}</div>
       <div *ngIf="error" class="mb-3 text-red-600 text-sm">{{ error }}</div>

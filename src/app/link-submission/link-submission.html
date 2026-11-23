@@ -9,8 +9,8 @@
         </path>
       </svg>
     </div>
-    <h2 class="text-2xl font-bold text-gray-900 mb-2 text-center">Invia una nuova rilevazione</h2>
-    <p class="text-sm text-gray-500 text-center mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2 text-center" i18n="@@submit.title">Invia una nuova rilevazione</h1>
+    <p class="text-sm text-gray-500 text-center mb-8" i18n="@@submit.subtitle">
       Hai trovato la Nutella in giro per il mondo? Inviaci il dato e contribuisci all'indice!
     </p>
 
@@ -18,23 +18,23 @@
 
       <!-- ===== SEZIONE: DOVE ===== -->
       <div>
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">📍 Dove</h3>
+        <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3" i18n="@@submit.section.where">📍 Dove</h2>
         <div class="grid grid-cols-2 gap-4">
 
           <!-- Country -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Paese</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@submit.form.countryLabel">Paese</label>
             <select formControlName="country" (change)="onCountryChange()"
               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-white text-sm">
-              <option value="">Seleziona Paese...</option>
-              <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
+              <option value="" i18n="@@submit.form.countryPlaceholder">Seleziona Paese...</option>
+              <option *ngFor="let c of countries" [value]="c">{{ displayName(c) }}</option>
             </select>
           </div>
 
           <!-- City -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Città</label>
-            <input type="text" formControlName="city" placeholder="es. Tokyo, Parigi..."
+            <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@submit.form.cityLabel">Città</label>
+            <input type="text" formControlName="city" placeholder="es. Tokyo, Parigi..." i18n-placeholder="@@submit.form.cityPlaceholder"
               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm">
           </div>
 
@@ -43,33 +43,33 @@
 
       <!-- ===== SEZIONE: IL PRODOTTO ===== -->
       <div>
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">🫙 Il Prodotto</h3>
+        <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3" i18n="@@submit.section.product">🫙 Il Prodotto</h2>
         <div class="grid grid-cols-2 gap-4">
 
           <!-- Price in local currency -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Prezzo a scaffale</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@submit.form.priceLabel">Prezzo a scaffale</label>
             <div class="relative">
-              <input type="number" formControlName="price" placeholder="es. 1250" min="0" step="0.01"
+              <input type="number" formControlName="price" placeholder="es. 1250" i18n-placeholder="@@submit.form.pricePlaceholder" min="0" step="0.01"
                 (input)="onPriceOrWeightChange()"
                 class="w-full pl-4 pr-20 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm">
               <div
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded">
-                {{ currencyCode || currencyLabel || 'valuta' }}
+                {{ currencyCode || currencyLabel || currencyFallback }}
               </div>
             </div>
           </div>
 
           <!-- Weight: free input -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Grammi del vasetto</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@submit.form.weightLabel">Grammi del vasetto</label>
             <div class="relative">
-              <input type="number" formControlName="weight" placeholder="es. 750" min="1" step="1"
+              <input type="number" formControlName="weight" placeholder="es. 750" i18n-placeholder="@@submit.form.weightPlaceholder" min="1" step="1"
                 (input)="onPriceOrWeightChange()"
                 class="w-full pl-4 pr-12 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm">
               <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-semibold">g</div>
             </div>
-            <p class="text-xs text-gray-400 mt-1">Scrivi la grammatura esatta che vedi sul vasetto</p>
+            <p class="text-xs text-gray-400 mt-1" i18n="@@submit.form.weightHint">Scrivi la grammatura esatta che vedi sul vasetto</p>
           </div>
 
         </div>
@@ -77,23 +77,23 @@
 
       <!-- ===== AUTO CONVERSION PANEL ===== -->
       <div *ngIf="exchangeRate" class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-        <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">💱 Conversione automatica</p>
+        <p class="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3" i18n="@@submit.conversion.title">💱 Conversione automatica</p>
         <div class="grid grid-cols-3 gap-3 text-center">
 
           <div>
-            <p class="text-xs text-gray-500 mb-1">Valuta locale</p>
+            <p class="text-xs text-gray-500 mb-1" i18n="@@submit.conversion.localCurrency">Valuta locale</p>
             <p class="font-bold text-gray-800 text-sm">{{ currencyLabel }}</p>
             <p class="text-xs text-gray-400">({{ currencyCode }})</p>
           </div>
 
           <div>
-            <p class="text-xs text-gray-500 mb-1">Tasso di cambio</p>
+            <p class="text-xs text-gray-500 mb-1" i18n="@@submit.conversion.exchangeRate">Tasso di cambio</p>
             <p class="font-bold text-gray-800 text-sm">1 EUR = {{ exchangeRate | number:'1.2-4' }}</p>
             <p class="text-xs text-gray-400">{{ currencyCode }}</p>
           </div>
 
           <div>
-            <p class="text-xs text-gray-500 mb-1">Prezzo in Euro</p>
+            <p class="text-xs text-gray-500 mb-1" i18n="@@submit.conversion.euroPrice">Prezzo in Euro</p>
             <p class="font-bold text-lg" [class.text-blue-700]="calculatedEuroPrice"
               [class.text-gray-300]="!calculatedEuroPrice">
               {{ calculatedEuroPrice !== null ? (calculatedEuroPrice | number:'1.2-2') + ' €' : '—' }}
@@ -105,14 +105,14 @@
 
       <!-- No country selected hint -->
       <div *ngIf="!exchangeRate && form.value.country === ''"
-        class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center text-sm text-gray-400">
+        class="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 text-center text-sm text-gray-400" i18n="@@submit.selectCountryHint">
         👆 Seleziona prima il paese per vedere la valuta e il tasso di cambio
       </div>
 
       <!-- ===== SEZIONE: TU ===== -->
       <div>
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">👤 Chi sei?</h3>
-        <input type="text" formControlName="userName" placeholder="es. Mario Rossi, @tuonick — lascia vuoto per 'Community'"
+        <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3" i18n="@@submit.section.who">👤 Chi sei?</h2>
+        <input type="text" formControlName="userName" placeholder="es. Mario Rossi, @tuonick — lascia vuoto per 'Community'" i18n-placeholder="@@submit.form.userNamePlaceholder"
           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm">
       </div>
 
@@ -125,19 +125,19 @@
           </svg>
         </div>
         <div class="relative z-10">
-          <h3 class="text-orange-900 font-bold text-base mb-1 flex items-center gap-2">
+          <h2 class="text-orange-900 font-bold text-base mb-1 flex items-center gap-2" i18n="@@submit.preview.title">
             📊 Anteprima Nutella Index
-          </h3>
-          <p class="text-orange-700 text-xs mb-3">
+          </h2>
+          <p class="text-orange-700 text-xs mb-3" i18n="@@submit.preview.details">
             Costo 100g: <strong>{{ costo100g | number:'1.2-2' }}€</strong> •
             PIL pro capite: <strong>{{ valoreGdpEur | number:'1.0-0' }}€</strong>
           </p>
           <div class="flex items-baseline gap-2">
             <span class="text-4xl font-black text-orange-600 tracking-tight">{{ nutellaIndexMinutes | number:'1.2-2'
               }}</span>
-            <span class="text-orange-800 font-semibold">minuti di lavoro per 100g</span>
+            <span class="text-orange-800 font-semibold" i18n="@@submit.preview.unit">minuti di lavoro per 100g</span>
           </div>
-          <p class="text-xs text-orange-400 mt-2">Riferimento Italia: 2.41 minuti</p>
+          <p class="text-xs text-orange-400 mt-2" i18n="@@submit.preview.italyReference">Riferimento Italia: {{ italyRef().minutesPer100g | number:'1.2-2' }} minuti</p>
         </div>
       </div>
 
@@ -166,9 +166,9 @@
             class="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer">
         </div>
         <div>
-          <label for="gdprConsent" class="font-semibold text-gray-700 text-sm cursor-pointer">Informativa sulla privacy
+          <label for="gdprConsent" class="font-semibold text-gray-700 text-sm cursor-pointer" i18n="@@submit.gdpr.title">Informativa sulla privacy
             (art. 13 GDPR)</label>
-          <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+          <p class="text-xs text-gray-500 mt-1 leading-relaxed" i18n="@@submit.gdpr.text">
             I dati che invii (prezzo, città, paese) vengono raccolti esclusivamente per scopi statistici e di ricerca
             nell'ambito del progetto Nutella Index. Non vengono ceduti a terzi né utilizzati per finalità commerciali.
             <strong>Selezionando questa casella acconsenti al trattamento dei dati.</strong>
@@ -182,10 +182,10 @@
           </svg>
         </div>
         <div>
-          <h4 class="font-semibold text-amber-800 text-sm flex items-center gap-1">
+          <h3 class="font-semibold text-amber-800 text-sm flex items-center gap-1" i18n="@@submit.note.title">
             <span>⚠️</span> Nota Bene
-          </h4>
-          <p class="text-xs text-amber-700 mt-2 leading-relaxed">
+          </h3>
+          <p class="text-xs text-amber-700 mt-2 leading-relaxed" i18n="@@submit.note.text">
             Se hai una foto per supportare il tuo dato, inviala a <strong>@_luiggio_</strong> su
             <a href="https://www.instagram.com/luiggio" target="_blank" rel="noopener noreferrer"
               class="text-amber-600 hover:text-amber-800 underline font-semibold">Instagram</a>
@@ -206,7 +206,7 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
         </svg>
-        <span>{{ isSubmitting ? 'Invio in corso...' : 'Invia Segnalazione' }}</span>
+        <span>@if (isSubmitting) {<ng-container i18n="@@submit.button.sending">Invio in corso...</ng-container>} @else {<ng-container i18n="@@submit.button.send">Invia Segnalazione</ng-container>}</span>
       </button>
 
     </form>

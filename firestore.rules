@@ -1,13 +1,40 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /submissions/{doc} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+
+    function isAdmin() {
+      return request.auth != null && request.auth.uid in ['L5MfhKTVMBbjfBQTrBARUik5LQH3', 'YLuBely6ViRaqMV8bny2Jo77Sn72'];
     }
-    match /{document=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
+
+    function optString(d, k, max) {
+      return !(k in d) || (d[k] is string && d[k].size() <= max);
+    }
+
+    function isValidSubmission(d) {
+      return d.keys().hasAll(['country', 'city', 'price', 'currency', 'euroPrice', 'weight', 'exchangeRate', 'timestamp', 'status'])
+        && d.keys().hasOnly(['country', 'city', 'price', 'currency', 'euroPrice', 'weight', 'exchangeRate',
+                             'timestamp', 'status', 'nome_utente', 'nutellaIndexMinutes'])
+        && d.country is string && d.country.size() > 0 && d.country.size() <= 100
+        && d.city is string && d.city.size() > 0 && d.city.size() <= 100
+        && d.price is number && d.price > 0 && d.price < 1000000000
+        && d.currency is string && d.currency.size() <= 60
+        && d.euroPrice is number && d.euroPrice >= 0
+        && d.weight is number && d.weight > 0 && d.weight <= 10000
+        && d.exchangeRate is number && d.exchangeRate > 0
+        && d.timestamp is string && d.timestamp.size() <= 40
+        && d.status == 'pending'
+        && optString(d, 'nome_utente', 60)
+        && (!('nutellaIndexMinutes' in d) || d.nutellaIndexMinutes == null || d.nutellaIndexMinutes is number);
+    }
+
+    match /measurements/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /paesi_config/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /countries/{id}    { allow read: if true; allow write: if isAdmin(); }
+    match /areas/{id}        { allow read: if true; allow write: if isAdmin(); }
+
+    match /submissions/{id} {
+      allow create: if isValidSubmission(request.resource.data);
+      allow read, update, delete: if isAdmin();
     }
   }
 }

@@ -1,9 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, inject, ChangeDetectorRef, PLATFORM_ID, LOCALE_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { Chart, registerables } from 'chart.js';
 import { DataService } from '../data.service';
+import { FALLBACK_ITALY_REFERENCE, ItalyReference, findItalyReference, valuationPct } from '../shared/nutella-math';
 import { resolveCountryMapName } from '../shared/world-map-names';
 import { unwrapAntimeridian } from '../shared/world-map-geo';
 import countryIso from '../country-iso.json';
@@ -13,6 +14,7 @@ Chart.register(...registerables);
 
 const HUMAN_SAFARI_COLOR = '#f59e0b';
 const SYSTEM_COLOR = '#3b82f6';
+const ALL_AREAS = $localize`:@@dashboard.allAreas:Tutte le Aree`;
 
 @Component({
   selector: 'app-dashboard',
@@ -33,8 +35,8 @@ export class Dashboard implements OnInit, AfterViewInit {
   private worldMapRegistered = false;
   private worldMapNames = new Set<string>();
 
-  selectedRegion = 'Tutte le Aree';
-  regions = ['Tutte le Aree'];
+  selectedRegion = ALL_AREAS;
+  regions = [ALL_AREAS];
 
   allData: any[] = [];
   filteredData: any[] = [];
@@ -42,15 +44,19 @@ export class Dashboard implements OnInit, AfterViewInit {
   loading = true;
 
   private dataService = inject(DataService);
+  private italyRef: ItalyReference = FALLBACK_ITALY_REFERENCE;
   private cd = inject(ChangeDetectorRef);
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private isEnglish = inject(LOCALE_ID).startsWith('en');
 
-  ngOnInit() { this.loadData(); }
-  ngAfterViewInit() { this.buildCharts(); }
+  ngOnInit() { if (this.isBrowser) this.loadData(); }
+  ngAfterViewInit() { if (this.isBrowser) this.buildCharts(); }
 
   async loadData() {
     this.loading = true;
     try {
       const rilevazioni = await this.dataService.getRilevazioni();
+      this.italyRef = findItalyReference(rilevazioni);
 
       // Keep only the latest rilevazione per paese
       const latestMap = new Map<string, any>();
@@ -88,11 +94,11 @@ export class Dashboard implements OnInit, AfterViewInit {
           
           return {
             ...r,
-            country: r.paese_it || r.paese_en,
+            country: this.isEnglish
+              ? r.paese_en || (itaToEng as any)[r.paese_it] || r.paese_it
+              : r.paese_it || r.paese_en,
             isoCode: flagIso,
-            valuation_pct: r.euro_per_100g > 0
-              ? ((r.euro_per_100g / 1.00) - 1) * 100
-              : 0
+            valuation_pct: valuationPct(r.euro_per_100g, this.italyRef.euroPer100g)
           };
         });
 
@@ -104,7 +110,7 @@ export class Dashboard implements OnInit, AfterViewInit {
 
       // Build region list dynamically
       const areas = [...new Set(this.allData.map(d => d.area).filter(Boolean))].sort();
-      this.regions = ['Tutte le Aree', ...areas];
+      this.regions = [ALL_AREAS, ...areas];
 
       this.applyFilter();
       this.buildWorldMap();
@@ -190,7 +196,7 @@ export class Dashboard implements OnInit, AfterViewInit {
   }
 
   applyFilter() {
-    this.filteredData = this.selectedRegion === 'Tutte le Aree'
+    this.filteredData = this.selectedRegion === ALL_AREAS
       ? [...this.allData]
       : this.allData.filter(d => d.area === this.selectedRegion);
     if (!this.loading) {
@@ -215,12 +221,14 @@ export class Dashboard implements OnInit, AfterViewInit {
 
     this.pppChart = new Chart(this.pppChartRef.nativeElement, {
       type: 'bar',
-      data: { labels, datasets: [{ label: 'Sopra/Sottovalutazione (%)', data: values, backgroundColor: colors, borderRadius: 5, borderWidth: 0 }] },
+      data: { labels, datasets: [{ label: $localize`:@@dashboard.pppChart.datasetLabel:Sopra/Sottovalutazione (%)`, data: values, backgroundColor: colors, borderRadius: 5, borderWidth: 0 }] },
       options: {
         indexAxis: 'y', responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          tooltip: { callbacks: { label: ctx => { const v = ctx.parsed.x ?? 0; return v > 0 ? `Sopravvalutata del ${v.toFixed(1)}%` : `Sottovalutata del ${Math.abs(v).toFixed(1)}%`; } } }
+          tooltip: { callbacks: { label: ctx => { const v = ctx.parsed.x ?? 0; return v > 0
+            ? $localize`:@@dashboard.pppChart.overvalued:Sopravvalutata del ${v.toFixed(1)}:value:%`
+            : $localize`:@@dashboard.pppChart.undervalued:Sottovalutata del ${Math.abs(v).toFixed(1)}:value:%`; } } }
         },
         scales: { x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + '%' } }, y: { grid: { display: false } } }
       }
@@ -231,7 +239,7 @@ export class Dashboard implements OnInit, AfterViewInit {
     if (!this.faticaChartRef) return;
     if (this.faticaChart) this.faticaChart.destroy();
 
-    const italyEntry = { country: 'Italia 🇮🇹', minutes_per_100g: 4.02 };
+    const italyEntry = { country: $localize`:@@dashboard.effortChart.italyLabel:Italia 🇮🇹`, minutes_per_100g: this.italyRef.minutesPer100g, isReference: true };
     const validData = this.filteredData.filter(d => typeof d.minutes_per_100g === 'number' && !isNaN(d.minutes_per_100g));
     const sorted = [...validData].sort((a, b) => a.minutes_per_100g - b.minutes_per_100g);
     const all = [italyEntry, ...sorted].sort((a, b) => a.minutes_per_100g - b.minutes_per_100g);
@@ -239,18 +247,18 @@ export class Dashboard implements OnInit, AfterViewInit {
     const labels = all.map(d => d.country);
     const values = all.map(d => d.minutes_per_100g);
     const colors = all.map(d =>
-      d.country.includes('Italia') ? 'rgba(59,130,246,0.9)' :
-      d.minutes_per_100g <= 4.02 ? 'rgba(34,197,94,0.8)' : 'rgba(249,115,22,0.8)'
+      d.isReference ? 'rgba(59,130,246,0.9)' :
+      d.minutes_per_100g <= this.italyRef.minutesPer100g ? 'rgba(34,197,94,0.8)' : 'rgba(249,115,22,0.8)'
     );
 
     this.faticaChart = new Chart(this.faticaChartRef.nativeElement, {
       type: 'bar',
-      data: { labels, datasets: [{ label: 'Minuti di lavoro per 100g', data: values, backgroundColor: colors, borderRadius: 5, borderWidth: 0 }] },
+      data: { labels, datasets: [{ label: $localize`:@@dashboard.effortChart.datasetLabel:Minuti di lavoro per 100g`, data: values, backgroundColor: colors, borderRadius: 5, borderWidth: 0 }] },
       options: {
         indexAxis: 'y', responsive: true, maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
-          tooltip: { callbacks: { label: ctx => `${(ctx.parsed.x ?? 0).toFixed(2)} minuti` } }
+          tooltip: { callbacks: { label: ctx => $localize`:@@dashboard.effortChart.tooltip:${(ctx.parsed.x ?? 0).toFixed(2)}:minutes: minuti` } }
         },
         scales: { x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + ' min' } }, y: { grid: { display: false } } }
       }
@@ -260,7 +268,16 @@ export class Dashboard implements OnInit, AfterViewInit {
   exportCSV() {
     if (!this.filteredData || this.filteredData.length === 0) return;
 
-    const headers = ['Paese', 'Area', 'Prezzo Euro', 'Peso (g)', 'Euro/100g', 'Min/100g', 'Fonte', 'Valutazione (%)'];
+    const headers = [
+      $localize`:@@dashboard.csv.country:Paese`,
+      $localize`:@@dashboard.csv.area:Area`,
+      $localize`:@@dashboard.csv.priceEur:Prezzo Euro`,
+      $localize`:@@dashboard.csv.weight:Peso (g)`,
+      'Euro/100g',
+      'Min/100g',
+      $localize`:@@dashboard.csv.source:Fonte`,
+      $localize`:@@dashboard.csv.valuation:Valutazione (%)`
+    ];
     const rows = this.filteredData.map(d => [
       `"${d.country}"`,
       `"${d.area}"`,

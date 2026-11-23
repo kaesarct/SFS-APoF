@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, LOCALE_ID, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import nutellaData from '../nutella-data.json';
-import { ITALY_WAGE_PER_MINUTE, ITALY_MINUTES_PER_100G, findMatchingTier, PriceTier } from '../shared/tiers';
+import { findMatchingTier, PriceTier } from '../shared/tiers';
+import { FALLBACK_ITALY_REFERENCE, euroPer100g, minutesPer100g } from '../shared/nutella-math';
 import { DataService } from '../data.service';
 
 @Component({
@@ -15,6 +16,8 @@ import { DataService } from '../data.service';
 })
 export class InstantCalculator implements OnInit {
   private dataService = inject(DataService);
+  protected italyRef = signal(FALLBACK_ITALY_REFERENCE);
+  private isEnglish = inject(LOCALE_ID).startsWith('en');
 
   countries: string[] = [];
   private currencyMap = new Map<string, { currency: string; rate: number }>();
@@ -49,6 +52,7 @@ export class InstantCalculator implements OnInit {
   private cd = inject(ChangeDetectorRef);
 
   async ngOnInit() {
+    this.dataService.getItalyReference().then(ref => this.italyRef.set(ref));
     try {
       const remote = await this.dataService.getPaesiConfig();
       if (remote.length > 0) {
@@ -57,6 +61,7 @@ export class InstantCalculator implements OnInit {
           this.currencyMap.set(c.paese_it, { currency: c.currency, rate: c.exchange_rate });
           this.itaToEngMap.set(c.paese_it, c.paese_en);
         });
+        this.sortCountriesForDisplay();
         console.log('instant-calculator: loaded', remote.length, 'countries from Firestore');
         this.cd.detectChanges();
         return;
@@ -73,7 +78,16 @@ export class InstantCalculator implements OnInit {
     this.countries = (paesiIta.default as string[]).sort();
     Object.entries(itaToEng.default as any).forEach(([k, v]: any) => this.itaToEngMap.set(k, v as string));
     Object.entries(currencyData.default as any).forEach(([k, v]: any) => this.currencyMap.set(k, { currency: v.currency, rate: v.rate }));
+    this.sortCountriesForDisplay();
     this.cd.detectChanges();
+  }
+
+  displayName(itaName: string): string {
+    return this.isEnglish ? this.itaToEngMap.get(itaName) || itaName : itaName;
+  }
+
+  private sortCountriesForDisplay() {
+    if (this.isEnglish) this.countries = [...this.countries].sort((a, b) => this.displayName(a).localeCompare(this.displayName(b), 'en'));
   }
 
   onCountryChange() {
@@ -112,25 +126,22 @@ export class InstantCalculator implements OnInit {
 
     const gdpPerCapita = this.getRecentGdp(this.selectedCountry);
     if (gdpPerCapita <= 0) {
-      alert(`Nessun dato PIL trovato per ${this.selectedCountry}`);
+      alert($localize`:@@calculator.error.noGdp:Nessun dato PIL trovato per ${this.displayName(this.selectedCountry)}:country:`);
       return;
     }
 
     // "Quindi il programma si converte automaticamente il costo in valuta locale in quello in EURO dividendo la variabile inserita per il TASSO DI CONVERSIONE"
     this.calculatedEuroPrice = this.localPrice / this.exchangeRate;
 
-    // "Con il PIL fa lo stesso conto del Nutella index normale" (Prezzo_Euro_100g / PIL) * 2000 * 60
-    const prezzoEuro100g = (this.calculatedEuroPrice / this.weightGrams) * 100;
-    this.calculatedMinutes100g = (prezzoEuro100g / gdpPerCapita) * 2000 * 60;
+    this.calculatedMinutes100g = minutesPer100g(euroPer100g(this.calculatedEuroPrice, this.weightGrams), gdpPerCapita);
 
     // "In questa istanza [...] l'utente ha caricato il prezzo di un vasetto da 350g e vuole sapere quanto tempo ci vuole per acquistare quello."
     // 350/100 * min(100)
     this.calculatedMinutesVasetto = (this.weightGrams / 100) * this.calculatedMinutes100g;
 
-    // "Prende i minuti per il vasetto, li moltiplica per 0.20 (ITALY_WAGE_PER_MINUTE) e trova la fascia di prezzo"
-    this.calculatedEquivalentEuro = this.calculatedMinutesVasetto * ITALY_WAGE_PER_MINUTE;
+    this.calculatedEquivalentEuro = this.calculatedMinutesVasetto * this.italyRef().wagePerMinute;
     this.matchedTier = findMatchingTier(this.calculatedEquivalentEuro);
-    this.calculatedNutellaGrams = (this.calculatedMinutesVasetto / ITALY_MINUTES_PER_100G) * 100;
+    this.calculatedNutellaGrams = (this.calculatedMinutesVasetto / this.italyRef().minutesPer100g) * 100;
     
     // Auto-populate the equivalency tab if they switch to it
     this.inputMinutes = this.calculatedMinutesVasetto;
@@ -150,8 +161,8 @@ export class InstantCalculator implements OnInit {
 
   calculateEquivalency() {
     if (!this.inputMinutes) return;
-    this.calculatedEuroValue = this.inputMinutes * ITALY_WAGE_PER_MINUTE;
+    this.calculatedEuroValue = this.inputMinutes * this.italyRef().wagePerMinute;
     this.matchedTier = findMatchingTier(this.calculatedEuroValue);
-    this.calculatedNutellaGrams = (this.inputMinutes / ITALY_MINUTES_PER_100G) * 100;
+    this.calculatedNutellaGrams = (this.inputMinutes / this.italyRef().minutesPer100g) * 100;
   }
 }

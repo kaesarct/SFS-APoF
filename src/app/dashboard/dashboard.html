@@ -3,17 +3,17 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-xl shadow-sm border border-gray-100">
     <div>
-      <h2 class="text-2xl font-bold text-gray-800">Dashboard Nutella Index</h2>
-      <p class="text-gray-500 text-sm mt-1">Dati verificati da admin · aggiornati manualmente</p>
+      <h1 class="text-2xl font-bold text-gray-800" i18n="@@dashboard.title">Dashboard Nutella Index</h1>
+      <p class="text-gray-500 text-sm mt-1" i18n="@@dashboard.subtitle">Dati verificati da admin · aggiornati manualmente</p>
     </div>
     <div class="mt-4 md:mt-0 flex flex-col md:flex-row gap-3">
-      <select [(ngModel)]="selectedRegion" (ngModelChange)="applyFilter()"
+      <select aria-label="Filtra per area geografica" i18n-aria-label="@@dashboard.regionFilterLabel" [(ngModel)]="selectedRegion" (ngModelChange)="applyFilter()"
         class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium border-none focus:ring-2 focus:ring-blue-500 outline-none">
         <option *ngFor="let r of regions" [value]="r">{{ r }}</option>
       </select>
       <button (click)="exportCSV()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center justify-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-        Esporta CSV
+        <ng-container i18n="@@dashboard.exportCsv">Esporta CSV</ng-container>
       </button>
     </div>
   </div>
@@ -26,7 +26,7 @@
     </svg>
   </div>
 
-  <div *ngIf="!loading && allData.length === 0" class="bg-white p-12 rounded-xl text-center text-gray-400">
+  <div *ngIf="!loading && allData.length === 0" class="bg-white p-12 rounded-xl text-center text-gray-400" i18n="@@dashboard.empty">
     Nessun dato. Carica le rilevazioni dall'admin.
   </div>
 
@@ -36,8 +36,8 @@
     <!-- Chart 1: PPP Index -->
     <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
       <div class="mb-4">
-        <h3 class="text-lg font-bold text-gray-800">Nutella PPP Index</h3>
-        <p class="text-xs text-gray-500 mt-1">
+        <h2 class="text-lg font-bold text-gray-800" i18n="@@dashboard.pppChart.title">Nutella PPP Index</h2>
+        <p class="text-xs text-gray-500 mt-1" i18n="@@dashboard.pppChart.legend">
           Sopra/sottovalutazione della valuta rispetto all'Euro, basata sul prezzo di 100g di Nutella.
           <span class="inline-block w-3 h-3 rounded-sm bg-red-400 ml-2"></span> Sopravvalutata
           <span class="inline-block w-3 h-3 rounded-sm bg-green-400 ml-1"></span> Sottovalutata
@@ -52,8 +52,8 @@
     <!-- Chart 2: Nutella Fatica -->
     <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
       <div class="mb-4">
-        <h3 class="text-lg font-bold text-gray-800">Nutella Fatica</h3>
-        <p class="text-xs text-gray-500 mt-1">
+        <h2 class="text-lg font-bold text-gray-800" i18n="@@dashboard.effortChart.title">Nutella Fatica</h2>
+        <p class="text-xs text-gray-500 mt-1" i18n="@@dashboard.effortChart.legend">
           Minuti di lavoro necessari per acquistare 100g di Nutella nel paese X.
           <span class="inline-block w-3 h-3 rounded-sm bg-blue-500 ml-2"></span> Italia (riferimento)
           <span class="inline-block w-3 h-3 rounded-sm bg-green-400 ml-1"></span> Meno fatica dell'Italia
@@ -69,17 +69,17 @@
 
   <!-- Summary Table -->
   <div *ngIf="!loading && allData.length > 0" class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-    <h3 class="text-lg font-bold text-gray-800 mb-4">Riepilogo dati</h3>
+    <h2 class="text-lg font-bold text-gray-800 mb-4" i18n="@@dashboard.summary.title">Riepilogo dati</h2>
     <div class="overflow-x-auto">
       <table class="w-full text-sm text-left text-gray-600">
         <thead class="bg-gray-50 text-gray-700 text-xs uppercase tracking-wider">
           <tr>
-            <th class="px-4 py-3 rounded-tl-lg">Paese</th>
-            <th class="px-4 py-3">Area</th>
+            <th class="px-4 py-3 rounded-tl-lg" i18n="@@dashboard.summary.country">Paese</th>
+            <th class="px-4 py-3" i18n="@@dashboard.summary.area">Area</th>
             <th class="px-4 py-3 text-right">€/100g</th>
             <th class="px-4 py-3 text-right">Min/100g</th>
-            <th class="px-4 py-3 text-right">Fonte</th>
-            <th class="px-4 py-3 text-right rounded-tr-lg">Valutazione</th>
+            <th class="px-4 py-3 text-right" i18n="@@dashboard.summary.source">Fonte</th>
+            <th class="px-4 py-3 text-right rounded-tr-lg" i18n="@@dashboard.summary.valuation">Valutazione</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -118,19 +118,19 @@
       <div class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
       </div>
-      <h3 class="text-xl font-bold text-gray-800">Catture Recenti</h3>
+      <h2 class="text-xl font-bold text-gray-800" i18n="@@dashboard.recent.title">Catture Recenti</h2>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <div *ngFor="let upload of recentUploads" class="group block relative rounded-xl overflow-hidden bg-gray-50 border border-gray-200 hover:shadow-xl transition-all duration-300">
         <div class="aspect-w-4 aspect-h-3 w-full bg-gray-200">
-          <img [src]="upload.photo_url" alt="Foto da {{ upload.country }}" class="object-cover w-full h-48 group-hover:scale-105 transition-transform duration-500">
+          <img [src]="upload.photo_url" alt="Foto da {{ upload.country }}" i18n-alt="@@dashboard.recent.photoAlt" class="object-cover w-full h-48 group-hover:scale-105 transition-transform duration-500">
         </div>
         <div class="p-4 bg-white">
           <div class="flex justify-between items-start mb-2">
-            <h4 class="font-bold text-gray-900 text-lg flex items-center gap-2">
+            <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
               <span class="fi fi-{{ upload.isoCode }} text-xl rounded-sm shadow-sm"></span> {{ upload.country }}
-            </h4>
+            </h3>
             <span class="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{{ upload.euro_per_100g | number:'1.2-2' }} €</span>
           </div>
           <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
@@ -150,8 +150,8 @@
 
   <!-- World Map -->
   <div *ngIf="!loading && allData.length > 0" class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mt-8 animate-fade-in-up">
-    <h3 class="text-lg font-bold text-gray-800 mb-1">Mappa del Mondo</h3>
-    <p class="text-xs text-gray-500 mb-4">
+    <h2 class="text-lg font-bold text-gray-800 mb-1" i18n="@@dashboard.map.title">Mappa del Mondo</h2>
+    <p class="text-xs text-gray-500 mb-4" i18n="@@dashboard.map.legend">
       Passa il mouse su un paese colorato per vedere il Nutella Index.
       <span class="inline-block w-3 h-3 rounded-sm bg-blue-500 ml-2"></span> Dati Utenti
       <span class="inline-block w-3 h-3 rounded-sm bg-amber-500 ml-1"></span> Human Safari
@@ -160,9 +160,9 @@
     <div class="relative" *ngIf="mapChartOption">
       <div echarts [options]="mapChartOption" (chartInit)="onMapChartInit($event)" class="w-full" style="height: 650px;"></div>
       <div class="absolute top-3 right-3 flex flex-col gap-1 z-10">
-        <button (click)="zoomMap(2)" title="Zoom avanti" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700 font-bold text-lg leading-none">+</button>
-        <button (click)="zoomMap(0.5)" title="Zoom indietro" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700 font-bold text-lg leading-none">−</button>
-        <button (click)="resetMapZoom()" title="Reimposta vista" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700">
+        <button (click)="zoomMap(2)" title="Zoom avanti" i18n-title="@@dashboard.map.zoomIn" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700 font-bold text-lg leading-none">+</button>
+        <button (click)="zoomMap(0.5)" title="Zoom indietro" i18n-title="@@dashboard.map.zoomOut" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700 font-bold text-lg leading-none">−</button>
+        <button (click)="resetMapZoom()" title="Reimposta vista" i18n-title="@@dashboard.map.reset" class="w-8 h-8 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-md shadow-sm text-gray-700">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
         </button>
       </div>

@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDocs, writeBatch, deleteDoc, setDoc, addDoc } from '@angular/fire/firestore';
-import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
-import { read, utils } from 'xlsx';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Firestore, collection, doc, getDocs, writeBatch, deleteDoc, setDoc, addDoc, query, where } from '@angular/fire/firestore';
+import { FALLBACK_ITALY_REFERENCE, ItalyReference, euroPer100g, findItalyReference, latestGdp, minutesPer100g } from './shared/nutella-math';
 
 export interface Rilevazione {
   id?: string;
@@ -49,7 +49,8 @@ export interface Submission {
 @Injectable({ providedIn: 'root' })
 export class DataService {
   private firestore = inject(Firestore);
-  private storage = inject(Storage);
+  // The build-time prerender must not query Firestore: pages are generated with the static JSON fallbacks.
+  private isServer = isPlatformServer(inject(PLATFORM_ID));
 
   private cleanId = (s: string) => s.trim().toLowerCase().replace(/[^a-z0-9]/g, '_');
 
@@ -58,6 +59,7 @@ export class DataService {
   private rilevazioniCache: Rilevazione[] | null = null;
 
   async getRilevazioni(force = false): Promise<Rilevazione[]> {
+    if (this.isServer) return [];
     if (this.rilevazioniCache && !force) return this.rilevazioniCache;
 
     const [measSnap, counSnap, areaSnap] = await Promise.all([
@@ -83,13 +85,13 @@ export class DataService {
       const data = d.data();
       const p = countriesMap.get(data['paese_id']);
 
-      const euro_per_100g = data['peso_grammi'] > 0 ? (data['prezzo_euro'] / data['peso_grammi']) * 100 : 0;
+      const euro_per_100g = euroPer100g(data['prezzo_euro'], data['peso_grammi']);
 
       // Prioritize video PIL (can be named pil_video_eur or pil_pro_capite_eur in db), else get the 2024 GDP
       const dbPil = Number(data['pil_video_eur']) || Number(data['pil_pro_capite_eur']) || 0;
       const pil = dbPil > 0 ? dbPil : (p?.pil_data?.['2024'] || 0);
 
-      const minutes_per_100g = pil > 0 ? ((euro_per_100g / pil) * 2000 * 60) : 0;
+      const minutes_per_100g = minutesPer100g(euro_per_100g, pil);
 
       let fallbackName = data['paese_id'] ? data['paese_id'].toString().replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()) : 'Unknown';
       let finalPaeseIt = data['paese_it'] || p?.nome || fallbackName;
@@ -127,6 +129,29 @@ export class DataService {
     });
 
     return this.rilevazioniCache;
+  }
+
+  private italyReference: ItalyReference | null = null;
+
+  /** Italian benchmark from the latest Italian reading: reads only Italy's documents, not the whole collection. */
+  async getItalyReference(): Promise<ItalyReference> {
+    if (this.isServer) return FALLBACK_ITALY_REFERENCE;
+    if (this.italyReference) return this.italyReference;
+    try {
+      const snap = await getDocs(query(collection(this.firestore, 'measurements'), where('paese_id', 'in', ['italia', 'italy'])));
+      this.italyReference = findItalyReference(snap.docs.map(d => {
+        const m = d.data();
+        return {
+          paese_it: m['paese_it'], paese_en: m['paese_en'], data_video: m['data_video'],
+          prezzo_euro: Number(m['prezzo_euro']), peso_grammi: Number(m['peso_grammi']),
+          pil_pro_capite_eur: Number(m['pil_video_eur']) || Number(m['pil_pro_capite_eur']) || 0
+        };
+      }));
+    } catch (e) {
+      console.error('Italy reference unavailable, using fallback', e);
+      this.italyReference = FALLBACK_ITALY_REFERENCE;
+    }
+    return this.italyReference;
   }
 
   async saveRilevazione(r: Rilevazione): Promise<void> {
@@ -174,6 +199,7 @@ export class DataService {
   }
 
   async importRilevazioniFromExcel(file: File): Promise<string> {
+    const { read, utils } = await import('xlsx');
     const wb = read(await file.arrayBuffer(), { cellDates: true });
     if (!wb.SheetNames.length) throw new Error('Excel vuoto');
     const rows = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]) as any[];
@@ -211,9 +237,6 @@ export class DataService {
       const annoPil = parseInt(row['Anno del dato pil'] || row['Anno PIL'] || new Date().getFullYear());
 
       const paeseIt = enToIt.get(paeseEn.toLowerCase()) || paeseEn;
-      const euro100g = peso > 0 ? (prezzoEuro / peso) * 100 : 0;
-      const min100g = pil > 0 ? (euro100g / pil) * 2000 * 60 : 0;
-
       ops.push({
         id: `${this.cleanId(paeseEn)}_${dataVideo}`,
         data: {
@@ -245,6 +268,7 @@ export class DataService {
   private paesiCache: PaeseConfig[] | null = null;
 
   async getPaesiConfig(force = false): Promise<PaeseConfig[]> {
+    if (this.isServer) return [];
     if (this.paesiCache && !force) return this.paesiCache;
     const snap = await getDocs(collection(this.firestore, 'paesi_config'));
     this.paesiCache = snap.docs.map(d => ({ id: d.id, ...d.data() } as PaeseConfig));
@@ -279,14 +303,6 @@ export class DataService {
     this.paesiCache = null;
   }
 
-  // --- STORAGE ---
-
-  async uploadPhoto(file: File): Promise<string> {
-    const storageRef = ref(this.storage, `uploads/${Date.now()}_${file.name}`);
-    const result = await uploadBytes(storageRef, file);
-    return getDownloadURL(result.ref);
-  }
-
   // --- PUBLIC SUBMISSION ---
 
   async submitData(data: any): Promise<void> {
@@ -303,24 +319,33 @@ export class DataService {
   async approveSubmission(submission: Submission): Promise<void> {
     if (!submission.id) throw new Error('Submission ID mancante');
 
-    // Create a rilevazione from the submission
-    const paeseEn = submission.country || 'Unknown';
+    // The public form submits the Italian country name.
+    const paeseIt = submission.country || 'Unknown';
+    const [{ default: itaToEng }, { default: nutellaData }, existing] = await Promise.all([
+      import('./ita-to-eng.json'),
+      import('./nutella-data.json'),
+      this.getRilevazioni()
+    ]);
+    const paeseEn = (itaToEng as Record<string, string>)[paeseIt] || paeseIt;
     const paeseId = this.cleanId(paeseEn);
+    const gdp = latestGdp((nutellaData.gdp as Record<string, Record<string, unknown>>)[paeseEn]);
+    const area = existing.find(r => r.paese_en === paeseEn || r.paese_it === paeseIt)?.area || 'User Submitted';
     const today = new Date().toISOString().split('T')[0];
 
-    const measurementId = `${paeseId}_${today}`;
+    // The submission id keeps two approvals for the same country on the same day from overwriting each other.
+    const measurementId = `${paeseId}_${today}_${submission.id}`;
     const measurement = {
       paese_id: paeseId,
       paese_en: paeseEn,
-      paese_it: paeseEn, // Could be enhanced to lookup from paesi_config
-      area: 'User Submitted', // Placeholder
+      paese_it: paeseIt,
+      area,
       data_video: today,
       prezzo_originale: submission.price,
       tasso_cambio: submission.exchangeRate,
       prezzo_euro: submission.euroPrice,
       peso_grammi: submission.weight,
-      pil_video_eur: 0, // Will need to be calculated or filled later
-      anno_pil_video: new Date().getFullYear(),
+      pil_video_eur: gdp?.value ?? 0,
+      anno_pil_video: gdp?.year ?? new Date().getFullYear(),
       is_human_safari: false,
       nome_utente: submission.nome_utente || 'User',
       photo_url: '',

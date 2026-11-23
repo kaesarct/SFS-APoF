@@ -290,7 +290,7 @@ export class Admin {
   togglePasswordModal() { this.showPasswordModal = !this.showPasswordModal; this.newPassword = ''; this.error = ''; this.message = ''; }
 
   async onChangePassword() {
-    if (!this.newPassword || this.newPassword.length < 6) { this.error = 'Minimo 6 caratteri.'; return; }
+    if (!this.newPassword || this.newPassword.length < 12) { this.error = 'Minimo 12 caratteri.'; return; }
     const currentUser = this.auth.currentUser;
     if (!currentUser) return;
     this.uploading = true;
