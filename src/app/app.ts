@@ -80,6 +80,7 @@ export class App {
         url: urlFor(this.language),
         inLanguage: this.language,
         isAccessibleForFree: true,
+        license: 'https://creativecommons.org/licenses/by/4.0/',
         spatialCoverage: { '@type': 'Place', name: 'World' },
         variableMeasured: ['EUR per 100 g', 'Minutes of work per 100 g', 'Currency over/undervaluation vs EUR (%)'],
         creator: { '@type': 'Person', name: 'Nicolò Balini (Human Safari)' }
