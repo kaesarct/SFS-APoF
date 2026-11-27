@@ -3,7 +3,7 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-xl shadow-sm border border-gray-100">
     <div>
-      <h1 class="text-2xl font-bold text-gray-800" i18n="@@dashboard.title">Dashboard Nutella Index</h1>
+      <h1 class="text-2xl font-bold text-gray-800" i18n="@@dashboard.title">Dashboard Indice Nutella</h1>
       <p class="text-gray-500 text-sm mt-1" i18n="@@dashboard.subtitle">Dati verificati da admin · aggiornati manualmente</p>
     </div>
     <div class="mt-4 md:mt-0 flex flex-col md:flex-row gap-3">
@@ -17,6 +17,16 @@
       </button>
     </div>
   </div>
+
+  <!-- Editorial Overview (prerendered for search engines and first paint) -->
+  <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-sm text-gray-600 leading-relaxed space-y-3">
+    <p i18n="@@dashboard.intro.summary">
+      L'<strong>Indice Nutella</strong> confronta il prezzo reale di 100 g di Nutella rilevato sul campo nei supermercati di tutto il mondo per misurare due indicatori del potere d'acquisto: la <strong>parità di potere d'acquisto (PPP)</strong> delle valute rispetto all'Euro (in stile Big Mac Index) e i <strong>minuti di lavoro</strong> necessari per comprarla, stimati a partire dal PIL pro capite nominale (dati IMF e World Bank).
+    </p>
+    <p i18n="@@dashboard.intro.links">
+      Puoi esplorare i dati verificati qui sotto, provare il <a routerLink="/ppp-index" class="text-blue-600 hover:underline font-medium">calcolatore PPP</a> o il <a routerLink="/instant-calculator" class="text-blue-600 hover:underline font-medium">calcolo istantaneo dei minuti di lavoro</a>, leggere la <a routerLink="/methodology" class="text-blue-600 hover:underline font-medium">metodologia completa</a> oppure <a routerLink="/submit-link" class="text-blue-600 hover:underline font-medium">inviare una nuova rilevazione</a> da un Paese che hai visitato.
+    </p>
+  </section>
 
   <!-- Loader -->
   <div *ngIf="loading" class="flex justify-center py-20 text-blue-600">

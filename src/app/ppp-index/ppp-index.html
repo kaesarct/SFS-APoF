@@ -16,14 +16,14 @@
       <!-- Row 1: Italy price (fixed) + Country -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.italyPriceLabel">Prezzo medio per 100g di Nutella in Italia
+          <label for="ppp-italy-price" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.italyPriceLabel">Prezzo medio per 100g di Nutella in Italia
             (€)</label>
-          <input type="number" [value]="italyPrice" readonly
+          <input id="ppp-italy-price" type="number" [value]="italyPrice" readonly
             class="w-full px-4 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.countryLabel">Paese</label>
-          <select [(ngModel)]="selectedCountry" (ngModelChange)="onCountryChange()"
+          <label for="ppp-country" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.countryLabel">Paese</label>
+          <select id="ppp-country" [(ngModel)]="selectedCountry" (ngModelChange)="onCountryChange()"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50">
             <option value="" i18n="@@ppp.countryPlaceholder">Seleziona un Paese...</option>
             <option *ngFor="let country of countries" [value]="country">{{ displayName(country) }}</option>
@@ -34,13 +34,13 @@
       <!-- Row 2: Currency (auto) + Exchange rate (auto) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6" *ngIf="selectedCountry">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.currencyLabel">Valuta</label>
-          <input type="text" [value]="currencyLabel" readonly
+          <label for="ppp-currency" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.currencyLabel">Valuta</label>
+          <input id="ppp-currency" type="text" [value]="currencyLabel" readonly
             class="w-full px-4 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.exchangeRateLabel">Tasso di cambio (1 € = X valuta locale)</label>
-          <input type="number" [value]="exchangeRate" readonly
+          <label for="ppp-rate" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.exchangeRateLabel">Tasso di cambio (1 € = X valuta locale)</label>
+          <input id="ppp-rate" type="number" [value]="exchangeRate" readonly
             class="w-full px-4 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-500 cursor-not-allowed">
         </div>
       </div>
@@ -48,16 +48,16 @@
       <!-- Row 3: Local price + Weight -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.localPriceLabel">
+          <label for="ppp-local-price" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.localPriceLabel">
             Prezzo Nutella (in valuta locale)
           </label>
-          <input type="number" [(ngModel)]="localPrice" placeholder="es. 6.00" i18n-placeholder="@@ppp.localPricePlaceholder" min="0" step="0.01"
+          <input id="ppp-local-price" type="number" [(ngModel)]="localPrice" placeholder="es. 6.00" i18n-placeholder="@@ppp.localPricePlaceholder" min="0" step="0.01"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.weightLabel">Peso vasetto (g)</label>
+          <label for="ppp-weight" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@ppp.weightLabel">Peso vasetto (g)</label>
           <div class="relative">
-            <input type="number" [(ngModel)]="weightGrams" min="1" step="1"
+            <input id="ppp-weight" type="number" [(ngModel)]="weightGrams" min="1" step="1"
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors">
             <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-sm">g</div>
           </div>
@@ -140,7 +140,7 @@
             <p *ngIf="valuationPercentage! >= -5 && valuationPercentage! <= 5" i18n="@@ppp.explanation.balanced">
               Il tasso di cambio ufficiale è <strong>in sintonia</strong> con il suo reale potere d'acquisto.
               I prezzi locali convertiti in Euro risultano allineati: in termini pratici, acquistare 100g di Nutella in <strong>{{ displayName(selectedCountry) }}</strong> richiede
-              l'equivalente di <strong>{{ localPriceInEur100g | number:'1.2-2' }}€ </strong>, costando pressochè lo stesso con una variazione del <strong>{{
+              l'equivalente di <strong>{{ localPriceInEur100g | number:'1.2-2' }}€ </strong>, costando pressoché lo stesso con una variazione del <strong>{{
                 absValuationPercentage | number:'1.1-1' }}%
                 <span *ngIf="valuationPercentage! < 0">in meno</span>
                 <span *ngIf="valuationPercentage! > 0">in più</span>

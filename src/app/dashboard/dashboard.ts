@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, inject, ChangeDetectorRef, PLATFORM_ID, LOCALE_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { Chart, registerables } from 'chart.js';
 import { DataService } from '../data.service';
@@ -19,7 +20,7 @@ const ALL_AREAS = $localize`:@@dashboard.allAreas:Tutte le Aree`;
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxEchartsDirective],
+  imports: [CommonModule, FormsModule, RouterLink, NgxEchartsDirective],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

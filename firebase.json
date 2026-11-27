@@ -6,6 +6,18 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "redirects": [
+      {
+        "source": "/equivalency",
+        "destination": "/instant-calculator",
+        "type": 301
+      },
+      {
+        "source": "/en/equivalency",
+        "destination": "/en/instant-calculator",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "/login",
@@ -47,6 +59,15 @@
           {
             "key": "Content-Security-Policy-Report-Only",
             "value": "default-src 'self'; script-src 'self' https://www.google.com https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.googleapis.com https://www.google.com; frame-src https://www.google.com https://recaptcha.google.com https://lgrdg-a4a32.firebaseapp.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+          }
+        ]
+      },
+      {
+        "regex": "^(/en)?/(login|admin)$",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
           }
         ]
       },

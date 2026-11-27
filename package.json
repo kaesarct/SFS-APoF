@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && node -e \"require('fs').copyFileSync('dist/frontend/browser/index.csr.html','dist/frontend/browser/404.html')\"",
+    "build": "ng build && node -e \"const fs=require('fs');const h=fs.readFileSync('dist/frontend/browser/index.csr.html','utf8');fs.writeFileSync('dist/frontend/browser/404.html',h.replace('</head>','  <meta name=\\\"robots\\\" content=\\\"noindex, nofollow\\\">\\n</head>'))\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

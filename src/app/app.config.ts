@@ -1,4 +1,5 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, Injectable, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -14,10 +15,20 @@ import { environment } from '../environments/environment';
 // reCAPTCHA needs a real browser: during the build-time prerender there is no window, so App Check is skipped.
 const isBrowser = typeof window !== 'undefined';
 
+// Match Firebase Hosting's trailingSlash: false so links to the English home emit /en instead of /en/.
+@Injectable()
+class NoTrailingSlashPathLocationStrategy extends PathLocationStrategy {
+  override prepareExternalUrl(internal: string): string {
+    const url = super.prepareExternalUrl(internal);
+    return url.length > 1 && url.endsWith('/') ? url.slice(0, -1) : url;
+  }
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    { provide: LocationStrategy, useClass: NoTrailingSlashPathLocationStrategy },
     provideHttpClient(withFetch()),
     provideClientHydration(withEventReplay()),
     provideFirebaseApp(() => initializeApp(environment.firebase)),

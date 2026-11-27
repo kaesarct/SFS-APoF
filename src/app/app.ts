@@ -8,8 +8,16 @@ import { filter } from 'rxjs';
 const SITE_URL = 'https://lgrdg-a4a32.web.app';
 const LOCALE_PREFIX: Record<string, string> = { it: '', en: '/en' };
 const OG_LOCALE: Record<string, string> = { it: 'it_IT', en: 'en_GB' };
+const OG_LOCALE_ALT: Record<string, string> = { it: 'en_GB', en: 'it_IT' };
+const OG_IMAGE: Record<string, string> = { it: `${SITE_URL}/og-image.png`, en: `${SITE_URL}/og-image-en.png` };
 const SITE_NAME = $localize`:@@meta.siteName:Indice Nutella`;
+const OG_IMAGE_ALT = $localize`:@@meta.ogImageAlt:Indice Nutella: confronto del prezzo della Nutella e minuti di lavoro nel mondo`;
 const DATASET_DESCRIPTION = $localize`:@@meta.datasetDescription:Prezzi della Nutella rilevati sul campo in Paesi di tutto il mondo, convertiti in euro per 100 g e confrontati con il PIL pro capite per stimare i minuti di lavoro necessari e la sopra o sottovalutazione delle valute rispetto all'euro.`;
+const DATASET_VARIABLES = [
+  $localize`:@@meta.datasetVar.eurPer100g:EUR per 100 g`,
+  $localize`:@@meta.datasetVar.minutesPer100g:Minuti di lavoro per 100 g`,
+  $localize`:@@meta.datasetVar.valuationPct:Sopra o sottovalutazione della valuta rispetto all'euro (%)`
+];
 const DEFAULT_DESCRIPTION = $localize`:@@meta.defaultDescription:Indice Nutella: scopri il PPP della Nutella nel mondo. Calcola quanto tempo devi lavorare per poterti permettere 100g di Nutella nel tuo Paese.`;
 
 @Component({
@@ -48,15 +56,22 @@ export class App {
 
         meta.updateTag({ name: 'description', content: description });
         meta.updateTag({ name: 'robots', content: route.data['robots'] ?? 'index, follow' });
+        meta.updateTag({ property: 'og:site_name', content: SITE_NAME });
         meta.updateTag({ property: 'og:title', content: pageTitle });
         meta.updateTag({ property: 'og:description', content: description });
         meta.updateTag({ property: 'og:url', content: urlFor(this.language) });
         meta.updateTag({ property: 'og:locale', content: OG_LOCALE[this.language] });
-        meta.updateTag({ name: 'twitter:card', content: 'summary' });
+        meta.updateTag({ property: 'og:locale:alternate', content: OG_LOCALE_ALT[this.language] });
+        meta.updateTag({ property: 'og:image', content: OG_IMAGE[this.language] });
+        meta.updateTag({ property: 'og:image:width', content: '1200' });
+        meta.updateTag({ property: 'og:image:height', content: '630' });
+        meta.updateTag({ property: 'og:image:alt', content: OG_IMAGE_ALT });
+        meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
         meta.updateTag({ name: 'twitter:title', content: pageTitle });
         meta.updateTag({ name: 'twitter:description', content: description });
+        meta.updateTag({ name: 'twitter:image', content: OG_IMAGE[this.language] });
 
-        this.setLink(document, 'canonical', undefined, urlFor(this.language));
+        this.setLink(document, 'canonical', undefined, indexable ? urlFor(this.language) : null);
         for (const lang of ['it', 'en']) this.setLink(document, 'alternate', lang, indexable ? urlFor(lang) : null);
         this.setLink(document, 'alternate', 'x-default', indexable ? urlFor('it') : null);
 
@@ -82,7 +97,7 @@ export class App {
         isAccessibleForFree: true,
         license: 'https://creativecommons.org/licenses/by/4.0/',
         spatialCoverage: { '@type': 'Place', name: 'World' },
-        variableMeasured: ['EUR per 100 g', 'Minutes of work per 100 g', 'Currency over/undervaluation vs EUR (%)'],
+        variableMeasured: DATASET_VARIABLES,
         creator: { '@type': 'Person', name: 'Nicolò Balini (Human Safari)' }
       });
     }

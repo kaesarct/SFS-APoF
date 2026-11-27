@@ -158,78 +158,92 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="route.equivalency.title" datatype="html">
-        <source>Potere d&apos;acquisto in Italia · Indice Nutella</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="route.equivalency.description" datatype="html">
-        <source>Scopri cosa potresti comprare in Italia con i minuti di lavoro necessari per 100 g di Nutella in un altro Paese.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="route.submit.title" datatype="html">
         <source>Invia una rilevazione di prezzo · Indice Nutella</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="route.submit.description" datatype="html">
         <source>Hai trovato la Nutella all&apos;estero? Invia prezzo, peso e città: dopo la verifica la rilevazione entra nell&apos;Indice Nutella.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="route.login.title" datatype="html">
         <source>Area amministratore · Indice Nutella</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="route.admin.title" datatype="html">
         <source>Area amministratore · Indice Nutella</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="route.notFound.title" datatype="html">
         <source>Pagina non trovata · Indice Nutella</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="meta.siteName" datatype="html">
         <source>Indice Nutella</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meta.ogImageAlt" datatype="html">
+        <source>Indice Nutella: confronto del prezzo della Nutella e minuti di lavoro nel mondo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="meta.datasetDescription" datatype="html">
         <source>Prezzi della Nutella rilevati sul campo in Paesi di tutto il mondo, convertiti in euro per 100 g e confrontati con il PIL pro capite per stimare i minuti di lavoro necessari e la sopra o sottovalutazione delle valute rispetto all&apos;euro.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meta.datasetVar.eurPer100g" datatype="html">
+        <source>EUR per 100 g</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meta.datasetVar.minutesPer100g" datatype="html">
+        <source>Minuti di lavoro per 100 g</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meta.datasetVar.valuationPct" datatype="html">
+        <source>Sopra o sottovalutazione della valuta rispetto all&apos;euro (%)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="meta.defaultDescription" datatype="html">
         <source>Indice Nutella: scopri il PPP della Nutella nel mondo. Calcola quanto tempo devi lavorare per poterti permettere 100g di Nutella nel tuo Paese.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.title" datatype="html">
-        <source>Dashboard Nutella Index</source>
+        <source>Dashboard Indice Nutella</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
           <context context-type="linenumber">6,7</context>
@@ -256,299 +270,228 @@
           <context context-type="linenumber">16,18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="dashboard.intro.summary" datatype="html">
+        <source> L&apos;<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Indice Nutella<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> confronta il prezzo reale di 100 g di Nutella rilevato sul campo nei supermercati di tutto il mondo per misurare due indicatori del potere d&apos;acquisto: la <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>parità di potere d&apos;acquisto (PPP)<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> delle valute rispetto all&apos;Euro (in stile Big Mac Index) e i <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>minuti di lavoro<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> necessari per comprarla, stimati a partire dal PIL pro capite nominale (dati IMF e World Bank). </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.intro.links" datatype="html">
+        <source> Puoi esplorare i dati verificati qui sotto, provare il <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/ppp-index&quot; class=&quot;text-blue-600 hover:underline font-medium&quot;&gt;"/>calcolatore PPP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o il <x id="START_LINK_1" equiv-text="&lt;a routerLink=&quot;/instant-calculator&quot; class=&quot;text-blue-600 hover:underline font-medium&quot;&gt;"/>calcolo istantaneo dei minuti di lavoro<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, leggere la <x id="START_LINK_2" equiv-text="&lt;a routerLink=&quot;/methodology&quot; class=&quot;text-blue-600 hover:underline font-medium&quot;&gt;"/>metodologia completa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> oppure <x id="START_LINK_3" equiv-text="&lt;a routerLink=&quot;/submit-link&quot; class=&quot;text-blue-600 hover:underline font-medium&quot;&gt;"/>inviare una nuova rilevazione<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> da un Paese che hai visitato. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
+          <context context-type="linenumber">27,29</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="dashboard.empty" datatype="html">
         <source> Nessun dato. Carica le rilevazioni dall&apos;admin. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">30,33</context>
+          <context context-type="linenumber">40,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.pppChart.title" datatype="html">
         <source>Nutella PPP Index</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">39,40</context>
+          <context context-type="linenumber">49,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.pppChart.legend" datatype="html">
         <source> Sopra/sottovalutazione della valuta rispetto all&apos;Euro, basata sul prezzo di 100g di Nutella. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-red-400 ml-2&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Sopravvalutata <x id="START_TAG_SPAN_1" ctype="x-span_1" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-green-400 ml-1&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Sottovalutata <x id="START_TAG_SPAN_2" ctype="x-span_2" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-gray-300 ml-1&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> In equilibrio </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">41,46</context>
+          <context context-type="linenumber">51,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.effortChart.title" datatype="html">
         <source>Nutella Fatica</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">55,56</context>
+          <context context-type="linenumber">65,66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.effortChart.legend" datatype="html">
         <source> Minuti di lavoro necessari per acquistare 100g di Nutella nel paese X. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-blue-500 ml-2&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Italia (riferimento) <x id="START_TAG_SPAN_1" ctype="x-span_1" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-green-400 ml-1&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Meno fatica dell&apos;Italia <x id="START_TAG_SPAN_2" ctype="x-span_2" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-orange-400 ml-1&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Più fatica dell&apos;Italia </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">57,62</context>
+          <context context-type="linenumber">67,72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.summary.title" datatype="html">
         <source>Riepilogo dati</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">72,73</context>
+          <context context-type="linenumber">82,83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.summary.country" datatype="html">
         <source>Paese</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">77,78</context>
+          <context context-type="linenumber">87,88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.summary.area" datatype="html">
         <source>Area</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">78,79</context>
+          <context context-type="linenumber">88,89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.summary.source" datatype="html">
         <source>Fonte</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">81,82</context>
+          <context context-type="linenumber">91,92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.summary.valuation" datatype="html">
         <source>Valutazione</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">82,85</context>
+          <context context-type="linenumber">92,95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.recent.title" datatype="html">
         <source>Catture Recenti</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">121,124</context>
+          <context context-type="linenumber">131,134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.recent.photoAlt" datatype="html">
         <source>Foto da <x id="INTERPOLATION" equiv-text="{{ upload.country }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.map.title" datatype="html">
         <source>Mappa del Mondo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">153,154</context>
+          <context context-type="linenumber">163,164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.map.legend" datatype="html">
         <source> Passa il mouse su un paese colorato per vedere il Nutella Index. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-blue-500 ml-2&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Dati Utenti <x id="START_TAG_SPAN_1" ctype="x-span_1" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-amber-500 ml-1&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Human Safari <x id="START_TAG_SPAN_2" ctype="x-span_2" equiv-text="&lt;span class=&quot;inline-block w-3 h-3 rounded-sm bg-white border border-gray-300 ml-1&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Nessun dato </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">155,160</context>
+          <context context-type="linenumber">165,170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.map.zoomIn" datatype="html">
         <source>Zoom avanti</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.map.zoomOut" datatype="html">
         <source>Zoom indietro</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.map.reset" datatype="html">
         <source>Reimposta vista</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.html</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.allAreas" datatype="html">
         <source>Tutte le Aree</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.pppChart.datasetLabel" datatype="html">
         <source>Sopra/Sottovalutazione (%)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">224</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.pppChart.overvalued" datatype="html">
         <source>Sopravvalutata del <x id="value" equiv-text="v.toFixed(1)"/>%</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.pppChart.undervalued" datatype="html">
         <source>Sottovalutata del <x id="value" equiv-text="Math.abs(v).toFixed(1)"/>%</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">231</context>
+          <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.effortChart.italyLabel" datatype="html">
         <source>Italia 🇮🇹</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.effortChart.datasetLabel" datatype="html">
         <source>Minuti di lavoro per 100g</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.effortChart.tooltip" datatype="html">
         <source><x id="minutes" equiv-text="(ctx.parsed.x ?? 0).toFixed(2)"/> minuti</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">261</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.csv.country" datatype="html">
         <source>Paese</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.csv.area" datatype="html">
         <source>Area</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.csv.priceEur" datatype="html">
         <source>Prezzo Euro</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">274</context>
+          <context context-type="linenumber">275</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.csv.weight" datatype="html">
         <source>Peso (g)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">275</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.csv.source" datatype="html">
         <source>Fonte</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dashboard.csv.valuation" datatype="html">
         <source>Valutazione (%)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/dashboard/dashboard.ts</context>
-          <context context-type="linenumber">279</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.title" datatype="html">
-        <source>Potere d&apos;Acquisto in Italia</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">10,11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.subtitle" datatype="html">
-        <source> Scopri quanti <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Euro<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> potresti guadagnare lavorando in Italia lo stesso numero di minuti che serve per comprare la Nutella in un altro Paese, e cosa ci potresti acquistare. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">12,15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.minutesLabel" datatype="html">
-        <source>Inserisci i Minuti di Lavoro (&quot;Fatica&quot;)</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">20,21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.minutesPlaceholder" datatype="html">
-        <source>Es. 24.55</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.minutesUnit" datatype="html">
-        <source> Minuti </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">26,28</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.hint" datatype="html">
-        <source> In Italia si guadagnano in media <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ italyRef().wagePerMinute | number:&apos;1.2-2&apos; }}"/> € al minuto<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (≈ <x id="INTERPOLATION_1" equiv-text="{{ italyRef().wagePerMinute * 60 | number:&apos;1.0-0&apos; }}"/> €/ora). Inoltre, l&apos;Indice Nutella italiano per 100g si attesta a circa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ italyRef().minutesPer100g | number:&apos;1.2-2&apos; }}"/> minuti<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">30,33</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.earningsTitle" datatype="html">
-        <source>Guadagno in Italia</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">44,45</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.earningsText" datatype="html">
-        <source> Lavorando <x id="INTERPOLATION" equiv-text="{{ inputMinutes }}"/> minuti nel contesto economico italiano. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">49,51</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.tier" datatype="html">
-        <source>Fascia: <x id="INTERPOLATION" equiv-text="{{ matchedTier.range }}"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">58,59</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.youCouldBuy" datatype="html">
-        <source>Con questa cifra in Italia compreresti:</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">65,66</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.nutellaTitle" datatype="html">
-        <source>Nutella in Italia per lo stesso tempo </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">76,78</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="equivalency.nutellaText" datatype="html">
-        <source> Esattamente l&apos;inverso dell&apos;estero: invece dei loro 100g, il lavoratore italiano ritira a casa quasi <x id="INTERPOLATION" equiv-text="{{
-        calculatedNutellaGrams/1000 | number:&apos;1.1-1&apos; }}"/> Kg! </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/equivalency/equivalency.html</context>
-          <context context-type="linenumber">82,85</context>
+          <context context-type="linenumber">280</context>
         </context-group>
       </trans-unit>
       <trans-unit id="calculator.title" datatype="html">
@@ -559,7 +502,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="calculator.subtitle" datatype="html">
-        <source> Inserisci il prezzo che vedi sullo scaffare e scopri all&apos;istante il <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Nutella Index<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e cosa potresti acquistare, equivalentemente, in Italia! </source>
+        <source> Inserisci il prezzo che vedi sullo scaffale e scopri all&apos;istante l&apos;<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Indice Nutella<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e cosa potresti acquistare, equivalentemente, in Italia! </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/instant-calculator/instant-calculator.html</context>
           <context context-type="linenumber">14,17</context>
@@ -639,7 +582,7 @@
         <source>Calcola Ora</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/instant-calculator/instant-calculator.html</context>
-          <context context-type="linenumber">88,90</context>
+          <context context-type="linenumber">88,89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="calculator.result.sentence" datatype="html">
@@ -688,7 +631,7 @@
         <source> Puoi inserire i minuti manualmente oppure calcolarli dalla scheda &quot;Calcolo dal prezzo&quot;. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/instant-calculator/instant-calculator.html</context>
-          <context context-type="linenumber">138,142</context>
+          <context context-type="linenumber">138,140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="calculator.eq.earningsTitle" datatype="html">
@@ -873,6 +816,13 @@
           <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="submit.form.userNameAria" datatype="html">
+        <source>Chi sei?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/link-submission/link-submission.html</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="submit.form.userNamePlaceholder" datatype="html">
         <source>es. Mario Rossi, @tuonick — lascia vuoto per &apos;Community&apos;</source>
         <context-group purpose="location">
@@ -988,7 +938,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="methodology.intro" datatype="html">
-        <source> Il Nutella-Index viene calcolato sulla base di dati raccolti in persona da viaggiatori in ogni angolo del globo. Le prime voci sulle quali è costruito l&apos;indice, e diverse altre che saranno aggiunte in futuro, sono state raccolte da Nicolò Balini (Human Safari: potete trovare i link di tutti i suoi social sul sito), che ha originariamente ideato il concetto del Nutella-index, e che si ringrazia per l&apos;entusiasmo e l&apos;impressione positiva riguardo l&apos;idea di questo sito. </source>
+        <source> L&apos;Indice Nutella viene calcolato sulla base di dati raccolti in persona da viaggiatori in ogni angolo del globo. Le prime voci sulle quali è costruito l&apos;indice, e diverse altre che saranno aggiunte in futuro, sono state raccolte da Nicolò Balini (Human Safari: potete trovare i link di tutti i suoi social sul sito), che ha originariamente ideato il concetto dell&apos;Indice Nutella, e che si ringrazia per l&apos;entusiasmo e l&apos;impressione positiva riguardo l&apos;idea di questo sito. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/methodology/methodology.html</context>
           <context context-type="linenumber">8,14</context>
@@ -1002,7 +952,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="methodology.philosophy.text" datatype="html">
-        <source> La filosofia principale del Nutella-Index è di natura collaborativa: ognuno di voi potrà contribuire ad arricchire il database inviando, tramite l&apos;apposito form, foto e informazioni riguardanti i prezzi trovati in giro per il mondo! Nel caso in cui dovessimo ricevere più dati su un determinato paese, questi potrebbero essere mediati o divisi per periodo. </source>
+        <source> La filosofia principale dell&apos;Indice Nutella è di natura collaborativa: ognuno di voi potrà contribuire ad arricchire il database inviando, tramite l&apos;apposito form, foto e informazioni riguardanti i prezzi trovati in giro per il mondo! Nel caso in cui dovessimo ricevere più dati su un determinato paese, questi potrebbero essere mediati o divisi per periodo. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/methodology/methodology.html</context>
           <context context-type="linenumber">20,25</context>
@@ -1016,7 +966,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="methodology.calculation.classic" datatype="html">
-        <source> Diverse sono le versioni in cui il NutellaIndex può essere presentato (e il sito si aggiornerà sempre per mostrarne di nuove): nella sua versione più classica, che potete calcolare tramite la scheda “Nutella PPP”, questo viene calcolato esattamente come il Big Mac Index, mostranto un confronto sui poteri d&apos;acquisto delle varie valute. La scheda restituirà un calcolo istantaneo, mentre i dati verificati inviati tramite form saranno disponibili, per tutti, nella sezione “Dashboard”. </source>
+        <source> Diverse sono le versioni in cui l&apos;Indice Nutella può essere presentato (e il sito si aggiornerà sempre per mostrarne di nuove): nella sua versione più classica, che potete calcolare tramite la scheda “Nutella PPP”, questo viene calcolato esattamente come il Big Mac Index, mostrando un confronto sui poteri d&apos;acquisto delle varie valute. La scheda restituirà un calcolo istantaneo, mentre i dati verificati inviati tramite form saranno disponibili, per tutti, nella sezione “Dashboard”. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/methodology/methodology.html</context>
           <context context-type="linenumber">29,36</context>
@@ -1201,7 +1151,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ppp.explanation.balanced" datatype="html">
-        <source> Il tasso di cambio ufficiale è <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>in sintonia<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> con il suo reale potere d&apos;acquisto. I prezzi locali convertiti in Euro risultano allineati: in termini pratici, acquistare 100g di Nutella in <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ displayName(selectedCountry) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> richiede l&apos;equivalente di <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ localPriceInEur100g | number:&apos;1.2-2&apos; }}"/>€ <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, costando pressochè lo stesso con una variazione del <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_2" equiv-text="{{
+        <source> Il tasso di cambio ufficiale è <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>in sintonia<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> con il suo reale potere d&apos;acquisto. I prezzi locali convertiti in Euro risultano allineati: in termini pratici, acquistare 100g di Nutella in <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ displayName(selectedCountry) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> richiede l&apos;equivalente di <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ localPriceInEur100g | number:&apos;1.2-2&apos; }}"/>€ <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, costando pressoché lo stesso con una variazione del <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_2" equiv-text="{{
                 absValuationPercentage | number:&apos;1.1-1&apos; }}"/>% <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;valuationPercentage! &lt; 0&quot;&gt;"/>in meno<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_1" ctype="x-span_1" equiv-text="&lt;span *ngIf=&quot;valuationPercentage! &gt; 0&quot;&gt;"/>in più<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rispetto all&apos;<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ITALIA<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/ppp-index/ppp-index.html</context>

@@ -1,8 +1,8 @@
 <div class="min-h-screen bg-gray-50 flex flex-col font-sans">
   <header class="text-white shadow-lg" style="background-color: #e50101;">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <p class="text-2xl font-bold tracking-tight" i18n="@@shell.brand">Dashboard Indice Nutella</p>
-      <nav class="space-x-6">
+    <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
+      <p class="text-2xl font-bold tracking-tight text-center md:text-left" i18n="@@shell.brand">Dashboard Indice Nutella</p>
+      <nav class="flex flex-wrap items-center justify-center md:justify-end gap-x-4 gap-y-2 sm:gap-x-6 text-sm sm:text-base">
         <a routerLink="/" class="hover:text-blue-200 transition-colors font-medium" i18n="@@nav.dashboard">Dashboard</a>
         <a routerLink="/methodology" class="hover:text-blue-200 transition-colors font-medium" i18n="@@nav.methodology">Metodologia</a>
         <a routerLink="/ppp-index" class="hover:text-blue-200 transition-colors font-medium" i18n="@@nav.ppp">Nutella PPP</a>

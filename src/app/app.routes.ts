@@ -30,9 +30,8 @@ export const routes: Routes = [
   },
   {
     path: 'equivalency',
-    loadComponent: () => import('./equivalency/equivalency').then(m => m.EquivalencyPage),
-    title: $localize`:@@route.equivalency.title:Potere d'acquisto in Italia · Indice Nutella`,
-    data: { description: $localize`:@@route.equivalency.description:Scopri cosa potresti comprare in Italia con i minuti di lavoro necessari per 100 g di Nutella in un altro Paese.` }
+    redirectTo: 'instant-calculator',
+    pathMatch: 'full'
   },
   {
     path: 'submit-link',
